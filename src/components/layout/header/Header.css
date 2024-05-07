@@ -1,0 +1,23 @@
+.container-header {
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  border: 1px solid red;
+}
+.container-logo{
+    display: flex;
+    margin: 15px;
+
+}
+
+.element-header{
+  margin: 15px;
+}
+@media (max-width: 480px) {
+  h3{
+    display:none
+  }
+}
