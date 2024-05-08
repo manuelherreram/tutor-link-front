@@ -1,0 +1,17 @@
+.container-footer{
+  display: flex;
+  align-items: center;
+}
+
+
+footer {
+  width: 100%;
+  border: 1px solid #333;
+  text-align: left;
+  
+
+
+}
+footer img {
+  margin: 15px;
+}
