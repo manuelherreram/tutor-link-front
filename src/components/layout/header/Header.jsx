@@ -14,8 +14,8 @@ const Header = () => {
         </Link>
       </div>
       <div>
-        <Button className="element-header" variant="outlined">Crear cuenta</Button>
-        <Button className="element-header" variant="outlined">Iniciar sesión</Button>
+        <Button id="btn" variant="outlined">Crear cuenta</Button>
+        <Button variant="outlined">Iniciar sesión</Button>
       </div>
     </header>
   );
