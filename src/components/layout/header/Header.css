@@ -1,25 +1,28 @@
 .container-header {
   width: 100%;
   position: fixed;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 70px;
-  border: 1px solid red;
-
+  background-color: #e3e9e9;
 }
 .container-logo {
   display: flex;
   margin: 15px;
 }
 h3 {
-  color: rgb(255, 0, 0);
+  color: #225675;
   font-style: italic;
 }
 .element-header {
-  margin: 15px;
+  margin: 15px 0px;
 }
-#btn{
+.img-header {
+  width: 65%;
+}
+#btn {
   margin: 15px;
 }
 

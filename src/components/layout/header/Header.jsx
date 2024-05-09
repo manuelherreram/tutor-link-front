@@ -7,15 +7,17 @@ const Header = () => {
     <header className="container-header">
       <div className="container-logo">
         <Link to="/" className="element-header">
-          <img src="" alt="logotipo" />
+          <img src="/tutor-link-logo.png" alt="logotipo" className='img-header' />
         </Link>
         <Link to="/" className="element-header">
           <h3>Tu camino hacia el éxito</h3>
         </Link>
       </div>
       <div>
-        <Button id="btn" variant="outlined">Crear cuenta</Button>
-        <Button variant="outlined">Iniciar sesión</Button>
+        <Button id="btn" variant="contained">
+          Crear cuenta
+        </Button>
+        <Button variant="contained">Iniciar sesión</Button>
       </div>
     </header>
   );
