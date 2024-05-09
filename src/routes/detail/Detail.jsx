@@ -21,8 +21,11 @@ const Detail = () => {
 
   return (
     <div className="container-detail">
+      <section className="section-detail">
       <h1>Detalles del Tutor</h1>
-      <button onClick={() => navigate(-1)}>⬅️</button>
+      <button className='btn-go-back'onClick={() => navigate(-1)}>⬅️</button>
+      </section>
+      
 
       {teacherSelected && teacherSelected.length > 0 ? (
         <div>

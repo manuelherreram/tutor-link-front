@@ -1,4 +1,16 @@
 .container-detail{
     margin-top: 90px;
+  
 
+}
+.btn-go-back{
+    text-align: right;
+    font-size: 25px;
+
+}
+.section-detail{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    
 }
