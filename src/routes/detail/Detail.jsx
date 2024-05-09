@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Detail.css';
 
 const Detail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { teacherSelected, setTeacherSelected } = useState();
 
   useEffect(() => {
@@ -20,6 +22,7 @@ const Detail = () => {
   return (
     <div className="container-detail">
       <h1>Detalles del Tutor</h1>
+      <button onClick={() => navigate(-1)}>⬅️</button>
 
       {teacherSelected && teacherSelected.length > 0 ? (
         <div>
