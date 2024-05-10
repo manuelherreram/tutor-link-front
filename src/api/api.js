@@ -5,7 +5,7 @@ import axios from 'axios';
       return res.data
       
     };
-    export const getDataById = async () => {
+    export const getDataById = async (id) => {
         let res = await axios.get(`http://localhost:8080/api/teachers/${id}`);
         return res.data
         
