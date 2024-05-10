@@ -1,16 +1,49 @@
-.container-detail{
-    margin-top: 90px;
-  
-
+.container-detail {
+  margin-top: 90px;
 }
-.btn-go-back{
-    text-align: right;
-    font-size: 25px;
-
+.btn-go-back {
+  text-align: right;
+  font-size: 25px;
 }
-.section-detail{
-    display: flex;
-    justify-content: space-between;
-    margin: 20px;
-    
+.section-detail {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+.container-teacher {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  border: 1px solid grey;
+}
+.container-section {
+  display: grid;
+  height: 50vh;
+  grid-template-columns: 2fr 2fr;
+  grid-gap: 10px;
+}
+
+.container-image {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+
+.first-image {
+  grid-column: span 2;
+  grid-row: span 4;
+}
+.container-image img {
+  border: 1px solid red;
+}
+.more {
+  width: 100px;
+  height: 20px;
+}
+.container-image img{
+    height: 100%;
+  margin: 5px
 }

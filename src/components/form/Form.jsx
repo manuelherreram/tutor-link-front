@@ -4,28 +4,41 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import MenuItem from '@mui/material/MenuItem';
 import './Form.css';
+import axios from 'axios';
+
 
 const Form = () => {
   const [mostrar, setMostrar] = useState(true);
 
-  const { handleChange, handleSubmit, errors } = useFormik({
+  const { handleChange, handleSubmit, errors, values } = useFormik({
     initialValues: {
       name: '',
       dni: '',
       description: '',
-      subject: '',
-      images: [
-        {
-          url: '',
-          title: '',
-        },
-      ],
+      // subject: '',
+      // images: [
+      //   {
+      //     url: '',
+      //     title: '',
+      //   },
+      // ],
     },
     onSubmit: (data) => {
-      console.log(data);
-
-      setMostrar(false);
+      
+      axios.post('http://localhost:8080/api/teachers', data, {  
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        console.log('Respuesta del servidor:', response.data);
+        setMostrar(false); 
+      })
+      .catch(error => {
+        console.error('Error al enviar los datos:', error);
+      });
     },
+    
     validationSchema: Yup.object({
       name: Yup.string()
         .min(3, 'El nombre debe tener por lo menos 3 caracteres')
@@ -36,14 +49,16 @@ const Form = () => {
         .max(11, 'El nombre debe tener maximo 11 caracteres')
         .required('El campo es requerido'),
       description: Yup.string(),
-      subject: Yup.string().required('Seleccione una categoría'),
-      images: Yup.array()
-        .required('Debe contener imágenes')
-        .min(5, 'Debe contener mínimo 5 imágenes'),
+      // subject: Yup.string().required('Seleccione una categoría'),
+      // images: Yup.array()
+      //   .required('Debe contener imágenes')
+      //   .min(5, 'Debe contener mínimo 5 imágenes'),
     }),
     validateOnChange: false,
   });
-  console.log(errors);
+ 
+  console.log(values);
+
   return (
     <main>
       {mostrar ? (
@@ -55,8 +70,8 @@ const Form = () => {
             name="name"
             label="Ingrese su nombre"
             variant="outlined"
-            error={errors.nombre ? true : false}
-            helperText={errors.nombre}
+            error={errors.name ? true : false}
+            helperText={errors.name}
           />
           <TextField
             type="text"
@@ -80,11 +95,13 @@ const Form = () => {
             error={errors.description ? true : false}
             helperText={errors.description}
           />
-          <TextField
+          
+          {/* <TextField
             select
             label="Seleccione una categoría"
             onChange={handleChange}
             name="subject"
+            value={values.subject}
             variant="outlined"
             error={errors.subject ? true : false}
             helperText={errors.subject}
@@ -93,14 +110,14 @@ const Form = () => {
             <MenuItem value="Lenguaje">Lenguaje</MenuItem>
             <MenuItem value="Inglés">Inglés</MenuItem>
             <MenuItem value="Historia">Historia</MenuItem>
-          </TextField>
-          <TextField
+          </TextField> */}
+          {/* <TextField
             type="file"
             onChange={handleChange}
             name="images"
             variant="outlined"
             autoComplete="off"
-          />
+          /> */}
 
           <Button type="submit" variant="contained" color="success">
             Enviar
