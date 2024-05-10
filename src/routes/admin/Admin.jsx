@@ -1,11 +1,12 @@
-
+import Form from '../../components/form/Form';
+import './Admin.css';
 
 const Admin = () => {
   return (
-    <h1>
-      Admin
-    </h1>
-  )
-}
+    <div className="container">
+      <Form />
+    </div>
+  );
+};
 
-export default Admin
+export default Admin;

@@ -1,0 +1,15 @@
+.container-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+margin-top: 90px;
+border-radius: 10px;
+background-color: #eef3f3;
+border: 1px solid rgb(134, 128, 128)
+}
+
+h2{
+    margin: 20px;
+    text-align: center;
+}
