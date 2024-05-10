@@ -4,7 +4,7 @@ import Layout from './components/layout/Layout';
 import Home from './routes/home/Home';
 import Admin from './routes/admin/Admin.jsx';
 import { ContextProvider } from './components/utils/globalContext.jsx';
-
+import NewTeacher from'./routes/newTeacher/NewTeacher'
 function App() {
   return (
     <>
@@ -16,6 +16,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/detalle/:id" element={<Detail/>} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/new" element={<NewTeacher/>} />
           </Route>
         </Routes>
         </ContextProvider>

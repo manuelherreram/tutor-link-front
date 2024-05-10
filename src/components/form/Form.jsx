@@ -1,49 +1,65 @@
-import { TextField, Button } from '@mui/material';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import MenuItem from '@mui/material/MenuItem';
-import './Form.css';
+import { storage } from './firebaseConfig'; 
+import { Button, TextField } from '@mui/material';
+import axios from 'axios';
+import './Form.css'
 
 const Form = () => {
   const [mostrar, setMostrar] = useState(true);
 
-  const { handleChange, handleSubmit, errors } = useFormik({
+  const { handleChange, handleSubmit, errors,  setFieldValue } = useFormik({
+
     initialValues: {
       name: '',
       dni: '',
       description: '',
-      subject: '',
-      images: [
-        {
-          url: '',
-          title: '',
-        },
-      ],
+      images: [], 
     },
-    onSubmit: (data) => {
-      console.log(data);
+    onSubmit: async (data) => {
+      try {
+        // Subir cada imagen al almacenamiento de Firebase y obtener las URLs
+        const imageUrls = await Promise.all(
+          data.images.map(async (image) => {
+            const storageRef = storage.ref(`images/${image.name}`);
+            await storageRef.put(image);
+            return await storageRef.getDownloadURL();
+          })
+        );
 
-      setMostrar(false);
+        // Agregar las URLs de las imágenes al objeto de datos
+        data.images = imageUrls;
+
+        // Enviar los datos al servidor
+        const response = await axios.post('http://localhost:8080/api/teachers', data, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Respuesta del servidor:', response.data);
+        setMostrar(false);
+      } catch (error) {
+        console.error('Error al enviar los datos:', error);
+      }
     },
     validationSchema: Yup.object({
       name: Yup.string()
         .min(3, 'El nombre debe tener por lo menos 3 caracteres')
-        .max(20, 'El nombre debe tener maximo 20 caracteres')
+        .max(20, 'El nombre debe tener máximo 20 caracteres')
         .required('El campo es obligatorio'),
       dni: Yup.string()
-        .min(8, 'El dni debe tener por lo menos 8 caracteres')
-        .max(11, 'El nombre debe tener maximo 11 caracteres')
+        .min(8, 'El DNI debe tener por lo menos 8 caracteres')
+        .max(11, 'El DNI debe tener máximo 11 caracteres')
         .required('El campo es requerido'),
       description: Yup.string(),
-      subject: Yup.string().required('Seleccione una categoría'),
-      images: Yup.array()
-        .required('Debe contener imágenes')
-        .min(5, 'Debe contener mínimo 5 imágenes'),
     }),
     validateOnChange: false,
+
+    
   });
-  console.log(errors);
+
   return (
     <main>
       {mostrar ? (
@@ -55,8 +71,8 @@ const Form = () => {
             name="name"
             label="Ingrese su nombre"
             variant="outlined"
-            error={errors.nombre ? true : false}
-            helperText={errors.nombre}
+            error={errors.name ? true : false}
+            helperText={errors.name}
           />
           <TextField
             type="text"
@@ -80,34 +96,18 @@ const Form = () => {
             error={errors.description ? true : false}
             helperText={errors.description}
           />
-          <TextField
-            select
-            label="Seleccione una categoría"
-            onChange={handleChange}
-            name="subject"
-            variant="outlined"
-            error={errors.subject ? true : false}
-            helperText={errors.subject}
-          >
-            <MenuItem value="Matemáticas">Matemáticas</MenuItem>
-            <MenuItem value="Lenguaje">Lenguaje</MenuItem>
-            <MenuItem value="Inglés">Inglés</MenuItem>
-            <MenuItem value="Historia">Historia</MenuItem>
-          </TextField>
-          <TextField
+          <input
             type="file"
-            onChange={handleChange}
             name="images"
-            variant="outlined"
-            autoComplete="off"
+            onChange={(event) => setFieldValue('images', Array.from(event.currentTarget.files))}
+            multiple
           />
-
-          <Button type="submit" variant="contained" color="success">
+          <Button type="submit" variant="contained" color="primary">
             Enviar
           </Button>
         </form>
       ) : (
-        <p>registro exitoso</p>
+        <p>Registro exitoso</p>
       )}
     </main>
   );
