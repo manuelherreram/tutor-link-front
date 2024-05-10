@@ -5,8 +5,8 @@ export const getData = async () => {
   return res.data;
 };
 export const getDataById = async (id) => {
-  let res = await axios.get(`http://localhost:8080/api/teachers/${id}`);
-  // let res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+  // let res = await axios.get(`http://localhost:8080/api/teachers/${id}`);
+  let res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
   return res.data;
 };
 export const register = async () => {
