@@ -46,6 +46,7 @@ const Detail = () => {
               className="first-image"
             /></Link>
         </div>
+        <div className='container-grid'>
         <div className="cont-other-img">
           {teacherSelected.images.slice(1).map((image, index) => (
             <img
@@ -55,7 +56,9 @@ const Detail = () => {
               className="item-image"
             />
           ))}
-          <button className="more">ver más</button>
+         
+        </div>
+        <button className="more">ver más</button>
         </div>
       </section>
       )}

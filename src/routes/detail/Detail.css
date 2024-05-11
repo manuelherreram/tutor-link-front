@@ -1,5 +1,5 @@
 .container-detail {
-  margin-top: 90px;
+  margin: 90px 40px 0 40px;
 }
 .btn-go-back {
   text-align: right;
@@ -18,35 +18,48 @@
 }
 .container-image {
   display: flex;
-  height: 50vh;
+  justify-content: space-between;
+  height: 80vh;
   border-radius: 15px;
- 
 }
 .cont-first-img {
-  width: 40%;
-  height: 40vh;
-  margin: 0 20px
-
+  flex:0.6;
+  width:230%;
+  height: 100%;
+  margin-right: 20px;
+  overflow: hidden;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  object-fit: cover;
 }
 
-.first-image{
-  width: 100%;
+.container-grid {
+  flex:0.4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  border-top-right-radius: 15px;
+  overflow: hidden;
 }
+
 .cont-other-img {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-template-rows: repeat(2, 1fr); 
-  grid-gap: 10px; 
-  width: 50%;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 10px;
+  width: 100%;
+  object-fit: cover;
 }
-
-.item-image{
-width: 90%;
-
+.first-image {
+  width: 100%;
+  object-fit: cover;
+}
+.item-image {
+  width: 100%;
+  height: 95%;
 }
 .more {
   width: 100px;
   height: 20px;
-  justify-self: end;
+  margin: 10px;
 }
-
