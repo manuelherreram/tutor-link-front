@@ -16,7 +16,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/detalle/:id" element={<Detail/>} />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/new" element={<NewTeacher/>} />
+            <Route path="/admin/new" element={<NewTeacher/>} />
           </Route>
         </Routes>
         </ContextProvider>
