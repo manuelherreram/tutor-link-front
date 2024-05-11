@@ -36,6 +36,7 @@ const Detail = () => {
       ) : (
         <p>Cargando datos del tutor...</p>
       )}
+      {teacherSelected && teacherSelected.images && (
       <section className="container-image">
         <div className="cont-first-img">
           {teacherSelected.images.slice(0, 1).map((image, index) => (
@@ -59,6 +60,7 @@ const Detail = () => {
           <button className="more">ver más</button>
         </div>
       </section>
+      )}
     </div>
   );
 };
