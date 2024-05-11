@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
+import { verificarNombreEnServidor } from '../../api/api';
 import * as Yup from 'yup';
 // import { storage } from './firebaseConfig';
 import { Button, TextField, Select, MenuItem } from '@mui/material';
 import Swal from 'sweetalert2';
-import axios from 'axios';
+import { register } from '../../api/api';
 import './Form.css';
 
 const Form = () => {
   const [mostrar, setMostrar] = useState(true);
   const subjectOptions = [
-    { value: '', label: 'Seleccionar tema' },
+    { value: '', label: 'Seleccionar asignatura' },
     { value: 'historia', label: 'Historia' },
     { value: 'matematicas', label: 'Matemáticas' },
     { value: 'inglés', label: 'Inglés' },
@@ -26,8 +27,6 @@ const Form = () => {
     },
     onSubmit: async (data) => {
       try {
-
-
         // // Subir cada imagen al almacenamiento de Firebase y obtener las URLs
         // const imageUrls = await Promise.all(
         //   data.images.map(async (image) => {
@@ -40,19 +39,8 @@ const Form = () => {
         // // Agregar las URLs de las imágenes al objeto de datos
         // data.images = imageUrls;
 
-
         // Enviar los datos al servidor sin manejo de imágenes
-        const response = await axios.post(
-          'http://localhost:8080/api/teachers',
-          data,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-       
+        const response = await register(data);
         setMostrar(false);
         console.log('Respuesta del servidor:', response.data);
         Swal.fire({
@@ -68,7 +56,11 @@ const Form = () => {
       name: Yup.string()
         .min(3, 'El nombre debe tener por lo menos 3 caracteres')
         .max(20, 'El nombre debe tener máximo 20 caracteres')
-        .required('El campo es obligatorio'),
+        .required('El campo es obligatorio')
+        .test('nombre-unico', '¡El nombre ya está en uso!', async function(value) {
+          const nombreNoExistente = await verificarNombreEnServidor(value);
+          return nombreNoExistente;
+        }),
       dni: Yup.string()
         .min(8, 'El DNI debe tener por lo menos 8 caracteres')
         .max(11, 'El DNI debe tener máximo 11 caracteres')
@@ -107,7 +99,7 @@ const Form = () => {
             type="text"
             onChange={handleChange}
             name="description"
-            label="Ingrese su área de conocimiento"
+            label="Ingrese una descripción"
             multiline
             rows={4}
             variant="outlined"
@@ -121,8 +113,8 @@ const Form = () => {
             name="subject"
             label="Subject"
             variant="outlined"
-            displayEmpty // Esta propiedad permite mostrar el label cuando no hay una opción seleccionada
-  inputProps={{ 'aria-label': 'Subject' }} 
+            displayEmpty 
+            inputProps={{ 'aria-label': 'Subject' }}
             fullWidth
           >
             {subjectOptions.map((option) => (
@@ -131,7 +123,7 @@ const Form = () => {
               </MenuItem>
             ))}
           </Select>
-       
+
           {/* <input
             type="file"
             name="images"
@@ -145,7 +137,7 @@ const Form = () => {
             Enviar
           </Button>
         </form>
-      ) }
+      )}
     </main>
   );
 };
