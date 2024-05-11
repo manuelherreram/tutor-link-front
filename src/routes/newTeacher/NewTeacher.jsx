@@ -1,7 +1,7 @@
 import Form from '../../components/form/Form';
+import './NewTeacher.css';
 
-
-const Admin = () => {
+const NewTeacher = () => {
   return (
     <div className="container">
       <Form />
@@ -9,4 +9,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default NewTeacher;
