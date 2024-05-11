@@ -15,10 +15,15 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
   measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
+
+console.log('Configuración de Firebase:', firebaseConfig);
+
 const app = initializeApp(firebaseConfig);
+console.log('Aplicación Firebase inicializada:', app);
 // Initialize Firebase
 // Obtiene una referencia al almacenamiento de Firebase
 const storage = getStorage(app);
+console.log('Referencia al almacenamiento Firebase:', storage);
 
 // Exporta la referencia al almacenamiento de Firebase para que otros archivos puedan usarlo
 export { storage };

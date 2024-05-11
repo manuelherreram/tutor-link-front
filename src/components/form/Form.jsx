@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import { verificarNombreEnServidor } from '../../api/api';
 import * as Yup from 'yup';
-// import { storage } from './firebaseConfig';
+import ImageUploader from './ImageUploader';
+import { storage } from './firebaseConfig';
 import { Button, TextField, Select, MenuItem } from '@mui/material';
 import Swal from 'sweetalert2';
 import { register } from '../../api/api';
@@ -24,22 +25,21 @@ const Form = () => {
       dni: '',
       description: '',
       subject: '',
+      images:[]
     },
-    onSubmit: async (data) => {
+    onSubmit: async (data, {setSubmitting}) => {
       try {
-        // // Subir cada imagen al almacenamiento de Firebase y obtener las URLs
-        // const imageUrls = await Promise.all(
-        //   data.images.map(async (image) => {
-        //     const storageRef = storage.ref(`images/${image.name}`);
-        //     await storageRef.put(image);
-        //     return await storageRef.getDownloadURL();
-        //   })
-        // );
+        if (data.images && data.images.length > 0) { // Verifica si hay imágenes seleccionadas
+          const imageUrls = await Promise.all(
+            data.images.map(async (image) => {
+              const storageRef = storage.ref(`images/${image.name}`);
+              await storageRef.put(image);
+              return await storageRef.getDownloadURL();
+            })
+          );
 
-        // // Agregar las URLs de las imágenes al objeto de datos
-        // data.images = imageUrls;
-
-        // Enviar los datos al servidor sin manejo de imágenes
+        data.images = imageUrls;
+        }
         const response = await register(data);
         setMostrar(false);
         console.log('Respuesta del servidor:', response.data);
@@ -50,6 +50,8 @@ const Form = () => {
         });
       } catch (error) {
         console.error('Error al enviar los datos:', error);
+      }finally{
+        setSubmitting(false);
       }
     },
     validationSchema: Yup.object({
@@ -124,14 +126,7 @@ const Form = () => {
             ))}
           </Select>
 
-          {/* <input
-            type="file"
-            name="images"
-            onChange={(event) =>
-              setFieldValue('images', Array.from(event.currentTarget.files))
-            }
-            multiple
-          /> */}
+          <ImageUploader/>
 
           <Button type="submit" variant="contained" color="primary">
             Enviar
