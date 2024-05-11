@@ -9,41 +9,44 @@
   display: flex;
   justify-content: space-between;
   margin: 20px;
+  height: 40px;
 }
 .container-teacher {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 300px;
-  border: 1px solid grey;
+  margin: 15px;
 }
-.container-section {
-  display: grid;
-  height: 50vh;
-  grid-template-columns: 2fr 2fr;
-  grid-gap: 10px;
-}
-
 .container-image {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  grid-gap: 10px;
+  display: flex;
+  height: 50vh;
+  border-radius: 15px;
+ 
+}
+.cont-first-img {
+  width: 40%;
+  height: 40vh;
+  margin: 0 20px
+
 }
 
-.first-image {
-  grid-column: span 2;
-  grid-row: span 4;
+.first-image{
+  width: 100%;
 }
-.container-image img {
-  border: 1px solid red;
+.cont-other-img {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  grid-template-rows: repeat(2, 1fr); 
+  grid-gap: 10px; 
+  width: 50%;
+}
+
+.item-image{
+width: 90%;
+
 }
 .more {
   width: 100px;
   height: 20px;
+  justify-self: end;
 }
-.container-image img{
-    height: 100%;
-  margin: 5px
-}
+
