@@ -4,11 +4,27 @@
   padding: 0px;
 }
 
+
+body{
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  
+}
+
+
+h1 {
+  font-weight: 900; 
+}
+
+h2 {
+  font-weight: 700; 
+}
+
+p {
+  font-weight: 400; 
+}
 a{
   text-decoration: none;
-}
-body{
-  height: 100vh
 }
 
 
