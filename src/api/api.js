@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-
-
 //Peticiones al servidor
 //Listar a los profesores
 export const getData = async () => {
-  let res = await axios.get('http://localhost:8080/api/teachers');
+  let res = await axios.get('http://localhost:8080/api/teachers/admin');
   return res.data;
 };
 
