@@ -22,35 +22,43 @@ const Detail = () => {
   return (
     <div className="container-detail">
       <div className="section-detail">
-        <h1>Detalles del Tutor</h1>
+        <h2>{teacherSelected && teacherSelected.name}</h2>
         <button className="btn-go-back" onClick={() => navigate(-1)}>
           ⬅️
         </button>
       </div>
-      <div className="container-section">
-        {teacherSelected ? (
-          <div className="container-teacher">
-            <h2>Nombre: {teacherSelected.name}</h2>
-            <p>DNI: {teacherSelected.dni}</p>
-            <p>Descripción: {teacherSelected.description}</p>
-            <img
-              src={teacherSelected.img}
-              alt={`imagen de ${teacherSelected.name}`}
-            />
-          </div>
-        ) : (
-          <p>Cargando datos del tutor...</p>
-        )}
 
-        <section className="container-image">
-          <img src="/vite.svg " alt="imagen 1 " className="first-image " />
-          <img src="/vite.svg" alt="imagen 2 " />
-          <img src="/vite.svg" alt="imagen 3" />
-          <img src="/vite.svg" alt="imagen 4" />
-          <img src="/vite.svg" alt="imagen 5" />
+      {teacherSelected ? (
+        <div className="container-teacher">
+          <p>DNI: {teacherSelected.dni}</p>
+          <p>Descripción: {teacherSelected.description}</p>
+        </div>
+      ) : (
+        <p>Cargando datos del tutor...</p>
+      )}
+      <section className="container-image">
+        <div className="cont-first-img">
+          {teacherSelected.images.slice(0, 1).map((image, index) => (
+            <img
+              key={index}
+              src={image.url}
+              alt={`imagen${index + 1}`}
+              className="first-image"
+            />
+          ))}
+        </div>
+        <div className="cont-other-img">
+          {teacherSelected.images.slice(1).map((image, index) => (
+            <img
+              key={index}
+              src={image.url}
+              alt={`imagen${index + 2}`}
+              className="item-image"
+            />
+          ))}
           <button className="more">ver más</button>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 };
