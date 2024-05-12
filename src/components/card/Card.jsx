@@ -21,7 +21,7 @@ const Card = ({name, category, image, description, id}) => {
                 
                 
             </div>
-                <Link to={`http://localhost:8080/api/teachers/${id}`}><button className='card-button'>Conectar</button></Link>
+                <Link to={`detalle/${id}`}><button className='card-button'>Conectar</button></Link>
         </div>
     )
 }
