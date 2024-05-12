@@ -6,14 +6,15 @@
   justify-content: space-between;
   align-items: center;
   height: 70px;
-  background-color: #e3e9e9;
+  background-image:linear-gradient(to bottom, #fff, #46b9bc);
+ 
 }
 .container-logo {
   display: flex;
   margin: 15px;
 }
 h3 {
-  color: #225675;
+  color: #1e506d;
   font-style: italic;
 }
 .element-header {
@@ -26,8 +27,21 @@ h3 {
   margin: 15px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 490px) {
   h3 {
-    display: none;
+    font-size: 14px;
+  }
+  Button{
+    width: 50px;
+    height: 25px;
+    
+  }
+  #btn {
+    margin: 5px;
+    font-size: 8px;
+  }
+  #btn2 {
+    margin:5px;
+    font-size: 8px;
   }
 }

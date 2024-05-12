@@ -1,0 +1,52 @@
+.container-detail {
+  margin-top: 90px;
+}
+.btn-go-back {
+  text-align: right;
+  font-size: 25px;
+}
+.section-detail {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  height: 40px;
+}
+.container-teacher {
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+}
+.container-image {
+  display: flex;
+  height: 50vh;
+  border-radius: 15px;
+ 
+}
+.cont-first-img {
+  width: 40%;
+  height: 40vh;
+  margin: 0 20px
+
+}
+
+.first-image{
+  width: 100%;
+}
+.cont-other-img {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  grid-template-rows: repeat(2, 1fr); 
+  grid-gap: 10px; 
+  width: 50%;
+}
+
+.item-image{
+width: 90%;
+
+}
+.more {
+  width: 100px;
+  height: 20px;
+  justify-self: end;
+}
+

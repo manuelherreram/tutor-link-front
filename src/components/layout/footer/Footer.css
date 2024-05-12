@@ -1,20 +1,22 @@
 .container-footer{
+  background-color: #005777;
   display: flex;
   align-items: center;
   justify-content:flex-start;
   position: relative;
   bottom: 0;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 9rem;
 }
 
 
 footer {
   width: 100%;
-  border: 1px solid #333;
   text-align: left;
+  color: #46b9bc
 
 }
 footer img {
   margin: 15px;
+  width: 70px;
 }
