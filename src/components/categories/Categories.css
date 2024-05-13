@@ -1,0 +1,48 @@
+.container-categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background-color: #EEF7F8;
+    color: #fff;
+    width: 80%;
+    height: 90px;
+    border-radius: 40px;
+    margin-top: 30px;
+}
+.element-categories {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+
+}
+
+.element-categories li {
+    margin: 0 20px 0 20px;
+
+}
+
+.element-categories li a {
+    text-decoration: none;
+    font-size: 18px;
+    font-family: poppins;
+    color: #505050;
+}
+
+@media (max-width: 768px) {
+
+    .navbar li {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .element-categories li {
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    }
