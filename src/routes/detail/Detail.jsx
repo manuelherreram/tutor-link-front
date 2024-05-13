@@ -22,12 +22,12 @@ const Detail = () => {
 
   return (
     <div className="container-detail">
-      <div className="section-detail">
+      <section className="section-detail">
         <h2>{teacherSelected && teacherSelected.name}</h2>
         <button className="btn-go-back" onClick={() => navigate(-1)}>
           ⬅️
         </button>
-      </div>
+      </section>
 
       {teacherSelected ? (
         <div className="container-teacher">
@@ -39,27 +39,11 @@ const Detail = () => {
       )}
       {teacherSelected && teacherSelected.images && (
       <section className="container-image">
-        <div className="cont-first-img">
-            <Link to=""><img
+           <Link to={`/detalle/${id}/gallery`}><img
               src={teacherSelected.images[0].url}
               alt={`imagen1`}
               className="first-image"
             /></Link>
-        </div>
-        <div className='container-grid'>
-        <div className="cont-other-img">
-          {teacherSelected.images.slice(1).map((image, index) => (
-            <img
-              key={index}
-              src={image.url}
-              alt={`imagen${index + 2}`}
-              className="item-image"
-            />
-          ))}
-         
-        </div>
-        <button className="more">ver más</button>
-        </div>
       </section>
       )}
     </div>
