@@ -1,21 +1,23 @@
 .container-footer{
-  background-color: #005777;
   display: flex;
-  align-items: center;
-  justify-content:flex-start;
-  position: relative;
+  background-color: #005777;
+  margin-top: 40px;
   bottom: 0;
   width: 100%;
-  margin-top: 9rem;
 }
-
-
-footer {
+.footer{
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content:flex-start;
+  bottom: 0;
+  width: 100%;
   width: 100%;
   text-align: left;
   color: #46b9bc
 
 }
+
 footer img {
   margin: 15px;
   width: 70px;
