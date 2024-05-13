@@ -2,6 +2,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+ 
     align-items: center;
 } 
 .container-utilities {
@@ -26,8 +27,10 @@
 
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    /* correción para el footer */
+    grid-template-rows: repeat(5, 1fr);
     grid-gap: 20px; 
-    height: 100vh;
+    /* height: 100vh; */
     padding: 20px;
     
 }
