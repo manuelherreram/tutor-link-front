@@ -82,7 +82,7 @@ const Form = () => {
             type="text"
             onChange={handleChange}
             name="name"
-            label="Ingrese su nombre"
+            label="Ingr6ese su nombre"
             variant="outlined"
             error={errors.name ? true : false}
             helperText={errors.name}
@@ -126,7 +126,7 @@ const Form = () => {
             ))}
           </Select>
 
-          <ImageUploader/>
+          <ImageUploader folderName={values.name}/>
 
           <Button type="submit" variant="contained" color="primary">
             Enviar
