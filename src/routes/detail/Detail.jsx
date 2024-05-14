@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getDataById } from "../../api/api";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./Detail.css";
 import Modal from "react-modal";
