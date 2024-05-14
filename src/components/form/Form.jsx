@@ -7,10 +7,14 @@ import { storage } from './firebaseConfig';
 import { Button, TextField, Select, MenuItem } from '@mui/material';
 import Swal from 'sweetalert2';
 import { register } from '../../api/api';
+import { useNavigate } from 'react-router-dom';
 import './Form.css';
 
 const Form = () => {
   const [mostrar, setMostrar] = useState(true);
+
+
+  const navigate = useNavigate();
   const subjectOptions = [
     { value: '', label: 'Seleccionar asignatura' },
     { value: 'historia', label: 'Historia' },
@@ -48,6 +52,7 @@ const Form = () => {
           title: '¡Registro exitoso!',
           text: 'El profesor se ha registrado correctamente.',
         });
+            navigate('/admin');
       } catch (error) {
         console.error('Error al enviar los datos:', error);
       }finally{
@@ -82,7 +87,7 @@ const Form = () => {
             type="text"
             onChange={handleChange}
             name="name"
-            label="Ingr6ese su nombre"
+            label="Ingrese su nombre"
             variant="outlined"
             error={errors.name ? true : false}
             helperText={errors.name}
