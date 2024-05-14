@@ -35,7 +35,7 @@ const Admin = () => {
     }
 
     return (
-        <div className="button-panel">
+        <div className="admin-container">
             <Menu
                 onClick={onClick}
                 selectedKeys={[current]}
