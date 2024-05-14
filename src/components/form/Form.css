@@ -13,3 +13,20 @@ h2{
     margin: 20px;
     text-align: center;
 }
+
+@media screen and (max-width: 480px) {
+    .container-form {
+      width: 90%; 
+      margin-top: 30px; 
+      border-radius: 10px;
+      background-color: #f7f7f7;
+      border: 1px solid rgb(134, 128, 128);
+      padding: 20px; 
+    }
+  
+    h2 {
+      margin: 10px 0; 
+      text-align: center;
+      font-size: 1.5rem; 
+    }
+  }

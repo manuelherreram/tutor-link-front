@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import { verificarNombreEnServidor } from '../../api/api';
+import { verificarDNIServidor } from '../../api/api';
 import * as Yup from 'yup';
 import ImageUploader from './ImageUploader';
 import { storage } from './firebaseConfig';
@@ -15,6 +15,7 @@ const Form = () => {
 
 
   const navigate = useNavigate();
+
   const subjectOptions = [
     { value: '', label: 'Seleccionar asignatura' },
     { value: 'historia', label: 'Historia' },
@@ -24,6 +25,7 @@ const Form = () => {
   ];
 
   const { handleChange, handleSubmit, errors, values } = useFormik({
+
     initialValues: {
       name: '',
       dni: '',
@@ -31,6 +33,7 @@ const Form = () => {
       subject: '',
       images:[]
     },
+
     onSubmit: async (data, {setSubmitting}) => {
       try {
         if (data.images && data.images.length > 0) { // Verifica si hay imágenes seleccionadas
@@ -58,24 +61,27 @@ const Form = () => {
       }finally{
         setSubmitting(false);
       }
+
     },
     validationSchema: Yup.object({
       name: Yup.string()
         .min(3, 'El nombre debe tener por lo menos 3 caracteres')
         .max(20, 'El nombre debe tener máximo 20 caracteres')
         .required('El campo es obligatorio')
-        .test('nombre-unico', '¡El nombre ya está en uso!', async function(value) {
-          const nombreNoExistente = await verificarNombreEnServidor(value);
-          return nombreNoExistente;
-        }),
+       ,
       dni: Yup.string()
         .min(8, 'El DNI debe tener por lo menos 8 caracteres')
         .max(11, 'El DNI debe tener máximo 11 caracteres')
-        .required('El campo es requerido'),
+        .required('El campo es requerido')
+        .test('dni-unico', '¡El DNI ya está en uso!', async function (value) {
+          const dniNoExistente = await verificarDNIServidor(value);
+          return dniNoExistente;
+        }),
       description: Yup.string(),
       subject: Yup.string().required('Seleccione un tema'),
     }),
     validateOnChange: false,
+    
   });
 
   return (

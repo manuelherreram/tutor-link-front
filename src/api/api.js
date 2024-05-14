@@ -29,13 +29,12 @@ export const register = async (data) => {
  
 };
 
-//Validar nombre del profesor
-export const verificarNombreEnServidor = async (name) => {
- 
-    const response = await axios.get('http://localhost:8080/api/teachers/admin');
-    const data = response.data;
-    const nombreExistente = data.some(profesor => profesor.name === name);
-    return !nombreExistente;
+//Validar ID del profesor
+export const verificarDNIServidor = async (dni) => {
+    const response = await axios.get(`http://localhost:8080/api/teachers/admin`);
+    const profesores = response.data;
+    const dniExistente = profesores.some(profesor => profesor.dni === dni);    
+    return !dniExistente;
+    
   
- 
 };
