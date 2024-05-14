@@ -17,7 +17,7 @@ const Header = () => {
         <Button id="btn" variant="contained">
           Crear cuenta
         </Button>
-        <Button variant="contained">Iniciar sesión</Button>
+        <Button id="btn" variant="contained">Iniciar sesión</Button>
       </div>
     </header>
   );
