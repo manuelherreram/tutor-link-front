@@ -65,13 +65,13 @@ const Detail = () => {
       {teacherSelected && teacherSelected.images && (
         <section className="container-image">
           <div className="cont-first-img">
-            <Link to="">
+            
               <img
                 src={teacherSelected.images[0].url}
                 alt={`imagen1`}
                 className="first-image"
               />
-            </Link>
+           
           </div>
           <div className="container-grid">
             <div className="cont-other-img">
