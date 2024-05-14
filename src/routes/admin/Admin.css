@@ -1,0 +1,7 @@
+.admin-container{
+    margin-top:70px;
+    flex-direction: column;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    height: 100vh;
+}

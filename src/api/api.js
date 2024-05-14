@@ -39,3 +39,12 @@ export const verificarNombreEnServidor = async (name) => {
   
  
 };
+
+export const deleteUser = async (id) => {
+  try {
+    const response = await axios.delete(`http://localhost:8080/api/teachers/${id}`);
+    console.log('Teacher deleted successfully:', response.data);
+  } catch (error) {
+    console.error('Error deleting teacher:', error);
+  }
+};
