@@ -56,7 +56,7 @@ const Detail = () => {
 
       {teacherSelected ? (
         <div className="container-teacher">
-          <p>{teacherSelected.dni}</p>
+          <p>{teacherSelected.subject.title}</p>
           <p> {teacherSelected.description}</p>
         </div>
       ) : (
