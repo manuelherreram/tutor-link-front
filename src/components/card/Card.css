@@ -20,8 +20,6 @@
     height: 272px;
     margin-top: 24px;
     border-radius: 25px;
-    border: 1px solid #14ed10;
-
     }
 
 .card-image img {
@@ -35,8 +33,6 @@
     height: 100px;
     margin-top: 24px;
     opacity: 0px;
-    border: 1px solid #14ed10;
-
 }
 
 .card-name {
