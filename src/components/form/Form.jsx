@@ -88,7 +88,7 @@ const Form = () => {
     <main>
       {mostrar && (
         <form className="container-form" onSubmit={handleSubmit}>
-          <h2>Formulario de Registro</h2>
+          <h3>Formulario de Registro</h3>
           <TextField
             type="text"
             onChange={handleChange}
