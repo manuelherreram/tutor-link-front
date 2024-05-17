@@ -1,8 +1,9 @@
 import './Panel.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getData, deleteUser } from '../../api/api';
-import { DeleteOutlined, EditTwoTone, PlusOutlined } from '@ant-design/icons';
-import { Modal, Space, Table, Tag, message } from 'antd';
+import { DeleteOutlined, EditTwoTone, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Modal, Space, Table, Tag, message, Input, Button } from 'antd';
+import Highlighter from 'react-highlight-words';
 
 const { Column } = Table;
 
@@ -11,6 +12,9 @@ const Panel = ({ showPanel }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [teacherToDeleteId, setTeacherToDeleteId] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -69,6 +73,93 @@ const Panel = ({ showPanel }) => {
     setConfirmDeleteVisible(true);
   };
 
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters, confirm) => {
+    clearFilters();
+    setSearchText('');
+    confirm();
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Buscar ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Buscar
+          </Button>
+          <Button
+            onClick={() => handleReset(clearFilters, confirm)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1677ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        : '',
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
   return (
     <div className="container-panel">
       <div className="title-panel">
@@ -79,10 +170,10 @@ const Panel = ({ showPanel }) => {
       ) : data.length === 0 ? (
         <div className="no-data">No se encontraron profesores</div>
       ) : (
-        <Table dataSource={data} className="table-ant">
-          <Column title="ID" dataIndex="id" key="id" />
-          <Column title="Nombre" dataIndex="nombre" key="nombre" />
-          <Column title="DNI" dataIndex="dni" key="dni" />
+        <Table dataSource={data} className="table-ant" rowKey="id">
+          <Column title="ID" dataIndex="id" key="id" {...getColumnSearchProps('id')} />
+          <Column title="Nombre" dataIndex="nombre" key="nombre" {...getColumnSearchProps('nombre')} />
+          <Column title="DNI" dataIndex="dni" key="dni" {...getColumnSearchProps('dni')} />
           <Column
             title="Materias"
             dataIndex="materia"
@@ -90,6 +181,7 @@ const Panel = ({ showPanel }) => {
             render={(materia) => (
               <Tag color={getColorBySubject(materia)}>{materia}</Tag>
             )}
+            {...getColumnSearchProps('materia')}
           />
           <Column
             title="Acciones"
