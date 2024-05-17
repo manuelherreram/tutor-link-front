@@ -1,50 +1,81 @@
-import { useState } from 'react'
-import Panel from '../../components/admin/Panel' // Import Panel component
-import { Menu } from 'antd' // Import useNavigate
-
-import './Admin.css'
+import { useState, useEffect } from 'react'
+import Panel from '../../components/admin/Panel'
+import { Button, Menu, Result } from 'antd'
 import { UserAddOutlined, WalletOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import './Admin.css'
 
 const Admin = () => {
-    const items = [
-        {
-            label: 'Todos los Profesores',
-            key: 'profesores',
-            icon: <WalletOutlined />,
-        },
-        {
-            label: 'Agregar un Profesor',
-            key: 'agregar',
-            icon: <UserAddOutlined />,
-        },
-    ]
-    const [showPanel, setShowPanel] = useState(false)
-    const [current, setCurrent] = useState('mail')
-    const navigate = useNavigate()
+  const items = [
+    {
+      label: 'Todos los Profesores',
+      key: 'profesores',
+      icon: <WalletOutlined />,
+    },
+    {
+      label: 'Agregar un Profesor',
+      key: 'agregar',
+      icon: <UserAddOutlined />,
+    },
+  ]
 
-    const onClick = e => {
-        console.log('click ', e)
-        setCurrent(e.key)
+  const [current, setCurrent] = useState('')
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+  const [showPanel, setShowPanel] = useState(false) // State to control the panel visibility
+  const navigate = useNavigate()
 
-        if (e.key === 'profesores') {
-            setShowPanel(true)
-        } else if (e.key === 'agregar') {
-            navigate('/admin/new')
-        }
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const handleMenuClick = (e) => {
+    setCurrent(e.key)
+
+    if (e.key === 'profesores') {
+      setShowPanel(true)
+    } else if (e.key === 'agregar') {
+      navigate('/admin/new')
+      setShowPanel(false)
     }
+  }
 
-    return (
-        <div className="admin-container">
-            <Menu
-                onClick={onClick}
-                selectedKeys={[current]}
-                mode="horizontal"
-                items={items}
-            />
-            {showPanel && <Panel showPanel={showPanel} />}
+  const handleGoHome = () => {
+    navigate('/') // Navigate to the root path
+  }
+
+  const renderContent = () => {
+    if (isMobile) {
+      return (
+        <div className="container-not-available">
+          <Result
+            status="warning"
+            title="Panel no disponible en dispositivos móviles."
+            extra={
+              <Button type="primary" key="console" onClick={handleGoHome}>
+                Ir al Inicio
+              </Button>
+            }
+          />
         </div>
-    )
+      )
+    } else {
+      return (
+        <>
+          <Menu
+            onClick={handleMenuClick}
+            selectedKeys={[current]}
+            mode="horizontal"
+            items={items}
+          />
+          {showPanel && <Panel showPanel={showPanel} />}
+        </>
+      )
+    }
+  }
+
+  return <div className="admin-container">{renderContent()}</div>
 }
 
 export default Admin

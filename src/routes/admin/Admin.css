@@ -5,3 +5,9 @@
     font-weight: 300;
     height: 100vh;
 }
+
+.container-not-available{
+    margin-top: 25%;
+    display: flex;
+    justify-content: center;
+}
