@@ -129,6 +129,7 @@ const Form = () => {
             displayEmpty 
             inputProps={{ 'aria-label': 'Subject' }}
             fullWidth
+       
           >
             {subjectOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -137,7 +138,7 @@ const Form = () => {
             ))}
           </Select>
 
-          <ImageUploader folderName={values.name}/>
+          <ImageUploader folderName={values.name} />
 
           <Button type="submit" variant="contained" color="primary">
             Enviar

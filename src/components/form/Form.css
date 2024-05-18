@@ -9,10 +9,15 @@ background-color: #f7f7f7;
 border: 1px solid rgb(134, 128, 128)
 }
 
-h3{
+ form h3{
+    font-weight: 300;
     margin: 20px;
     text-align: center;
  
+}
+input {
+  font-size: 16px; 
+  color: rgb(104, 101, 101);
 }
 
 @media screen and (max-width: 480px) {

@@ -14,10 +14,10 @@ const Header = () => {
         </Link>
       </div>
       <div>
-        <Button id="btn" variant="contained">
+        <Link to='/register'><Button id="btn" variant="contained">
           Crear cuenta
-        </Button>
-        <Button id="btn" variant="contained">Iniciar sesión</Button>
+        </Button></Link>
+        <Link to='/login'><Button id="btn" variant="contained">Iniciar sesión</Button></Link>
       </div>
     </header>
   );
