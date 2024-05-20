@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import { getData, deleteUser } from '../../api/api';
 import { DeleteOutlined, EditTwoTone, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Modal, Space, Table, Tag, message, Input, Button } from 'antd';
-import Highlighter from 'react-highlight-words';
 
 const { Column } = Table;
 
@@ -144,20 +143,14 @@ const Panel = ({ showPanel }) => {
         setTimeout(() => searchInput.current?.select(), 100);
       }
     },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{
-            backgroundColor: '#ffc069',
-            padding: 0,
-          }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
-      ) : (
-        text
-      ),
+  });
+
+  const getColumnRender = (dataIndex) => ({
+    render: (text) => (
+      <span>
+        <Tag color={getColorBySubject(text)}>{text}</Tag>
+      </span>
+    ),
   });
 
   return (
@@ -171,17 +164,30 @@ const Panel = ({ showPanel }) => {
         <div className="no-data">No se encontraron profesores</div>
       ) : (
         <Table dataSource={data} className="table-ant" rowKey="id">
-          <Column title="ID" dataIndex="id" key="id" {...getColumnSearchProps('id')} />
-          <Column title="Nombre" dataIndex="nombre" key="nombre" {...getColumnSearchProps('nombre')} />
-          <Column title="DNI" dataIndex="dni" key="dni" {...getColumnSearchProps('dni')} />
+          <Column
+            title="ID"
+            dataIndex="id"
+            key="id"
+            {...getColumnSearchProps('id')}
+          />
+          <Column
+            title="Nombre"
+            dataIndex="nombre"
+            key="nombre"
+            {...getColumnSearchProps('nombre')}
+          />
+          <Column
+            title="DNI"
+            dataIndex="dni"
+            key="dni"
+            {...getColumnSearchProps('dni')}
+          />
           <Column
             title="Materias"
             dataIndex="materia"
             key="materia"
-            render={(materia) => (
-              <Tag color={getColorBySubject(materia)}>{materia}</Tag>
-            )}
             {...getColumnSearchProps('materia')}
+            {...getColumnRender('materia')}
           />
           <Column
             title="Acciones"
