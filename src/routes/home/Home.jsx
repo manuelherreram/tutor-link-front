@@ -9,7 +9,7 @@ const Home = () => {
  const [ randomTeachers, setRandomTeachers ] =  useState([])
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/teachers/index')
+    fetch('http://localhost:8080/api/public/index')
     .then(res => res.json())
     .then(data => setRandomTeachers(data))
   },[])

@@ -3,13 +3,13 @@ import axios from 'axios';
 //Peticiones al servidor
 //Listar a los profesores
 export const getData = async () => {
-  let res = await axios.get('http://localhost:8080/api/teachers/admin');
+  let res = await axios.get('http://localhost:8080/api/admin/teachers');
   return res.data;
 };
 
 //buscar un profesor por su id
 export const getDataById = async (id) => {
-  let res = await axios.get(`http://localhost:8080/api/teachers/${id}`);
+  let res = await axios.get(`http://localhost:8080/api/public/${id}`);
   return res.data;
 };
 
@@ -17,7 +17,7 @@ export const getDataById = async (id) => {
 export const register = async (data) => {
 
     const response = await axios.post(
-      'http://localhost:8080/api/teachers',
+      'http://localhost:8080/api/admin/teacher',
       data,
       {
         headers: {
