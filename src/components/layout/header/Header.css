@@ -6,17 +6,21 @@
   justify-content: space-between;
   align-items: center;
   height: 70px;
-  background-image:linear-gradient(to top, #fff, #91d1d4);
- 
+  background-image: linear-gradient(to top, #fff, #91d1d4);
 }
 .container-logo {
   display: flex;
   margin: 15px;
 }
-h3 {
+nav {
+  display: flex;
+  align-items: center;
+}
+h4 {
   color: #1e506d;
   font-style: italic;
-  margin: 20px;
+  font-weight: 300;
+  margin: 10px;
 }
 .element-header {
   margin: 15px 0px;
@@ -25,8 +29,25 @@ h3 {
   width: 65%;
   margin-top: 15px;
 }
-#btn {
-  margin: 15px;
+.btn {
+  width: 137px;
+  height: 38px;
+  margin-right: 24px;
+  font-size: 16px;
+  font-family: poppins;
+  border-radius: 27px;
+  margin: 15px 5px;
+}
+
+.btn-sign {
+  background: #005770;
+  color: #ebebeb;
+  border: none;
+}
+.btn-login {
+  background: #ffffff;
+  color: #005770;
+  border: 1px solid #005770;
 }
 
 @media (max-width: 480px) {
@@ -39,20 +60,20 @@ h3 {
     align-items: center;
     height: 70px;
     background-image: linear-gradient(to top, #fff, #91d1d4);
-    padding: 0 20px; 
+    padding: 0 20px;
   }
-  
+
   .container-logo {
     display: flex;
     align-items: center;
   }
-  
+
   h3 {
     color: #1e506d;
     font-style: italic;
-    margin-left: 10px; 
+    margin-left: 10px;
   }
-  
+
   #btn {
     font-size: 12px;
     padding: 3px 5px; /* Ajustamos el tamaño del botón en móviles */
@@ -61,12 +82,9 @@ h3 {
 }
 
 @media (max-width: 800px) {
-
   #btn {
     font-size: 12px;
     padding: 3px 5px; /* Ajustamos el tamaño del botón en móviles */
     margin: 5px;
   }
-  
 }
-  
