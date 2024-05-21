@@ -12,12 +12,12 @@ const Header = () => {
             className="img-header"
           />
         </Link>
+        <Link to="/" className="element-header">
+          <h4>Tu camino al éxito comienza aquí</h4>
+        </Link>
       </div>
 
       <nav>
-        <Link to="/" className="element-header">
-          <h4>Tu camino al éxito comienza aquí...</h4>
-        </Link>
         <Link to="/register">
           <button className="btn btn-sign" >
            Registrar
