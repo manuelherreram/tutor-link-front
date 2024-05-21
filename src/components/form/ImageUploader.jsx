@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { storage } from './firebaseConfig';
+import { storage } from '../../firebase/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const ImageUploader = ({ folderName }) => {

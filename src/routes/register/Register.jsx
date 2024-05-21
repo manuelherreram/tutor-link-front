@@ -4,6 +4,9 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { app } from '../../firebase/firebaseConfig'; 
+
 const Register = () => {
   const navigate = useNavigate();
 
@@ -14,9 +17,26 @@ const Register = () => {
       email: '',
       password: '',
     },
-    onSubmit: (data) => {
-      console.log(data);
-      navigate('/login');
+    onSubmit: async (data) => {
+      const { email, password } = data;
+
+      try {
+        const auth = getAuth(app);
+
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log('User created successfully:', userCredential.user);
+        navigate('/login'); 
+      } catch (error) {
+        console.error('Registration failed:', error);
+        // Handle specific errors (example shown below)
+        if (error.code === 'auth/email-already-in-use') {
+          errors.email = 'This email address is already in use.';
+        } else if (error.code === 'auth/weak-password') {
+          errors.password = 'Password is too weak.';
+        } else {
+          errors.general = 'An error occurred during registration.';
+        }
+      }
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -27,7 +47,7 @@ const Register = () => {
       email: Yup.string()
         .email('El email no corresponde')
         .required('El campo es requerido'),
-      contraseña: Yup.string()
+      password: Yup.string()
         .required('obligatorio')
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,

@@ -1,13 +1,14 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getStorage, ref} from "firebase/storage";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
+  apiKey: "AIzaSyAJezbLzJrY8Ijc4I-z0rRVmR5dn1Y0ykk",
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_PROJECT_ID,
   storageBucket:import.meta.env.VITE_STORAGE_BUCKET,
@@ -27,5 +28,5 @@ const storageRef = ref(storage);
 console.log('Referencia al almacenamiento Firebase:', storage);
 console.log(storageRef, 'storageRef1')
 // Exporta la referencia al almacenamiento de Firebase para que otros archivos puedan usarlo
-export { storage, storageRef };
+export { storage, storageRef,app };
 

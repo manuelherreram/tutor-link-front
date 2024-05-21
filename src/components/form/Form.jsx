@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { verificarDNIServidor } from '../../api/api';
 import * as Yup from 'yup';
 import ImageUploader from './ImageUploader';
-import { storage } from './firebaseConfig';
+import { storage } from '../../firebase/firebaseConfig';
 import { Button, TextField, Select, MenuItem } from '@mui/material';
 import Swal from 'sweetalert2';
 import { register } from '../../api/api';
