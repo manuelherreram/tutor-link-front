@@ -1,3 +1,6 @@
+main{
+  display: flex;
+}
 .container-form{
     display: flex;
     flex-direction: column;
@@ -6,20 +9,39 @@
 margin-top: 90px;
 border-radius: 10px;
 background-color: #f7f7f7;
-border: 1px solid rgb(134, 128, 128)
+border: 1px solid rgb(206, 200, 200)
 }
 
- form h3{
+ form h4{
     font-weight: 300;
-    margin: 20px;
+    margin:  20px;
     text-align: center;
  
+}
+form h3{
+  font-weight: 300;
+  margin:  20px;
+  text-align: center;
+
 }
 input {
   font-size: 16px; 
   color: rgb(104, 101, 101);
+  font-family: 'poppins';
+  font-weight: 300;
 }
+Select{
+  font-size: 16px; 
+  color: rgb(104, 101, 101);
+  font-family: 'poppins';
+  font-weight: 300;
 
+}
+.categorias{
+  height: 200px;
+  margin: 90px 20px;
+  font-weight: 300;
+}
 @media screen and (max-width: 480px) {
     .container-form {
       width: 90%; 

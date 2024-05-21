@@ -31,7 +31,7 @@ export const register = async (data) => {
 
 //Validar ID del profesor
 export const verificarDNIServidor = async (dni) => {
-    const response = await axios.get(`http://localhost:8080/api/teachers/admin`);
+    const response = await axios.get(`http://localhost:8080/api/admin/teachers`);
     const profesores = response.data;
     const dniExistente = profesores.some(profesor => profesor.dni === dni);    
     return !dniExistente;
