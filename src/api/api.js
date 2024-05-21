@@ -48,3 +48,11 @@ export const deleteUser = async (id) => {
     console.error('Error deleting teacher:', error);
   }
 };
+
+//para filtrar por subject 
+export const fetchTeachers = async (subject) => {
+  const response = await axios.get('/api/profesores', {
+      params: { categoria: subject }
+  });
+  return response.data;
+};

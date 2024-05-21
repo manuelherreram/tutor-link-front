@@ -3,7 +3,7 @@ import Detail from './routes/detail/Detail';
 import Layout from './components/layout/Layout';
 import Home from './routes/home/Home';
 import Admin from './routes/admin/Admin.jsx';
-import { ContextProvider } from './components/utils/globalContext.jsx';
+import { TeacherContextProvider } from './components/utils/context/TeacherContext.jsx';
 import NewTeacher from'./routes/newTeacher/NewTeacher'
 import Login from'./routes/login/Login.jsx'
 import Register from './routes/register/Register.jsx'
@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-      <ContextProvider>
+      <TeacherContextProvider>
         <Routes>
           
           <Route element={<Layout />}>
@@ -25,7 +25,7 @@ function App() {
             <Route path="/register" element={<Register/>} />
           </Route>
         </Routes>
-        </ContextProvider>
+        </TeacherContextProvider>
       </BrowserRouter>
     
     </>
