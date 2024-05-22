@@ -28,9 +28,15 @@ const Form = () => {
     values: valuesCategories,
   } = useFormik({
     initialValues: {
-      isOnline: false,
-      isGroup: false,
-      isBilingual: false,
+      isCertificate:false,
+      trialClass:false,
+      languages:false,
+      isPresencial:false,
+      isGroup:false,
+      studyMaterial:false,
+      exams:false,
+      superTeacher:false
+    
     },
     onSubmit: () => {
       // Envía el formulario principal cuando se envía el formulario de categorías
@@ -163,15 +169,43 @@ const Form = () => {
             className="container-form categorias"
             onSubmit={handleSubmitCategories}
           >
-            <h4>Categorías del Tutor</h4>
+            <h4>Características del Tutor</h4>
             <label>
               <input
                 type="checkbox"
                 onChange={handleChangeCategories}
-                name="isOnline"
+                name="isCertificate"
                 checked={valuesCategories.isOnline}
               />{' '}
-              ¿Es online?
+              ¿Está certificado en su área de enseñanza?
+            </label>
+           
+            <label>
+            <input
+                type="checkbox"
+                onChange={handleChangeCategories}
+                name="trialClass"
+                checked={valuesCategories.isGroup}
+              />{' '}
+              ¿Ofrece clase de prueba?
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={handleChangeCategories}
+                name="languages"
+                checked={valuesCategories.isBilingual}
+              />{' '}
+              ¿Otros idiomas?
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={handleChangeCategories}
+                name="isPresencial"
+                checked={valuesCategories.isOnline}
+              />{' '}
+              ¿Realiza clases individuales?
             </label>
             <label>
               <input
@@ -180,17 +214,37 @@ const Form = () => {
                 name="isGroup"
                 checked={valuesCategories.isGroup}
               />{' '}
-              ¿Es grupal?
+              ¿Realiza clases grupales?
             </label>
             <label>
               <input
                 type="checkbox"
                 onChange={handleChangeCategories}
-                name="isBilingual"
-                checked={valuesCategories.isBilingual}
+                name="studyMaterial"
+                checked={valuesCategories.isOnline}
               />{' '}
-              ¿Es bilingüe?
+              ¿Entrega material de estudio?
             </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={handleChangeCategories}
+                name="exams"
+                checked={valuesCategories.isOnline}
+              />{' '}
+              ¿Realiza preparación para exámenes?
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={handleChangeCategories}
+                name="superTeacher"
+                checked={valuesCategories.isOnline}
+              />{' '}
+              SuperProfesor
+            </label>
+           
+           
             <Button type="submit" variant="contained" color="primary">
               Enviar
             </Button>
