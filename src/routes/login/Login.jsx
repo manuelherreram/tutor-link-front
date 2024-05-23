@@ -3,13 +3,12 @@ import * as Yup from 'yup';
 import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // For navigation
 import './Login.css';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from 'react';
-import { app } from '../../firebase/firebaseConfig';
+import {  auth } from '../../firebase/firebaseConfig';
 
 const Login = () => {
   const navigate = useNavigate();
-  const auth = getAuth(app); 
 
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -92,6 +91,7 @@ console.log('user', user)
 
         <p>Usuario actual: {currentUser.email}</p>
         <p>Usuario contraseña: {currentUser.uid}</p>
+     
         </div>
       )}
     </main>
