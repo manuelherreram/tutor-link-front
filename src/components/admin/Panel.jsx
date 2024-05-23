@@ -1,78 +1,159 @@
-import './Panel.css'
-import { useState, useEffect } from 'react'
-import { getData, deleteUser } from '../../api/api'; 
-import { DeleteOutlined, EditTwoTone, PlusOutlined } from '@ant-design/icons'
-import { Modal, Space, Table, Tag, message } from 'antd'
-const { Column } = Table
+import './Panel.css';
+import { useState, useEffect, useRef } from 'react';
+import { getData, deleteUser } from '../../api/api';
+import { DeleteOutlined, EditTwoTone, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Modal, Space, Table, Tag, message, Input, Button } from 'antd';
+
+const { Column } = Table;
 
 const Panel = ({ showPanel }) => {
-    const [data, setData] = useState([]) // Initialize empty data and loading state
-    const [isLoading, setIsLoading] = useState(true) // Start with loading state true
-    const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false); // State for delete confirmation modal
-    const [teacherToDeleteId, setTeacherToDeleteId] = useState(null); // Store ID for deletion
-  
-    useEffect(() => {
-        (async () => {
-            if (showPanel) {
-                // Check if showPanel is true
-                try {
-                    const teachersData = await getData()
-                    const processedData = teachersData.map(teacher => {
-                        return {
-                            id: teacher.id,
-                            nombre: teacher.name,
-                            dni: teacher.dni,
-                            materia: teacher.subject.title,
-                            description: teacher.description,
-                            images: teacher.images,
-                        }
-                    })
-                    console.log('Processed teachers data:', processedData)
-                    setData(processedData)
-                    setIsLoading(false) // Set loading state to false when data is loaded
-                } catch (error) {
-                    console.error('Error fetching teachers:', error)
-                }
-            }
-        })()
-    }, [showPanel])
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
+  const [teacherToDeleteId, setTeacherToDeleteId] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
 
-    const getColorBySubject = subject => {
-        switch (subject.toLowerCase()) {
-            case 'historia':
-                return 'pink'
-            case 'geografia':
-                return 'green'
-            case 'matematica':
-                return 'yellow'
-            case 'ingles':
-                return 'purple'
-            case 'lenguaje':
-                return 'red'
-            default:
-                return 'black'
+  useEffect(() => {
+    (async () => {
+      if (showPanel) {
+        try {
+          const teachersData = await getData();
+          const processedData = teachersData.map((teacher) => ({
+            id: teacher.id,
+            nombre: teacher.name,
+            dni: teacher.dni,
+            materia: teacher.subject.title,
+            description: teacher.description,
+            images: teacher.images,
+          }));
+          setData(processedData);
+          setIsLoading(false);
+        } catch (error) {
+          console.error('Error fetching teachers:', error);
         }
-    }
-    const handleDelete = async (id) => {
-      setConfirmDeleteVisible(false); 
-  
-      try {
-        await deleteUser(id); 
-        const newData = data.filter((teacher) => teacher.id !== id); 
-        setData(newData);
-        message.success('Profesor eliminado exitosamente'); 
-      } catch (error) {
-        console.error('Error deleting teacher:', error);
-        message.error('Error al eliminar el profesor'); 
       }
-    };
-  
-    const showDeleteConfirmation = (id) => {
-      setTeacherToDeleteId(id); 
-      setConfirmDeleteVisible(true); 
-    };
+    })();
+  }, [showPanel]);
 
-   return (
+  const getColorBySubject = (subject) => {
+    switch (subject.toLowerCase()) {
+      case 'historia':
+        return 'pink';
+      case 'geografia':
+        return 'green';
+      case 'matematica':
+        return 'yellow';
+      case 'ingles':
+        return 'purple';
+      case 'lenguaje':
+        return 'red';
+      default:
+        return 'black';
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setConfirmDeleteVisible(false);
+    try {
+      await deleteUser(id);
+      const newData = data.filter((teacher) => teacher.id !== id);
+      setData(newData);
+      message.success('Profesor eliminado exitosamente');
+    } catch (error) {
+      console.error('Error deleting teacher:', error);
+      message.error('Error al eliminar el profesor');
+    }
+  };
+
+  const showDeleteConfirmation = (id) => {
+    setTeacherToDeleteId(id);
+    setConfirmDeleteVisible(true);
+  };
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters, confirm) => {
+    clearFilters();
+    setSearchText('');
+    confirm();
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Buscar ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Buscar
+          </Button>
+          <Button
+            onClick={() => handleReset(clearFilters, confirm)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1677ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        : '',
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+  });
+
+  const getColumnRender = (dataIndex) => ({
+    render: (text) => (
+      <span>
+        <Tag color={getColorBySubject(text)}>{text}</Tag>
+      </span>
+    ),
+  });
+
+  return (
     <div className="container-panel">
       <div className="title-panel">
         <h3>Listado de Profesores</h3>
@@ -82,17 +163,31 @@ const Panel = ({ showPanel }) => {
       ) : data.length === 0 ? (
         <div className="no-data">No se encontraron profesores</div>
       ) : (
-        <Table dataSource={data} className="table-ant">
-          <Column title="ID" dataIndex="id" key="id" />
-          <Column title="Nombre" dataIndex="nombre" key="nombre" />
-          <Column title="DNI" dataIndex="dni" key="dni" />
+        <Table dataSource={data} className="table-ant" rowKey="id">
+          <Column
+            title="ID"
+            dataIndex="id"
+            key="id"
+            {...getColumnSearchProps('id')}
+          />
+          <Column
+            title="Nombre"
+            dataIndex="nombre"
+            key="nombre"
+            {...getColumnSearchProps('nombre')}
+          />
+          <Column
+            title="DNI"
+            dataIndex="dni"
+            key="dni"
+            {...getColumnSearchProps('dni')}
+          />
           <Column
             title="Materias"
             dataIndex="materia"
             key="materia"
-            render={(materia) => (
-              <Tag color={getColorBySubject(materia)}>{materia}</Tag>
-            )}
+            {...getColumnSearchProps('materia')}
+            {...getColumnRender('materia')}
           />
           <Column
             title="Acciones"
@@ -102,7 +197,7 @@ const Panel = ({ showPanel }) => {
                 <EditTwoTone style={{ color: 'blue' }} />
                 <DeleteOutlined
                   style={{ color: 'red' }}
-                  onClick={() => showDeleteConfirmation(record.id)} 
+                  onClick={() => showDeleteConfirmation(record.id)}
                 />
                 <PlusOutlined style={{ color: 'green' }} />
               </Space>
@@ -111,11 +206,10 @@ const Panel = ({ showPanel }) => {
         </Table>
       )}
 
-      {/* Confirmation Modal */}
       <Modal
         title="Confirmar eliminación"
         visible={confirmDeleteVisible}
-        onOk={() => handleDelete(teacherToDeleteId)} 
+        onOk={() => handleDelete(teacherToDeleteId)}
         onCancel={() => setConfirmDeleteVisible(false)}
       >
         ¿Está seguro que desea eliminar este profesor?
@@ -124,4 +218,4 @@ const Panel = ({ showPanel }) => {
   );
 };
 
-export default Panel
+export default Panel;
