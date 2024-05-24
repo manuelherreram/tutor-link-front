@@ -1,10 +1,19 @@
 import axios from 'axios';
 
-//Peticiones al servidor
 //Listar a los profesores
-export const getData = async () => {
-  let res = await axios.get('http://localhost:8080/api/admin/teachers');
-  return res.data;
+export const getData = async (accessToken) => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/admin/teachers', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching teachers:', error);
+    throw error; // Re-throw the error for handling in the component
+  }
 };
 
 //buscar un profesor por su id
@@ -39,13 +48,17 @@ export const verificarDNIServidor = async (dni) => {
   
  
 };
-
-export const deleteUser = async (id) => {
+export const deleteUser = async (id, accessToken) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/api/teachers/${id}`);
+    const response = await axios.delete(`http://localhost:8080/api/admin/teachers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
     console.log('Teacher deleted successfully:', response.data);
   } catch (error) {
     console.error('Error deleting teacher:', error);
+    throw error;
   }
 };
 

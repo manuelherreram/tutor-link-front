@@ -3,9 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
-
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { app } from '../../firebase/firebaseConfig'; 
+import { auth } from '../../firebase/firebaseConfig';
+import { doCreateUserWithEmailAndPassword } from '../../firebase/auth';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -21,9 +20,8 @@ const Register = () => {
       const { email, password } = data;
 
       try {
-        const auth = getAuth(app);
 
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await doCreateUserWithEmailAndPassword(auth, email, password);
         console.log('User created successfully:', userCredential.user);
         navigate('/login'); 
       } catch (error) {
