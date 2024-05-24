@@ -17,7 +17,7 @@ export const getDataById = async (id) => {
 export const register = async (data) => {
 
     const response = await axios.post(
-      'http://localhost:8080/api/admin/teacher',
+      'http://localhost:8080/api/admin/teachers',
       data,
       {
         headers: {
@@ -42,7 +42,7 @@ export const verificarDNIServidor = async (dni) => {
 
 export const deleteUser = async (id) => {
   try {
-    const response = await axios.delete(`http://localhost:8080/api/teachers/${id}`);
+    const response = await axios.delete(`http://localhost:8080/api/admin/teachers/${id}`);
     console.log('Teacher deleted successfully:', response.data);
   } catch (error) {
     console.error('Error deleting teacher:', error);
