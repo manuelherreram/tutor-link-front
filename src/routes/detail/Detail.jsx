@@ -62,32 +62,40 @@ const Detail = () => {
         <p>Cargando datos del tutor...</p>
       )}
       {teacherSelected && teacherSelected.images && (
-        <section className="container-image">
-          <div className="cont-first-img">
-            
+        <div>
+          <section className="container-image">
+            <div className="cont-first-img">
               <img
                 src={teacherSelected.images[0].url}
                 alt={`imagen1`}
                 className="first-image"
               />
-           
-          </div>
-          <div className="container-grid">
+            </div>
+            <div className="container-grid">
+              <div className="cont-other-img">
+                {teacherSelected.images.slice(1, 5).map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.url}
+                    alt={`imagen${index + 2}`}
+                    className="item-image"
+                  />
+                ))}
+              </div>
+              <button className="more" onClick={openModal}>
+                ver más
+              </button>
+            </div>
+          </section>
+          <div>
+            <h3> Características: </h3>
             <div className="cont-other-img">
-              {teacherSelected.images.slice(1, 5).map((image, index) => (
-                <img
-                  key={index}
-                  src={image.url}
-                  alt={`imagen${index + 2}`}
-                  className="item-image"
-                />
+              {teacherSelected.characteristics.map((character) => (
+                <div key={character.id}> {character.name} </div>
               ))}
             </div>
-            <button className="more" onClick={openModal}>
-              ver más
-            </button>
           </div>
-        </section>
+        </div>
       )}
 
       <Modal
