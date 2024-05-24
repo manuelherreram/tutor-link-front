@@ -5,7 +5,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase/firebaseConfig'
 
 const Header = () => {
-  const currentUser = useAuth(); 
+  const {currentUser,userLoggedIn} = useAuth(); 
 
   const handleLogout = async () => {
     try {
@@ -37,7 +37,7 @@ const Header = () => {
            Registrar
           </button>
         </Link>
-        {currentUser ? (
+        {userLoggedIn ? (
           <button className="btn btn-login" onClick={handleLogout}>
             Cerrar sesión
           </button>

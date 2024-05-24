@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getStorage, ref} from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { getStorage, ref} from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -30,6 +30,5 @@ console.log('Referencia al almacenamiento Firebase:', storage);
 console.log(storageRef, 'storageRef1')
 // Exporta la referencia al almacenamiento de Firebase para que otros archivos puedan usarlo
 const auth = getAuth(app); // Obtén el objeto auth
-
 
 export { storage, storageRef,app , auth};

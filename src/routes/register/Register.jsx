@@ -3,8 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
-import {  createUserWithEmailAndPassword } from 'firebase/auth'; // Importa createUserWithEmailAndPassword de firebase/auth
-import {  auth} from '../../firebase/firebaseConfig'; 
+import { auth } from '../../firebase/firebaseConfig';
+import { doCreateUserWithEmailAndPassword } from '../../firebase/auth';
 import Swal from 'sweetalert2';
 
 
@@ -17,14 +17,12 @@ const Register = () => {
       lastName: '',
       email: '',
       password: '',
-     
+      rol: 'USER'
     },
     onSubmit: async (data, { setErrors }) => {
       const { name, lastName, email, password } = data;
-
       try {
-        // Aquí puedes usar auth directamente
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await doCreateUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
         
