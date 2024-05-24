@@ -10,8 +10,7 @@ import { doSignInWithEmailAndPassword } from '../../firebase/auth'
 const Login = () => {
     const navigate = useNavigate()
     const { userLoggedIn, currentUser } = useAuth()
-    const [errors, setErrors] = useState({}) 
-
+    const [errors, setErrors] = useState({})
     const handleSubmit = async data => {
         const { email, password } = data
 
@@ -27,7 +26,9 @@ const Login = () => {
             } else if (error.code === 'auth/invalid-credential') {
                 setErrors({ email: 'Usuario no encontrado.' })
             } else {
-                setErrors({ general: 'Ocurrió un error al iniciar sesión.' })
+                setErrors({
+                    general: 'Ocurrió un error al iniciar sesión.',
+                })
             }
         }
     }
@@ -46,7 +47,7 @@ const Login = () => {
                 .required('Obligatorio')
                 .min(6, 'La contraseña debe tener al menos 6 caracteres'),
         }),
-        validateOnChange: false, // Only validate on submit
+        validateOnChange: false, 
     })
 
     return (

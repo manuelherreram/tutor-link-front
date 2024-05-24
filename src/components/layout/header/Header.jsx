@@ -1,7 +1,21 @@
 import './Header.css';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
+import { signOut } from 'firebase/auth'; 
+import { auth } from '../../../firebase/firebaseConfig'
 
 const Header = () => {
+  const {currentUser,userLoggedIn} = useAuth(); 
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); 
+      console.log('User signed out');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <header className="container-header">
       <div className="container-logo">
@@ -23,11 +37,17 @@ const Header = () => {
            Registrar
           </button>
         </Link>
-        <Link to="/login">
-          <button className="btn btn-login" >
-           Conectar
+        {userLoggedIn ? (
+          <button className="btn btn-login" onClick={handleLogout}>
+            Cerrar sesión
           </button>
-        </Link>
+        ) : (
+          <Link to="/login">
+            <button className="btn btn-login">
+              Conectar
+            </button>
+          </Link>
+        )}
       </nav>
     </header>
   );

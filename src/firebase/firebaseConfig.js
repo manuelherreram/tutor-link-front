@@ -26,9 +26,9 @@ console.log('Aplicación Firebase inicializada:', app);
 // Obtiene una referencia al almacenamiento de Firebase
 const storage = getStorage(app);
 const storageRef = ref(storage);
-const auth= getAuth(app)
 console.log('Referencia al almacenamiento Firebase:', storage);
 console.log(storageRef, 'storageRef1')
 // Exporta la referencia al almacenamiento de Firebase para que otros archivos puedan usarlo
-export { storage, storageRef,app,auth };
+const auth = getAuth(app); // Obtén el objeto auth
 
+export { storage, storageRef,app , auth};

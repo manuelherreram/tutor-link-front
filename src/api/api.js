@@ -26,7 +26,7 @@ export const getDataById = async (id) => {
 export const register = async (data) => {
 
     const response = await axios.post(
-      'http://localhost:8080/api/admin/teacher',
+      'http://localhost:8080/api/admin/teachers',
       data,
       {
         headers: {
