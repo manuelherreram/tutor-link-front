@@ -4,8 +4,9 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import {  createUserWithEmailAndPassword } from 'firebase/auth'; // Importa createUserWithEmailAndPassword de firebase/auth
-import {  auth } from '../../firebase/firebaseConfig'; // Importa app y auth desde tu archivo de configuración de Firebase
+import {  auth} from '../../firebase/firebaseConfig'; 
 import Swal from 'sweetalert2';
+
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Register = () => {
       lastName: '',
       email: '',
       password: '',
-      rol:'USER'
+     
     },
     onSubmit: async (data, { setErrors }) => {
       const { name, lastName, email, password } = data;
@@ -26,6 +27,7 @@ const Register = () => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        
         console.log('User created successfully:', user);
         Swal.fire({
           icon: 'success',
