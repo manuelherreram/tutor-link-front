@@ -20,6 +20,9 @@ console.log(randomTeachers);
   return (
     <div className="container-home">
       <div className="container-utilities">
+        <div className="container-title">
+          <h2>Tu camino al éxito</h2>
+        </div>
         <Search />
         <Categories />
       </div>

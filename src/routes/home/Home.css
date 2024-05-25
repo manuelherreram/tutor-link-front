@@ -12,15 +12,28 @@
     padding: 1.5rem;
     color: #fff;
     width: 100%;
-    height: 480px;
+    height: 450px;
     margin-top: 70px;
     border-bottom-right-radius: 50px;
     border-bottom-left-radius: 50px;
     background: linear-gradient(#ffffff, #91d1d4);
+    
 }
 
+.container-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 91px;
+    color: #005777;
+    font-weight: 800;
+    font-size: 45px;
+    font-family: poppins;
+    margin-top: 20px;
+}
 .container-search {
-    margin-top: 220px;
+    margin-top: 50px;
 }
 
 .container-cards {
