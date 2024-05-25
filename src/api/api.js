@@ -23,31 +23,43 @@ export const getDataById = async (id) => {
 };
 
 //Registrar a un nuevo profesor
-export const register = async (data) => {
-
-    const response = await axios.post(
-      'http://localhost:8080/api/admin/teachers',
-      data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    return response.data;
- 
+export const register = async (data, token) => {
+  const response = await axios.post(
+    'http://localhost:8080/api/admin/teachers',
+    data,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    }
+  );
+  return response.data;
 };
 
-//Validar ID del profesor
+//Validar DNI del profesor
 export const verificarDNIServidor = async (dni) => {
-    const response = await axios.get(`http://localhost:8080/api/admin/teachers`);
+  try {
+    const response = await axios.get('http://localhost:8080/api/admin/teachers');
     const profesores = response.data;
-    const dniExistente = profesores.some(profesor => profesor.dni === dni);    
+
+    if (!Array.isArray(profesores)) {
+      throw new Error('Se esperaba un array de profesores');
+    }
+    const dniExistente = profesores.some(profesor => profesor.dni === dni);
     return !dniExistente;
-    
-  
- 
+  } catch (error) {
+    console.error('Error al verificar el DNI:', error);
+    throw error;
+  }
 };
+//Para obtener todos los usuarios
+export const getUsers = async () => {
+  let res = await axios.get(`http://localhost:8080/api/user/users`);
+  return res.data;
+};
+
+
 export const deleteUser = async (id, accessToken) => {
   try {
     const response = await axios.delete(`http://localhost:8080/api/admin/teachers/${id}`, {

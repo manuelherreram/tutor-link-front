@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
-import { auth } from "../firebase/firebaseConfig";
+import React, { useContext, useState, useEffect } from 'react';
+import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
 
 const AuthContext = React.createContext();
 
@@ -25,10 +25,10 @@ export function AuthProvider({ children }) {
         try {
           // Fetch the ID token using getIdTokenResult
           const idTokenResult = await getIdTokenResult(user);
-          setIdToken(idTokenResult.token); 
+          setIdToken(idTokenResult.token);
           console.log(idToken, 'token');
         } catch (error) {
-          console.error("Error fetching ID token:", error);
+          console.error('Error fetching ID token:', error);
         }
       } else {
         setCurrentUser(null);
