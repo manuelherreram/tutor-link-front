@@ -4,12 +4,12 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    background-color: #EEF7F8;
+    background-color: #E7F4F5;
     color: #fff;
     width: 80%;
-    height: 90px;
-    border-radius: 40px;
-    margin-top: 30px;
+    height: 103px;
+    border-radius: 79px;
+    margin-top: 50px;
 }
 .element-categories {
     list-style: none;
@@ -29,9 +29,9 @@
 
 .element-categories li a {
     text-decoration: none;
-    font-size: 18px;
+    font-size: 14px;
     font-family: poppins;
-    color: #505050;
+    color: #666666;
 }
 
 @media (max-width: 768px) {
