@@ -1,0 +1,9 @@
+.characteristics{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid rgb(206, 200, 200);
+}

@@ -10,11 +10,13 @@ import { register } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
 import './Form.css';
 import { useAuth } from '../../contexts/AuthContext';
+import { ref, uploadBytes } from "firebase/storage";
 
 const Form = () => {
   const [mostrar, setMostrar] = useState(true);
   const navigate = useNavigate();
   const { idToken } = useAuth();
+
 
   const subjectOptions = [
     { value: 'Historia', label: 'Historia' },
@@ -24,12 +26,12 @@ const Form = () => {
   ];
 
   const characteristicsOptions = [
-    { id: 1, name: 'Licenciado en Educacion' },
-    { id:2, name: 'Ingles' },
-    { id: 3, name: 'Clase de Prueba' },
-    { id: 4, name: 'Clases Presenciales' },
-    { id: 5, name: 'Clases Grupales' },
-    { id: 6, name: 'SuperProfe',url:"" },
+    { id: 1, name: 'Licenciado en Educacion', url:'' },
+    { id: 2, name: 'Ingles', url: '' },
+    { id: 3, name: 'Clase de Prueba', url: '' },
+    { id: 4, name: 'Clases Presenciales', url: '' },
+    { id: 5, name: 'Clases Grupales', url: '' },
+    { id: 6, name: 'SuperProfe', url: '' },
   ];
 
   const {
@@ -45,39 +47,46 @@ const Form = () => {
       description: '',
       subject: '',
       images: [],
-      characteristics: [],
+     characteristics : [],
     },
     onSubmit: async (data, { setSubmitting }) => {
       try {
-        // Manejo de imágenes
         if (data.images && data.images.length > 0) {
           const imageUrls = await Promise.all(
-            data.images.map(async (image, index) => {
-              const storageRef = storage.ref(`images/${image.name}`);
-              await storageRef.put(image);
-              const url = await storageRef.getDownloadURL();
-              return { url, title: `Imagen ${index + 1} del Profesor` };
+            data.images.map(async (image) => {
+              console.log(storage)
+              console.log(image)
+              const storageRef = ref(storage, `images/${image.title}`);
+    console.log("storageRef", storageRef);
+
+          
+              console.log(`Subiendo imagen: ${image.title}`); 
+              const url= await uploadBytes(storageRef,image)
+              console.log(url)
+              console.log(`URL obtenida: ${url}`); 
+              return url;
             })
           );
 
-          data.images = imageUrls;
+          // data.images = imageUrls;
+          console.log('URLs de imágenes:', data.images); 
+        } else {
+          console.log('No se seleccionaron imágenes.');
         }
-
         // Construcción del objeto final
         const finalData = {
           name: data.name,
           dni: data.dni,
           description: data.description,
-          images: data.images,
+          images:data.images,
           subject: {
             title: data.subject,
           },
-          characteristics: characteristicsOptions.filter(option =>
+          characteristics: characteristicsOptions.filter((option) =>
             data.characteristics.includes(option.id)
           ),
-        
         };
-
+        console.log('Datos finales enviados al servidor:', finalData);
         const response = await register(finalData, idToken);
         setMostrar(false);
         console.log('Respuesta del servidor:', response);
@@ -144,7 +153,9 @@ const Form = () => {
             error={errorsProfessor.description ? true : false}
             helperText={errorsProfessor.description}
           />
-          <InputLabel id="subject-select-label">Selecciona la asignatura</InputLabel>
+          <InputLabel id="subject-select-label">
+            Selecciona la asignatura
+          </InputLabel>
           <Select
             labelId="subject-select-label"
             id="subject-select"
@@ -162,18 +173,22 @@ const Form = () => {
               </MenuItem>
             ))}
           </Select>
-
-          <ImageUploader folderName={valuesProfessor.name} setFieldValue={setFieldValue} />
-
+          <ImageUploader
+            folderName={valuesProfessor.name}
+            setFieldValue={setFieldValue}
+          />
           <h4>Características del Tutor</h4>
           {characteristicsOptions.map((option) => (
             <label key={option.id}>
               <input
                 type="checkbox"
                 onChange={() => {
-                  const updatedCharacteristics = valuesProfessor.characteristics.includes(option.id)
-                    ? valuesProfessor.characteristics.filter(id => id !== option.id)
-                    : [...valuesProfessor.characteristics, option.id];
+                  const updatedCharacteristics =
+                    valuesProfessor.characteristics.includes(option.id)
+                      ? valuesProfessor.characteristics.filter(
+                          (id) => id !== option.id
+                        )
+                      : [...valuesProfessor.characteristics, option.id];
                   setFieldValue('characteristics', updatedCharacteristics);
                 }}
                 checked={valuesProfessor.characteristics.includes(option.id)}
@@ -192,4 +207,3 @@ const Form = () => {
 };
 
 export default Form;
-

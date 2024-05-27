@@ -29,8 +29,9 @@ export const register = async (data, token) => {
     data,
     {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
     }
   );
