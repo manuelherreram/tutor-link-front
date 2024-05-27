@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Panel from '../../components/admin/Panel'
+import Panel from '../../components/admin/panel/Panel'
 import { Button, Menu, Result } from 'antd'
 import { UserAddOutlined, WalletOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
@@ -15,6 +15,11 @@ const Admin = () => {
     {
       label: 'Agregar un Profesor',
       key: 'agregar',
+      icon: <UserAddOutlined />,
+    },
+    {
+      label: 'Administrar características',
+      key: 'caracteristicas',
       icon: <UserAddOutlined />,
     },
   ]
@@ -38,6 +43,11 @@ const Admin = () => {
     } else if (e.key === 'agregar') {
       navigate('/admin/new')
       setShowPanel(false)
+    }else if(e.key === 'caracteristicas'){
+      navigate('/admin/characteristics')
+      setShowPanel(false)
+
+
     }
   }
 
