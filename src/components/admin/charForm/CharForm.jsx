@@ -1,87 +1,86 @@
-import { TextField,Button } from "@mui/material"
-import {useFormik} from "formik"
-import { useState } from "react";
+import { useState } from 'react';
+import { Form, Input, Button, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { useFormik } from 'formik';
 import { storage } from '../../../firebase/firebaseConfig';
-import { ref, uploadBytes } from "firebase/storage";
-import ImageUploader from "../../form/ImageUploader";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import './Charform.css'
+import { ref, uploadBytes } from 'firebase/storage';
+import { useAuth } from '../../../contexts/AuthContext';
+import "./Charform.css";
 
-const CharForm = ()=>{
-  const navigate=useNavigate()
+const CharForm = ({ onSave, onCancel }) => {
   const { idToken } = useAuth();
-  const[mostrar,setMostrar]=useState()
-    const {
-      handleChange,
-      handleSubmit,
-      errors,
-      values
-  
-    } = useFormik({
-      initialValues: {
-        name: '',
-        url: '',
-        
-      },
+  const [imageList, setImageList] = useState([]);
 
-      onSubmit: async (data, { setSubmitting }) => {
-        //manejo de imágenes
-        try {
-          if (data.images && data.images.length > 0) {
-            const imageUrls = await Promise.all(
-              data.images.map(async (image) => {
-                console.log(storage)
-                console.log(image)
-                const storageRef = ref(storage, `images/${image.title}`);
-      console.log("storageRef", storageRef);
-                console.log(`Subiendo imagen: ${image.title}`); 
-                const url= await uploadBytes(storageRef,image)
-                console.log(url)
-                console.log(`URL obtenida: ${url}`); 
-                return url;
-              })
-            );
-  
-            // data.images = imageUrls;
-            console.log('URLs de imágenes:', data.images); 
-          } else {
-            console.log('No se seleccionaron imágenes.');
-          }
-          const response = await registerCharacteristic(data, idToken);
-        setMostrar(false);
-        console.log('Respuesta del servidor:', response);
-        navigate('/admin');
+  const { handleChange, handleSubmit, errors, values, setFieldValue } = useFormik({
+    initialValues: {
+      name: '',
+      url: '',
+      images: []
+    },
+    onSubmit: async (data, { setSubmitting }) => {
+      try {
+        if (imageList && imageList.length > 0) {
+          const imageUrls = await Promise.all(
+            imageList.map(async (file) => {
+              const storageRef = ref(storage, `images/${file.name}`);
+              const snapshot = await uploadBytes(storageRef, file);
+              const url = snapshot.metadata.fullPath; // Assuming this returns the URL
+              return url;
+            })
+          );
+          data.images = imageUrls;
+        } else {
+          console.log('No se seleccionaron imágenes.');
+        }
+        const response = await registerCharacteristic(data, idToken);
+        onSave({ title: data.name, url: response.url });
       } catch (error) {
         console.error('Error al enviar los datos:', error);
       } finally {
         setSubmitting(false);
       }
-        }
-    });
+    }
+  });
 
-    return (
+  const handleUploadChange = ({ fileList }) => {
+    setImageList(fileList.map(file => file.originFileObj));
+    setFieldValue('images', fileList.map(file => file.originFileObj));
+  };
 
-    <form className="characteristics" onSubmit={handleSubmit}>
-    <h4>Características del tutor </h4>
-    <TextField
-      type="text"
-      onChange={handleChange}
-      name="name"
-      label="Ingrese el nombre de la característica"
-      variant="outlined"
-      error={errors.name ? true : false}
-      helperText={errors.name}
-    />
-    <ImageUploader
-            folderName={values.name}
-       
-          />
-    <Button type="submit" variant="contained" color="primary">
-      Enviar
-    </Button>
-  </form>
-  )
-  
-  }
-  export default CharForm
+  return (
+    <Form className="characteristics" onFinish={handleSubmit}>
+      <h3>NUEVA CARACTERÍSTICA</h3>
+      <Form.Item
+        label="Ingrese el nombre de la característica"
+        validateStatus={errors.name ? 'error' : ''}
+        help={errors.name}
+      >
+        <Input
+          name="name"
+          value={values.name}
+          onChange={handleChange}
+        />
+      </Form.Item>
+      <Form.Item label="Cargar Imágenes">
+        <Upload
+          multiple
+          listType="picture"
+          beforeUpload={() => false} // Prevents automatic upload
+          onChange={handleUploadChange}
+        >
+          <Button icon={<UploadOutlined />}>Seleccionar Imágenes</Button>
+        </Upload>
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
+          Enviar
+        </Button>
+        <Button onClick={onCancel}>
+          Cancelar
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default CharForm;
