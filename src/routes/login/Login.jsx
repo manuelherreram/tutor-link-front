@@ -9,16 +9,19 @@ import { doSignInWithEmailAndPassword } from '../../firebase/auth'
 
 const Login = () => {
     const navigate = useNavigate()
-    const { userLoggedIn, currentUser } = useAuth()
+    const { userLoggedIn, currentUser, setCurrentUser, setUserLoggedIn } = useAuth()
     const [errors, setErrors] = useState({})
 
     const handleSubmit = async (data, formikHelpers) => {
         const { email, password } = data
 
         try {
-            await doSignInWithEmailAndPassword(email, password)
-            console.log('Usuario logueado:', userLoggedIn)
+            const userCredential = await doSignInWithEmailAndPassword(email, password)
+            const user = userCredential.user
+            setCurrentUser(user) 
+            setUserLoggedIn(true) 
             navigate('/')
+
         } catch (error) {
             console.error('Login failed:', error)
             if (error.code === 'auth/wrong-password') {

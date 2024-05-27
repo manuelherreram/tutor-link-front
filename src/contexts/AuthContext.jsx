@@ -4,12 +4,10 @@ import { auth } from '../firebase/firebaseConfig';
 
 const AuthContext = React.createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-// eslint-disable-next-line react/prop-types
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -45,7 +43,9 @@ export function AuthProvider({ children }) {
   const value = {
     userLoggedIn,
     currentUser,
-    idToken, // Add the retrieved ID token to the context value
+    idToken,
+    setCurrentUser, // Add setter for currentUser
+    setUserLoggedIn // Add setter for userLoggedIn
   };
 
   return (
