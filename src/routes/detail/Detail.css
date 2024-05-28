@@ -1,6 +1,6 @@
-
 .container-detail {
   margin: 90px 40px 0 40px;
+  padding-bottom: 80px;
 }
 .btn-go-back {
   text-align: right;
@@ -21,12 +21,11 @@
 .container-image {
   display: flex;
   justify-content: space-between;
-  height: 80vh;
   border-radius: 15px;
 }
 .cont-first-img {
-  flex:0.6;
-  width:230%;
+  flex: 0.6;
+  width: 230%;
   height: 100%;
   margin-right: 20px;
   overflow: hidden;
@@ -36,7 +35,7 @@
 }
 
 .container-grid {
-  flex:0.4;
+  flex: 0.4;
   display: flex;
   flex-direction: column;
   align-items: flex-end;

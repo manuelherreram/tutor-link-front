@@ -1,0 +1,23 @@
+.characteristics {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 400px;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+  border: 1px solid rgb(206, 200, 200);
+}
+.ant-form-item-label {
+  margin: 0px 0px 10px 10px;
+}
+.ant-btn  {
+  margin: 5px;
+}
+.ant-form > h3{
+    font-family: 'Poppins';
+
+}
+.ant-form > span{
+    font-family: 'Poppins';
+
+}

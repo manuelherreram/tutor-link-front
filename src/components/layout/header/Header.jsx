@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { signOut } from 'firebase/auth'; 
 import { auth } from '../../../firebase/firebaseConfig'
+import { Avatar } from '@mui/material';
+import { orange } from '@mui/material/colors'
 
 const Header = () => {
   const {currentUser,userLoggedIn} = useAuth(); 
@@ -14,6 +16,11 @@ const Header = () => {
     } catch (error) {
       console.error('Logout failed:', error);
     }
+  };
+
+  const getInitials = (email) => {
+    if (!email) return '';
+    return email.charAt(0).toUpperCase();
   };
 
   return (
@@ -32,15 +39,24 @@ const Header = () => {
       </div>
 
       <nav>
-        <Link to="/register">
-          <button className="btn btn-sign" >
-           Registrar
-          </button>
-        </Link>
+        {!userLoggedIn && (
+          <Link to="/register">
+            <button className="btn btn-sign">
+              Registrar
+            </button>
+          </Link>
+        )}
         {userLoggedIn ? (
-          <button className="btn btn-login" onClick={handleLogout}>
-            Cerrar sesión
-          </button>
+          <div className="user-info">
+            <Avatar sx={{ bgcolor: orange[500] }} className="avatar">
+              {getInitials(currentUser.email)}
+            </Avatar>
+            <div className="user-details">
+                <button className="btn btn-logout" onClick={handleLogout}>
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
         ) : (
           <Link to="/login">
             <button className="btn btn-login">

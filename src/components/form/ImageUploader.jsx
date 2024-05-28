@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { storage } from '../../firebase/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-const ImageUploader = ({ folderName }) => {
+const ImageUploader = ({ folderName, setFieldValue }) => {
   const [imageUrl, setImageUrl] = useState('');
 
   const handleImageUpload = async (event) => {
@@ -24,9 +24,10 @@ const ImageUploader = ({ folderName }) => {
       },
       async () => {
         try {
-          const downloadURL = await getDownloadURL(storageRef); // Utiliza getDownloadURL para obtener la URL de descarga
+          const downloadURL = await getDownloadURL(storageRef); 
           console.log('URL de descarga de la imagen:', downloadURL);
           setImageUrl(downloadURL);
+          setFieldValue('images',[{url:downloadURL,title:file.name}])
         } catch (error) {
           console.error('Error al obtener la URL de descarga:', error);
         }

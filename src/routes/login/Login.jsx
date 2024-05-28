@@ -9,24 +9,29 @@ import { doSignInWithEmailAndPassword } from '../../firebase/auth'
 
 const Login = () => {
     const navigate = useNavigate()
-    const { userLoggedIn, currentUser } = useAuth()
+    const { userLoggedIn, currentUser, setCurrentUser, setUserLoggedIn } = useAuth()
     const [errors, setErrors] = useState({})
-    const handleSubmit = async data => {
+
+    const handleSubmit = async (data, formikHelpers) => {
         const { email, password } = data
 
         try {
-            await doSignInWithEmailAndPassword(email, password)
-            console.log(userLoggedIn, 'user')
+            const userCredential = await doSignInWithEmailAndPassword(email, password)
+            const user = userCredential.user
+            setCurrentUser(user) 
+            setUserLoggedIn(true) 
             navigate('/')
+
         } catch (error) {
             console.error('Login failed:', error)
-
             if (error.code === 'auth/wrong-password') {
-                setErrors({ password: 'Contraseña incorrecta.' })
-            } else if (error.code === 'auth/invalid-credential') {
-                setErrors({ email: 'Usuario no encontrado.' })
+                formikHelpers.setErrors({ password: 'Contraseña incorrecta.' })
+            } else if (error.code === 'auth/user-not-found') {
+                formikHelpers.setErrors({ email: 'Usuario no encontrado.' })
+            } else if (error.code === 'auth/invalid-email') {
+                formikHelpers.setErrors({ email: 'Email no válido.' })
             } else {
-                setErrors({
+                formikHelpers.setErrors({
                     general: 'Ocurrió un error al iniciar sesión.',
                 })
             }
@@ -44,11 +49,13 @@ const Login = () => {
                 .email('El email no corresponde')
                 .required('El campo es requerido'),
             password: Yup.string()
-                .required('Obligatorio')
+                .required('El campo es requerido')
                 .min(6, 'La contraseña debe tener al menos 6 caracteres'),
         }),
         validateOnChange: false, 
+        validateOnBlur: true,
     })
+
 
     return (
         <main className="container-login">

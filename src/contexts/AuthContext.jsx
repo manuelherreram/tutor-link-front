@@ -1,15 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, getIdTokenResult } from "firebase/auth";
-import { auth } from "../firebase/firebaseConfig";
+import React, { useContext, useState, useEffect } from 'react';
+import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
 
 const AuthContext = React.createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-// eslint-disable-next-line react/prop-types
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -25,10 +23,10 @@ export function AuthProvider({ children }) {
         try {
           // Fetch the ID token using getIdTokenResult
           const idTokenResult = await getIdTokenResult(user);
-          setIdToken(idTokenResult.token); 
+          setIdToken(idTokenResult.token);
           console.log(idToken, 'token');
         } catch (error) {
-          console.error("Error fetching ID token:", error);
+          console.error('Error fetching ID token:', error);
         }
       } else {
         setCurrentUser(null);
@@ -45,7 +43,9 @@ export function AuthProvider({ children }) {
   const value = {
     userLoggedIn,
     currentUser,
-    idToken, // Add the retrieved ID token to the context value
+    idToken,
+    setCurrentUser, // Add setter for currentUser
+    setUserLoggedIn // Add setter for userLoggedIn
   };
 
   return (

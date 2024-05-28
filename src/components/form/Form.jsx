@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import { verificarDNIServidor } from '../../api/api';
 import * as Yup from 'yup';
 import ImageUploader from './ImageUploader';
 import { storage } from '../../firebase/firebaseConfig';
@@ -10,45 +9,37 @@ import Swal from 'sweetalert2';
 import { register } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
 import './Form.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { ref, uploadBytes } from "firebase/storage";
 
 const Form = () => {
   const [mostrar, setMostrar] = useState(true);
   const navigate = useNavigate();
+  const { idToken } = useAuth();
+
 
   const subjectOptions = [
-    { value: 'historia', label: 'Historia' },
-    { value: 'matematicas', label: 'Matemáticas' },
-    { value: 'inglés', label: 'Inglés' },
-    { value: 'lenguaje', label: 'Lenguaje' },
+    { value: 'Historia', label: 'Historia' },
+    { value: 'Matemáticas', label: 'Matemáticas' },
+    { value: 'Inglés', label: 'Inglés' },
+    { value: 'Lenguaje', label: 'Lenguaje' },
   ];
 
-  const {
-    handleChange: handleChangeCategories,
-    handleSubmit: handleSubmitCategories,
-    values: valuesCategories,
-  } = useFormik({
-    initialValues: {
-      isCertificate:false,
-      trialClass:false,
-      languages:false,
-      isPresencial:false,
-      isGroup:false,
-      studyMaterial:false,
-      exams:false,
-      superTeacher:false
-    
-    },
-    onSubmit: () => {
-      // Envía el formulario principal cuando se envía el formulario de categorías
-      handleSubmitProfessor();
-    },
-  });
+  const characteristicsOptions = [
+    { id: 1, name: 'Licenciado en Educacion', url:'' },
+    { id: 2, name: 'Ingles', url: '' },
+    { id: 3, name: 'Clase de Prueba', url: '' },
+    { id: 4, name: 'Clases Presenciales', url: '' },
+    { id: 5, name: 'Clases Grupales', url: '' },
+    { id: 6, name: 'SuperProfe', url: '' },
+  ];
 
   const {
     handleChange: handleChangeProfessor,
     handleSubmit: handleSubmitProfessor,
     errors: errorsProfessor,
     values: valuesProfessor,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       name: '',
@@ -56,23 +47,49 @@ const Form = () => {
       description: '',
       subject: '',
       images: [],
+     characteristics : [],
     },
     onSubmit: async (data, { setSubmitting }) => {
       try {
         if (data.images && data.images.length > 0) {
           const imageUrls = await Promise.all(
             data.images.map(async (image) => {
-              const storageRef = storage.ref(`images/${image.name}`);
-              await storageRef.put(image);
-              return await storageRef.getDownloadURL();
+              console.log(storage)
+              console.log(image)
+              const storageRef = ref(storage, `images/${image.title}`);
+    console.log("storageRef", storageRef);
+
+          
+              console.log(`Subiendo imagen: ${image.title}`); 
+              const url= await uploadBytes(storageRef,image)
+              console.log(url)
+              console.log(`URL obtenida: ${url}`); 
+              return url;
             })
           );
 
-          data.images = imageUrls;
+          // data.images = imageUrls;
+          console.log('URLs de imágenes:', data.images); 
+        } else {
+          console.log('No se seleccionaron imágenes.');
         }
-        const response = await register(data);
+        // Construcción del objeto final
+        const finalData = {
+          name: data.name,
+          dni: data.dni,
+          description: data.description,
+          images:data.images,
+          subject: {
+            title: data.subject,
+          },
+          characteristics: characteristicsOptions.filter((option) =>
+            data.characteristics.includes(option.id)
+          ),
+        };
+        console.log('Datos finales enviados al servidor:', finalData);
+        const response = await register(finalData, idToken);
         setMostrar(false);
-        console.log('Respuesta del servidor:', response.data);
+        console.log('Respuesta del servidor:', response);
         Swal.fire({
           icon: 'success',
           title: '¡Registro exitoso!',
@@ -93,11 +110,7 @@ const Form = () => {
       dni: Yup.string()
         .min(8, 'El DNI debe tener por lo menos 8 caracteres')
         .max(11, 'El DNI debe tener máximo 11 caracteres')
-        .required('El campo es requerido')
-        .test('dni-unico', '¡El DNI ya está en uso!', async function (value) {
-          const dniNoExistente = await verificarDNIServidor(value);
-          return dniNoExistente;
-        }),
+        .required('El campo es requerido'),
       description: Yup.string(),
       subject: Yup.string().required('Seleccione un tema'),
     }),
@@ -107,149 +120,87 @@ const Form = () => {
   return (
     <main>
       {mostrar && (
-        <>
-          <form className="container-form" onSubmit={handleSubmitProfessor}>
-            <h4>Registro del Tutor</h4>
-            <TextField
-              type="text"
-              onChange={handleChangeProfessor}
-              name="name"
-              label="Ingrese su nombre"
-              variant="outlined"
-              error={errorsProfessor.name ? true : false}
-              helperText={errorsProfessor.name}
-            />
-            <TextField
-              type="text"
-              onChange={handleChangeProfessor}
-              name="dni"
-              label="Ingrese el DNI del profesor"
-              variant="outlined"
-              autoComplete="off"
-              error={errorsProfessor.dni ? true : false}
-              helperText={errorsProfessor.dni}
-            />
-            <TextField
-              type="text"
-              onChange={handleChangeProfessor}
-              name="description"
-              label="Ingrese una descripción"
-              multiline
-              rows={4}
-              variant="outlined"
-              autoComplete="off"
-              error={errorsProfessor.description ? true : false}
-              helperText={errorsProfessor.description}
-            />
-            <InputLabel id="demo-simple-select-label">
-              Selecciona la asignatura
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={valuesProfessor.subject}
-              name="subject"
-              label="Subject"
-              onChange={handleChangeProfessor}
-              displayEmpty
-              inputProps={{ 'aria-label': 'Subject' }}
-              fullWidth
-            >
-              {subjectOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-
-            <ImageUploader folderName={valuesProfessor.name} />
-          </form>
-
-          <form
-            className="container-form categorias"
-            onSubmit={handleSubmitCategories}
+        <form className="container-form" onSubmit={handleSubmitProfessor}>
+          <h4>Registro del Tutor</h4>
+          <TextField
+            type="text"
+            onChange={handleChangeProfessor}
+            name="name"
+            label="Ingrese su nombre"
+            variant="outlined"
+            error={errorsProfessor.name ? true : false}
+            helperText={errorsProfessor.name}
+          />
+          <TextField
+            type="text"
+            onChange={handleChangeProfessor}
+            name="dni"
+            label="Ingrese el DNI del profesor"
+            variant="outlined"
+            autoComplete="off"
+            error={errorsProfessor.dni ? true : false}
+            helperText={errorsProfessor.dni}
+          />
+          <TextField
+            type="text"
+            onChange={handleChangeProfessor}
+            name="description"
+            label="Ingrese una descripción"
+            multiline
+            rows={4}
+            variant="outlined"
+            autoComplete="off"
+            error={errorsProfessor.description ? true : false}
+            helperText={errorsProfessor.description}
+          />
+          <InputLabel id="subject-select-label">
+            Selecciona la asignatura
+          </InputLabel>
+          <Select
+            labelId="subject-select-label"
+            id="subject-select"
+            value={valuesProfessor.subject}
+            name="subject"
+            label="Subject"
+            onChange={handleChangeProfessor}
+            displayEmpty
+            inputProps={{ 'aria-label': 'Subject' }}
+            fullWidth
           >
-            <h4>Características del Tutor</h4>
-            <label>
+            {subjectOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+          <ImageUploader
+            folderName={valuesProfessor.name}
+            setFieldValue={setFieldValue}
+          />
+          <h4>Características del Tutor</h4>
+          {characteristicsOptions.map((option) => (
+            <label key={option.id}>
               <input
                 type="checkbox"
-                onChange={handleChangeCategories}
-                name="isCertificate"
-                checked={valuesCategories.isOnline}
+                onChange={() => {
+                  const updatedCharacteristics =
+                    valuesProfessor.characteristics.includes(option.id)
+                      ? valuesProfessor.characteristics.filter(
+                          (id) => id !== option.id
+                        )
+                      : [...valuesProfessor.characteristics, option.id];
+                  setFieldValue('characteristics', updatedCharacteristics);
+                }}
+                checked={valuesProfessor.characteristics.includes(option.id)}
               />{' '}
-              ¿Está certificado en su área de enseñanza?
+              {option.name}
             </label>
-           
-            <label>
-            <input
-                type="checkbox"
-                onChange={handleChangeCategories}
-                name="trialClass"
-                checked={valuesCategories.isGroup}
-              />{' '}
-              ¿Ofrece clase de prueba?
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                onChange={handleChangeCategories}
-                name="languages"
-                checked={valuesCategories.isBilingual}
-              />{' '}
-              ¿Otros idiomas?
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                onChange={handleChangeCategories}
-                name="isPresencial"
-                checked={valuesCategories.isOnline}
-              />{' '}
-              ¿Realiza clases individuales?
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                onChange={handleChangeCategories}
-                name="isGroup"
-                checked={valuesCategories.isGroup}
-              />{' '}
-              ¿Realiza clases grupales?
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                onChange={handleChangeCategories}
-                name="studyMaterial"
-                checked={valuesCategories.isOnline}
-              />{' '}
-              ¿Entrega material de estudio?
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                onChange={handleChangeCategories}
-                name="exams"
-                checked={valuesCategories.isOnline}
-              />{' '}
-              ¿Realiza preparación para exámenes?
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                onChange={handleChangeCategories}
-                name="superTeacher"
-                checked={valuesCategories.isOnline}
-              />{' '}
-              SuperProfesor
-            </label>
-           
-           
-            <Button type="submit" variant="contained" color="primary">
-              Enviar
-            </Button>
-          </form>
-        </>
+          ))}
+
+          <Button type="submit" variant="contained" color="primary">
+            Enviar
+          </Button>
+        </form>
       )}
     </main>
   );

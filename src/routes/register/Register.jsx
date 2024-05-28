@@ -7,6 +7,7 @@ import { auth } from '../../firebase/firebaseConfig';
 import { doCreateUserWithEmailAndPassword } from '../../firebase/auth';
 import Swal from 'sweetalert2';
 
+
 const Register = () => {
   const navigate = useNavigate();
 
@@ -19,11 +20,12 @@ const Register = () => {
       rol: 'USER'
     },
     onSubmit: async (data, { setErrors }) => {
-      const { name, lastName, email, password } = data;
+      const { name, lastName, email, password,rol } = data;
       try {
         const userCredential = await doCreateUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        
         console.log('User created successfully:', user);
         Swal.fire({
           icon: 'success',

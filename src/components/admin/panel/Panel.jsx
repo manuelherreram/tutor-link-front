@@ -1,6 +1,6 @@
 import './Panel.css'
 import { useState, useEffect, useRef } from 'react'
-import { getData, deleteUser } from '../../api/api'
+import { getData, deleteUser } from '../../../api/api'
 import {
     DeleteOutlined,
     EditTwoTone,
@@ -8,7 +8,7 @@ import {
     SearchOutlined,
 } from '@ant-design/icons'
 import { Modal, Space, Table, Tag, message, Input, Button } from 'antd'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../../contexts/AuthContext'
 
 const { Column } = Table
 
