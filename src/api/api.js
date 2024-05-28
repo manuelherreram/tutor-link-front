@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+
+/*-----------Teachers---------------------------*/
+
 //Listar a los profesores
 export const getData = async (accessToken) => {
   try {
@@ -54,14 +57,9 @@ export const verificarDNIServidor = async (dni) => {
     throw error;
   }
 };
-//Para obtener todos los usuarios
-export const getUsers = async () => {
-  let res = await axios.get(`http://localhost:8080/api/user/users`);
-  return res.data;
-};
 
 
-export const deleteUser = async (id, accessToken) => {
+export const deleteTeacher = async (id, accessToken) => {
   try {
     const response = await axios.delete(`http://localhost:8080/api/admin/teachers/${id}`, {
       headers: {
@@ -82,3 +80,56 @@ export const fetchTeachers = async (subject) => {
   });
   return response.data;
 };
+
+
+/*------------------USERS------------------*/
+
+//Para obtener todos los usuarios
+export const getUsers = async (accessToken) => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/admin/users', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error; // Re-throw the error for handling in the component
+  }
+};
+// Setear Rol de User 
+export const setUser = async (accessToken, uid, role) => {
+  try {
+    const response = await axios.put(
+      'http://localhost:8080/api/admin/set-role',
+      { uid, role },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error setting user role:', error);
+    throw error;
+  }
+};
+
+//Crear Usuarios
+export const createUser = async () =>{
+  try {
+    const response = await axios.post(
+      'http://localhost:8080/api/public/createuser',
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error create user:', error);
+    throw error;
+  }
+}

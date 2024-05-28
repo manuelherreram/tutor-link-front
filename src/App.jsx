@@ -10,6 +10,7 @@ import Characteristics from './routes/characteristics/Characteristics.jsx';
 import Register from './routes/register/Register.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import PrivateRoute from './routes/PrivateRoutes.jsx';
+import Users from './components/admin/users/Users.jsx';
 
 function App() {
   return (
@@ -48,6 +49,14 @@ function App() {
                   element={
                     <PrivateRoute>
                       <Characteristics />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/admin/users"
+                  element={
+                    <PrivateRoute>
+                      <Users />
                     </PrivateRoute>
                   }
                 />

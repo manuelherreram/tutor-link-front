@@ -1,6 +1,6 @@
 import './Panel.css'
 import { useState, useEffect, useRef } from 'react'
-import { getData, deleteUser } from '../../../api/api'
+import { getData, deleteTeacher } from '../../../api/api'
 import {
     DeleteOutlined,
     EditTwoTone,
@@ -67,7 +67,7 @@ const Panel = ({ showPanel }) => {
     const handleDelete = async id => {
         setConfirmDeleteVisible(false)
         try {
-            await deleteUser(id, idToken)
+            await deleteTeacher(id, idToken)
             const newData = data.filter(teacher => teacher.id !== id)
             setData(newData)
             message.success('Profesor eliminado exitosamente')

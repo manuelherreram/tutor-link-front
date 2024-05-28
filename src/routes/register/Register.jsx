@@ -4,12 +4,34 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import { auth } from '../../firebase/firebaseConfig';
-import { doCreateUserWithEmailAndPassword } from '../../firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import Swal from 'sweetalert2';
-
+import { useState } from 'react';
 
 const Register = () => {
+  const [showResendButton, setShowResendButton] = useState(false);
   const navigate = useNavigate();
+  const handleResendVerification = async () => {
+    try {
+      auth.languageCode = 'es';
+      const user = auth.currentUser;
+      if (user) {
+        await sendEmailVerification(user);
+        Swal.fire({
+          icon: 'success',
+          title: 'Correo de verificación reenviado',
+          text: 'Por favor, revisa tu correo electrónico.',
+        });
+      }
+    } catch (error) {
+      console.error('Error sending email verification:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo reenviar el correo de verificación.',
+      });
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -20,20 +42,23 @@ const Register = () => {
       rol: 'USER'
     },
     onSubmit: async (data, { setErrors }) => {
-      const { name, lastName, email, password,rol } = data;
+      const { name, lastName, email, password, rol } = data;
       try {
-        const userCredential = await doCreateUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
-        
+  
+        // Send email verification
+        await sendEmailVerification(user);
+  
         console.log('User created successfully:', user);
         Swal.fire({
           icon: 'success',
           title: '¡Registro exitoso!',
-          text: 'Usuario registrado exitosamente',
+          text: 'Usuario registrado exitosamente. Revisa tu correo para verificar tu cuenta.',
         });
 
-        navigate('/login');
+        setShowResendButton(true);
+  
       } catch (error) {
         console.error('Registration failed:', error);
         if (error.code === 'auth/email-already-in-use') {
@@ -110,19 +135,26 @@ const Register = () => {
           error={formik.errors.password ? true : false}
           helperText={formik.errors.password}
         />
-
+  
         {formik.errors.general && (
           <div className="error-message">
             {formik.errors.general}
           </div>
         )}
-
+  
         <Button type="submit" variant="contained">
           Registrar
         </Button>
+        
+        {showResendButton && (
+          <Button onClick={handleResendVerification}>
+            Reenviar correo de verificación
+          </Button>
+        )}
       </form>
     </div>
   );
+  
 };
 
 export default Register;
