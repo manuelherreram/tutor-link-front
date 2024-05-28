@@ -121,15 +121,15 @@ export const setUser = async (accessToken, uid, role) => {
 };
 
 //Crear Usuarios
-export const createUser = async () =>{
+export const createUser = async (userData) => {
   try {
     const response = await axios.post(
       'http://localhost:8080/api/public/createuser',
+      userData
     );
-
     return response.data;
   } catch (error) {
-    console.error('Error create user:', error);
+    console.error('Error creating user:', error);
     throw error;
   }
-}
+};
