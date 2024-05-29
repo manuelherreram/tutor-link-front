@@ -80,9 +80,11 @@ function App() {
                   }
                 />
                 <Route path="/admin/categories" element={
-                  <PrivateRoute>
+                  <AdminRoute>
                     <Categories />
-                  </PrivateRoute>} />
+                  </AdminRoute>
+                  } 
+                />
               </Route>
             </Routes>
           </AuthProvider>

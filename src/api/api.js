@@ -86,7 +86,7 @@ export const fetchTeachers = async (subject) => {
   return response.data;
 };
 
-
+/*------------------CATEGORIES------------------*/
 
 export const registerCategories = async (data, token) => {
   const response = await axios.post(

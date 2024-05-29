@@ -59,7 +59,13 @@ const Admin = () => {
       setShowPanel(false)
 
 
+    }else if(e.key === 'categorias'){
+      navigate('/admin/categories')
+      setShowPanel(false)
+
+
     }
+
   }
 
   const handleGoHome = () => {
