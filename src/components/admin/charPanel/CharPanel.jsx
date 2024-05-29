@@ -1,5 +1,5 @@
 import { Table, Button, Space } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined,FileSearchOutlined } from '@ant-design/icons';
 import './CharPanel.css';
 
 const CharPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
@@ -15,10 +15,11 @@ const CharPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
       key: 'name'
     },
     {
-      title: 'URL',
-      dataIndex: 'url',
+      title: 'Icon',
       key: 'url',
-      render: (text) => text ? <a href={text} target="_blank" rel="noopener noreferrer">{text}</a> : 'N/A'
+      render: (text, record) => (
+        <img src={record.url} alt="Icon"className="image-in-table" />
+      )
     },
     {
       title: 'Acciones',
