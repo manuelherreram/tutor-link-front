@@ -1,4 +1,4 @@
-import Categories from "../../components/categories/Categories"
+import Categories from "../../components/categoriesSection/CategoriesSection"
 import Search from "../../components/search/Search"
 import Card from "../../components/card/Card"
 import "./Home.css"

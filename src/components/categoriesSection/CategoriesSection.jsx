@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import './Categories.css'
+import './CategoriesSection.css'
 
 const Categories = () => {
     return (
 
-        <div className='container-categories'>
-            <ul className='element-categories'>
+        <div className='container-categories-section'>
+            <ul className='element-categories-section'>
                 <li><Link to={'/filter/Matematicas'}>Matematicas</Link></li>
                 <li><a href="#">Inglés</a></li>
                 <li><a href="#">Física</a></li>
@@ -21,4 +21,4 @@ const Categories = () => {
     )
 }
 
-export default Categories;
+export default CategoriesSection;
