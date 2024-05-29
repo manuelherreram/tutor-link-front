@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
+import { getUsers } from '../api/api';
+
 
 const AuthContext = React.createContext();
 
@@ -13,6 +15,7 @@ export function AuthProvider({ children }) {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [idToken, setIdToken] = useState(null); 
+  const [isAdmin, setIsAdmin] = useState(false); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -24,14 +27,21 @@ export function AuthProvider({ children }) {
           // Fetch the ID token using getIdTokenResult
           const idTokenResult = await getIdTokenResult(user);
           setIdToken(idTokenResult.token);
-          console.log(idToken, 'token');
+
+          const users = await getUsers(idTokenResult.token);
+          
+          const usersData = await getUsers(idTokenResult.token);
+          const currentUserData = usersData.find(u => u.uid === user.uid);
+          setIsAdmin(currentUserData && currentUserData.role === 'ADMIN');
         } catch (error) {
-          console.error('Error fetching ID token:', error);
+          console.error('Error fetching ID token or user data:', error);
         }
+      
       } else {
         setCurrentUser(null);
         setUserLoggedIn(false);
         setIdToken(null); // Clear ID token when user logs out
+        setIsAdmin(false);
       }
 
       setLoading(false);
@@ -44,6 +54,7 @@ export function AuthProvider({ children }) {
     userLoggedIn,
     currentUser,
     idToken,
+    isAdmin,
     setCurrentUser, // Add setter for currentUser
     setUserLoggedIn // Add setter for userLoggedIn
   };

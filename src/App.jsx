@@ -9,6 +9,7 @@ import Login from './routes/login/Login.jsx';
 import Characteristics from './routes/characteristics/Characteristics.jsx';
 import Register from './routes/register/Register.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
+import AdminRoute from './routes/AdminRoute.jsx';
 import PrivateRoute from './routes/PrivateRoutes.jsx';
 import Users from './components/admin/users/Users.jsx';
 
@@ -22,42 +23,57 @@ function App() {
               {/* Rutas no protegidas */}
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
-                <Route path="/detalle/:id" element={<Detail />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
-                {/* Rutas protegidas */}
-
+                {/* Rutas protegidas para usuarios logueados */}
+                <Route
+                  path="/detalle/:id"
+                  element={
+                    <PrivateRoute>
+                      <Detail />
+                    </PrivateRoute>
+                  }
+                />
+                {/* Rutas protegidas para administradores */}
                 <Route
                   path="/admin"
                   element={
-                    <PrivateRoute>
+                    <AdminRoute>
                       <Admin />
-                    </PrivateRoute>
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminRoute>
+                      <Admin />
+                    </AdminRoute>
                   }
                 />
                 <Route
                   path="/admin/new"
                   element={
-                    <PrivateRoute>
+                    <AdminRoute>
                       <NewTeacher />
-                    </PrivateRoute>
+                    </AdminRoute>
                   }
                 />
                 <Route
                   path="/admin/characteristics"
                   element={
-                    <PrivateRoute>
+                    <AdminRoute>
                       <Characteristics />
-                    </PrivateRoute>
+                    </AdminRoute>
                   }
                 />
                 <Route
                   path="/admin/users"
                   element={
-                    <PrivateRoute>
+                    <AdminRoute>
                       <Users />
-                    </PrivateRoute>
+                    </AdminRoute>
                   }
                 />
               </Route>

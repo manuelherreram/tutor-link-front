@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Table, Spin, Alert, Button, Modal, Switch } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { getUsers, setUser } from '../../../api/api'; // Asegúrate de importar setUser
+import { getUsers, setUser } from '../../../api/api'; 
 import { useAuth } from '../../../contexts/AuthContext';
 import './Users.css'
 

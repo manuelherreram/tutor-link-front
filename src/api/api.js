@@ -126,7 +126,10 @@ export const updateChar = async (data, idtoken) => {
     }
   );
   return response.data;
+
 };
+
+//Para eliminar caracterísctica
 
 export const deleteChar = async (id, idtoken) => {
   const response = await axios.delete(
@@ -190,3 +193,4 @@ export const createUser = async (userData) => {
     throw error;
   }
 };
+
