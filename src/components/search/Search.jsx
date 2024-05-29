@@ -16,7 +16,6 @@ const Search = () => {
                 }}
                 >
                 <Form className='form-search'>
-                    <label htmlFor="search"></label>
                     <Field id="search" name="search" placeholder="¿Qué quieres aprender el día de hoy?" />
                     <button className="search-button" type="submit">Buscar</button>
                 </Form>

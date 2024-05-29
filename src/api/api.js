@@ -82,3 +82,20 @@ export const fetchTeachers = async (subject) => {
   });
   return response.data;
 };
+
+
+
+export const registerCategories = async (data, token) => {
+  const response = await axios.post(
+    'http://localhost:8080/api/admin/subjects/add',
+    data,
+    {
+      headers: {
+        
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+    }
+  );
+  return response.data;
+};

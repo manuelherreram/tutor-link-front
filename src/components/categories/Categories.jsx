@@ -1,4 +1,4 @@
-
+import { Link } from 'react-router-dom';
 import './Categories.css'
 
 const Categories = () => {
@@ -6,7 +6,7 @@ const Categories = () => {
 
         <div className='container-categories'>
             <ul className='element-categories'>
-                <li><a href="#">Matematicas</a></li>
+                <li><Link to={'/filter/Matematicas'}>Matematicas</Link></li>
                 <li><a href="#">Inglés</a></li>
                 <li><a href="#">Física</a></li>
                 <li><a href="#">Danza</a></li>

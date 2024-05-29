@@ -10,11 +10,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.5rem;
+    padding: 0.2rem;
     color: #fff;
     width: 100%;
-    height: 450px;
-    margin-top: 70px;
+    height: 380px;
+    margin-top: 60px;
     border-bottom-right-radius: 50px;
     border-bottom-left-radius: 50px;
     background: linear-gradient(#ffffff, #91d1d4);
@@ -31,10 +31,10 @@
     font-weight: 800;
     font-size: 45px;
     font-family: poppins;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .container-search {
-    margin-top: 50px;
+    margin-top: 35px;
 }
 
 .container-cards {
@@ -52,3 +52,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+@media (max-width: 480px) {
+    .container-title {
+        font-size: 20px;
+        height: 60px;
+        margin-top: 45px;
+    }
+  }

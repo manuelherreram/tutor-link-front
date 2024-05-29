@@ -10,6 +10,8 @@ import Characteristics from './routes/characteristics/Characteristics.jsx';
 import Register from './routes/register/Register.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import PrivateRoute from './routes/PrivateRoutes.jsx';
+import CategoryFilters from './routes/catFilter/CategoryFilters.jsx';
+import Categories from './routes/categories/Categories.jsx';
 
 function App() {
   return (
@@ -24,7 +26,7 @@ function App() {
                 <Route path="/detalle/:id" element={<Detail />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-
+                <Route path='/filter/:category' element={<CategoryFilters />} />
                 {/* Rutas protegidas */}
 
                 <Route
@@ -51,6 +53,10 @@ function App() {
                     </PrivateRoute>
                   }
                 />
+                <Route path="/admin/categories" element={
+                  <PrivateRoute>
+                    <Categories />
+                  </PrivateRoute>} />
               </Route>
             </Routes>
           </AuthProvider>
