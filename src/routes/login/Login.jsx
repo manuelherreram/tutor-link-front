@@ -87,15 +87,6 @@ const Login = () => {
                     <p className="error-message">{errors.general}</p>
                 )}
             </form>
-
-            {userLoggedIn && (
-                <div>
-                    <p>
-                        Nombre: {currentUser.displayName || currentUser.email}
-                    </p>
-                    <p>ID de usuario: {currentUser.uid}</p>
-                </div>
-            )}
         </main>
     )
 }

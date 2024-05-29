@@ -1,39 +1,22 @@
-import { useState } from 'react';
-import { Form, Input, Button, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, } from 'antd';
 import { useFormik } from 'formik';
-import { storage } from '../../../firebase/firebaseConfig';
-import { ref, uploadBytes } from 'firebase/storage';
 import { useAuth } from '../../../contexts/AuthContext';
+import { registerChar } from '../../../api/api';
 import "./Charform.css";
 
-const CharForm = ({ onSave, onCancel }) => {
+const CharForm = ({ onSave, onCancel,characteristic }) => {
   const { idToken } = useAuth();
-  const [imageList, setImageList] = useState([]);
+ 
+const initialValues= characteristic ??  {
+  name: '',
+  url: '',
+};
 
-  const { handleChange, handleSubmit, errors, values, setFieldValue } = useFormik({
-    initialValues: {
-      name: '',
-      url: '',
-      images: []
-    },
-    onSubmit: async (data, { setSubmitting }) => {
+  const { handleChange, handleSubmit, errors, values } = useFormik({
+    initialValues,
+    onSubmit: async (formData, { setSubmitting }) => {
       try {
-        if (imageList && imageList.length > 0) {
-          const imageUrls = await Promise.all(
-            imageList.map(async (file) => {
-              const storageRef = ref(storage, `images/${file.name}`);
-              const snapshot = await uploadBytes(storageRef, file);
-              const url = snapshot.metadata.fullPath; // Assuming this returns the URL
-              return url;
-            })
-          );
-          data.images = imageUrls;
-        } else {
-          console.log('No se seleccionaron imágenes.');
-        }
-        const response = await registerCharacteristic(data, idToken);
-        onSave({ title: data.name, url: response.url });
+       onSave( formData);
       } catch (error) {
         console.error('Error al enviar los datos:', error);
       } finally {
@@ -42,11 +25,7 @@ const CharForm = ({ onSave, onCancel }) => {
     }
   });
 
-  const handleUploadChange = ({ fileList }) => {
-    setImageList(fileList.map(file => file.originFileObj));
-    setFieldValue('images', fileList.map(file => file.originFileObj));
-  };
-
+ 
   return (
     <Form className="characteristics" onFinish={handleSubmit}>
       <h3>NUEVA CARACTERÍSTICA</h3>
@@ -60,16 +39,6 @@ const CharForm = ({ onSave, onCancel }) => {
           value={values.name}
           onChange={handleChange}
         />
-      </Form.Item>
-      <Form.Item label="Cargar Imágenes">
-        <Upload
-          multiple
-          listType="picture"
-          beforeUpload={() => false} // Prevents automatic upload
-          onChange={handleUploadChange}
-        >
-          <Button icon={<UploadOutlined />}>Seleccionar Imágenes</Button>
-        </Upload>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>

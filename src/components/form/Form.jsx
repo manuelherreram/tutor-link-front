@@ -67,8 +67,6 @@ const Form = () => {
               return url;
             })
           );
-
-          // data.images = imageUrls;
           console.log('URLs de imágenes:', data.images); 
         } else {
           console.log('No se seleccionaron imágenes.');

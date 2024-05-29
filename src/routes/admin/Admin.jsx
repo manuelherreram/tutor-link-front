@@ -20,12 +20,18 @@ const Admin = () => {
     {
       label: 'Administrar características',
       key: 'caracteristicas',
-      icon: <UserAddOutlined />,
+      icon: <UserAddOutlined />, 
     },
     {
       label: 'Administrar categorias',
       key: 'categorias',
       icon: <UserAddOutlined />,
+    },
+    {
+      label: 'Todos los usuarios ',
+      key: 'usuarios',
+      icon:  <WalletOutlined />,
+      
     },
   ]
 
@@ -51,9 +57,8 @@ const Admin = () => {
     }else if(e.key === 'caracteristicas'){
       navigate('/admin/characteristics')
       setShowPanel(false)
-    }else if (e.key === 'categorias') {
-      navigate('/admin/categories')
-      setShowPanel(false)
+
+
     }
   }
 
