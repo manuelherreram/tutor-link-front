@@ -38,7 +38,7 @@ const CharPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
       <Table 
         dataSource={dataSource} 
         columns={columns} 
-        pagination={{ pageSize: 6}} 
+        pagination={{ pageSize: 7}} 
         rowKey={record => record.id} 
       />
       <Button type="primary" onClick={onAdd} style={{ marginTop: 16 }}>

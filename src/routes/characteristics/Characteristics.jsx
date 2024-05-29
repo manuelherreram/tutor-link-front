@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import CharPanel from '../../components/admin/charPanel/CharPanel';
 import CharForm from '../../components/admin/charForm/CharForm';
 import { registerChar, updateChar, deleteChar, listChar } from '../../api/api';
+import { notification } from 'antd';
 import { useAuth } from '../../contexts/AuthContext';
 import './Characteristics.css';
 
@@ -10,7 +11,6 @@ const Characteristics = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [newChar, setNewChar] = useState(null);
   const { idToken } = useAuth();
-
 
   const fetchData = async () => {
     try {
@@ -31,29 +31,36 @@ const Characteristics = () => {
 
   const handleSave = async (newFeature) => {
     try {
-      console.log(newChar)
+      console.log(newChar);
       if (newChar) {
-        const updatedFeature = await updateChar(
-          newFeature,
-          idToken,
-                );
+        const updatedFeature = await updateChar(newFeature, idToken);
         const updatedData = data.map((item) =>
           item.id === newChar.id ? { ...item, ...updatedFeature } : item
         );
         setData(updatedData);
+        showNotification('success', 'Característica actualizada exitosamente');
       } else {
         const response = await registerChar(newFeature, idToken);
         setData([...data, { ...newFeature, id: response.id }]);
+        showNotification('success', 'Característica agregada exitosamente');
       }
     } catch (error) {
       console.error('Error saving data:', error);
     } finally {
       setIsAdding(false);
       setNewChar(null);
-      fetchData(idToken)
+      fetchData(idToken);
     }
   };
-
+ 
+  const showNotification = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+      placement: 'topRight',
+      
+    });
+  };
   const handleCancel = () => {
     setIsAdding(false);
     setNewChar(null);
@@ -67,9 +74,8 @@ const Characteristics = () => {
   const handleDelete = async (id) => {
     try {
       await deleteChar(id, idToken);
-      fetchData(idToken)
-      // const updatedData = data.filter((item) => item.id !== id);
-      // setData(updatedData);
+      fetchData(idToken);
+      showNotification('success', 'Característica eliminada exitosamente');
     } catch (error) {
       console.error('Error deleting data:', error);
     }
@@ -86,10 +92,10 @@ const Characteristics = () => {
         />
       ) : (
         <CharPanel
-        dataSource={data} 
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onAdd={handleAddClick}
+          dataSource={data}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onAdd={handleAddClick}
         />
       )}
     </div>
