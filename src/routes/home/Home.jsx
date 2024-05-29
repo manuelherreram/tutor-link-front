@@ -1,4 +1,4 @@
-import Categories from "../../components/categories/Categories"
+import Categories from "../../components/categoriesSection/CategoriesSection"
 import Search from "../../components/search/Search"
 import Card from "../../components/card/Card"
 import "./Home.css"
@@ -20,6 +20,9 @@ console.log(randomTeachers);
   return (
     <div className="container-home">
       <div className="container-utilities">
+        <div className="container-title">
+          <h2>Tu camino al éxito</h2>
+        </div>
         <Search />
         <Categories />
       </div>

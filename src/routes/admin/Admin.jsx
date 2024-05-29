@@ -23,6 +23,11 @@ const Admin = () => {
       icon: <UserAddOutlined />, 
     },
     {
+      label: 'Administrar categorias',
+      key: 'categorias',
+      icon: <UserAddOutlined />,
+    },
+    {
       label: 'Todos los usuarios ',
       key: 'usuarios',
       icon:  <WalletOutlined />,
@@ -52,12 +57,15 @@ const Admin = () => {
     }else if(e.key === 'caracteristicas'){
       navigate('/admin/characteristics')
       setShowPanel(false)
-    }
-    else if(e.key === 'usuarios'){
-      navigate('/admin/users')
+
+
+    }else if(e.key === 'categorias'){
+      navigate('/admin/categories')
       setShowPanel(false)
 
+
     }
+
   }
 
   const handleGoHome = () => {

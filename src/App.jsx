@@ -11,6 +11,8 @@ import Register from './routes/register/Register.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import AdminRoute from './routes/AdminRoute.jsx';
 import PrivateRoute from './routes/PrivateRoutes.jsx';
+import CategoryFilters from './routes/catFilter/CategoryFilters.jsx';
+import Categories from './routes/categories/Categories.jsx';
 import Users from './components/admin/users/Users.jsx';
 
 function App() {
@@ -25,8 +27,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/filter/:category" element={<CategoryFilters />} />
+                {/* Rutas protegidas */}
 
-                {/* Rutas protegidas para usuarios logueados */}
                 <Route
                   path="/detalle/:id"
                   element={
@@ -75,6 +78,12 @@ function App() {
                       <Users />
                     </AdminRoute>
                   }
+                />
+                <Route path="/admin/categories" element={
+                  <AdminRoute>
+                    <Categories />
+                  </AdminRoute>
+                  } 
                 />
               </Route>
             </Routes>
