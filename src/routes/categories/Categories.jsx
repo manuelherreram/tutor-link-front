@@ -1,6 +1,6 @@
 import  { useEffect, useState } from 'react';
 import CatPanel from '../../components/admin/catPanel/CatPanel';
-
+import CatForm from '../../components/admin/catForm/CatForm1'
 import './Categories.css'
 
 

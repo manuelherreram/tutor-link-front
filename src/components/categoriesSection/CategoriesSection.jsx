@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './CategoriesSection.css'
 
-const Categories = () => {
+const CategoriesSection = () => {
     return (
 
         <div className='container-categories-section'>
