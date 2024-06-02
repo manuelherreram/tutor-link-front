@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Button, TextField } from '@mui/material'
-import { useNavigate } from 'react-router-dom' // For navigation
+import { Button, Input } from 'antd' 
+import { useNavigate } from 'react-router-dom' 
 import './Login.css'
 import { useAuth } from '../../contexts/AuthContext'
 import { doSignInWithEmailAndPassword } from '../../firebase/auth'
@@ -20,7 +20,7 @@ const Login = () => {
             const user = userCredential.user
             setCurrentUser(user) 
             setUserLoggedIn(true) 
-            navigate('/')
+           navigate('/') 
 
         } catch (error) {
             console.error('Login failed:', error)
@@ -61,26 +61,24 @@ const Login = () => {
         <main className="container-login">
             <form className="container-form" onSubmit={formik.handleSubmit}>
                 <h3>Iniciar sesión</h3>
-                <TextField
+                <Input
                     type="email"
                     onChange={formik.handleChange}
                     name="email"
-                    label="Ingrese su email"
-                    variant="outlined"
-                    error={errors.email ? true : false}
-                    helperText={errors.email}
+                    placeholder="Ingrese su email" 
+                    value={formik.values.email} 
+                    className={errors.email && 'error'} 
                 />
-                <TextField
-                    type="password"
+                {errors.email && <p className="error-message">{errors.email}</p>}
+                <Input.Password
                     onChange={formik.handleChange}
                     name="password"
-                    label="Ingrese su contraseña"
-                    variant="outlined"
-                    autoComplete="off"
-                    error={errors.password ? true : false}
-                    helperText={errors.password}
+                    placeholder="Ingrese su contraseña" 
+                    value={formik.values.password} 
+                    className={errors.password && 'error'} 
                 />
-                <Button type="submit" variant="contained" color="primary">
+                {errors.password && <p className="error-message">{errors.password}</p>}
+                <Button type="primary" htmlType="submit"> 
                     Iniciar sesión
                 </Button>
                 {errors.general && (
