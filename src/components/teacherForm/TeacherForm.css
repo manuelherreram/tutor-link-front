@@ -1,0 +1,52 @@
+.main {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+}
+
+.form-row label {
+  width: 120px; 
+  text-align: left;
+  margin-right: 10px;
+  font-family: 'Poppins';
+}
+
+.form-row .ant-form-item-control {
+  flex: 1;
+  font-family: 'Poppins';
+}
+ .ant-form h4{
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: medium;
+}
+.form-row .ant-form-item-control-input {
+  width: 100%; 
+}
+
+@media screen and (max-width: 480px) {
+  .container-form {
+    width: 90%;
+    margin-top: 30px;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid rgb(134, 128, 128);
+    padding: 20px;
+  }
+
+  h3 {
+    margin: 10px 0;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+}

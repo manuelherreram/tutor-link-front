@@ -1,10 +1,10 @@
-import Form from '../../components/form/Form';
+import TeacherForm from '../../components/teacherForm/TeacherForm'
 import './NewTeacher.css';
 
 const NewTeacher = () => {
   return (
     <div className="container">
-      <Form />
+      <TeacherForm />
     </div>
   );
 };

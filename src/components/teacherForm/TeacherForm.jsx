@@ -3,20 +3,20 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import ImageUploader from './ImageUploader';
 import { storage } from '../../firebase/firebaseConfig';
-import { Button, TextField, Select, MenuItem } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
+import { Button, Input, Select, Form, Checkbox } from 'antd';
 import Swal from 'sweetalert2';
 import { register } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
-import './Form.css';
+import './TeacherForm.css';
 import { useAuth } from '../../contexts/AuthContext';
 import { ref, uploadBytes } from "firebase/storage";
 
-const Form = () => {
+const { Option } = Select;
+
+const TeacherForm = () => {
   const [mostrar, setMostrar] = useState(true);
   const navigate = useNavigate();
   const { idToken } = useAuth();
-
 
   const subjectOptions = [
     { value: 'Historia', label: 'Historia' },
@@ -47,36 +47,27 @@ const Form = () => {
       description: '',
       subject: '',
       images: [],
-     characteristics : [],
+      characteristics: [],
     },
     onSubmit: async (data, { setSubmitting }) => {
       try {
         if (data.images && data.images.length > 0) {
           const imageUrls = await Promise.all(
             data.images.map(async (image) => {
-              console.log(storage)
-              console.log(image)
               const storageRef = ref(storage, `images/${image.title}`);
-    console.log("storageRef", storageRef);
-
-          
-              console.log(`Subiendo imagen: ${image.title}`); 
-              const url= await uploadBytes(storageRef,image)
-              console.log(url)
-              console.log(`URL obtenida: ${url}`); 
+              const url = await uploadBytes(storageRef, image);
               return url;
             })
           );
-          console.log('URLs de imágenes:', data.images); 
         } else {
           console.log('No se seleccionaron imágenes.');
         }
-        // Construcción del objeto final
+
         const finalData = {
           name: data.name,
           dni: data.dni,
           description: data.description,
-          images:data.images,
+          images: data.images,
           subject: {
             title: data.subject,
           },
@@ -84,10 +75,9 @@ const Form = () => {
             data.characteristics.includes(option.id)
           ),
         };
-        console.log('Datos finales enviados al servidor:', finalData);
+
         const response = await register(finalData, idToken);
         setMostrar(false);
-        console.log('Respuesta del servidor:', response);
         Swal.fire({
           icon: 'success',
           title: '¡Registro exitoso!',
@@ -116,92 +106,121 @@ const Form = () => {
   });
 
   return (
-    <main>
-      {mostrar && (
-        <form className="container-form" onSubmit={handleSubmitProfessor}>
-          <h4>Registro del Tutor</h4>
-          <TextField
+    <main className="main">
+  {mostrar && (
+    <Form
+      layout="horizontal"
+      className="container-form"
+      onFinish={handleSubmitProfessor}
+    >
+      <h4>Registro del Tutor</h4>
+      <div className="form-row">
+        <Form.Item
+          label="Nombre"
+          name="name"
+          validateStatus={errorsProfessor.name ? 'error' : ''}
+          help={errorsProfessor.name}
+        >
+          <Input
             type="text"
             onChange={handleChangeProfessor}
             name="name"
-            label="Ingrese su nombre"
-            variant="outlined"
-            error={errorsProfessor.name ? true : false}
-            helperText={errorsProfessor.name}
+            placeholder="Ingrese su nombre"
           />
-          <TextField
+        </Form.Item>
+      </div>
+      <div className="form-row">
+        <Form.Item
+          label="DNI"
+          name="dni"
+          validateStatus={errorsProfessor.dni ? 'error' : ''}
+          help={errorsProfessor.dni}
+        >
+          <Input
             type="text"
             onChange={handleChangeProfessor}
             name="dni"
-            label="Ingrese el DNI del profesor"
-            variant="outlined"
-            autoComplete="off"
-            error={errorsProfessor.dni ? true : false}
-            helperText={errorsProfessor.dni}
+            placeholder="Ingrese el DNI del profesor"
           />
-          <TextField
-            type="text"
+        </Form.Item>
+      </div>
+      <div className="form-row">
+        <Form.Item
+          label="Descripción"
+          name="description"
+          validateStatus={errorsProfessor.description ? 'error' : ''}
+          help={errorsProfessor.description}
+        >
+          <Input.TextArea
             onChange={handleChangeProfessor}
             name="description"
-            label="Ingrese una descripción"
-            multiline
+            placeholder="Ingrese una descripción"
             rows={4}
-            variant="outlined"
-            autoComplete="off"
-            error={errorsProfessor.description ? true : false}
-            helperText={errorsProfessor.description}
           />
-          <InputLabel id="subject-select-label">
-            Selecciona la asignatura
-          </InputLabel>
+        </Form.Item>
+      </div>
+      <div className="form-row">
+        <Form.Item
+          label="Asignatura"
+          name="subject"
+          validateStatus={errorsProfessor.subject ? 'error' : ''}
+          help={errorsProfessor.subject}
+        >
           <Select
-            labelId="subject-select-label"
-            id="subject-select"
+            placeholder="Selecciona la asignatura"
             value={valuesProfessor.subject}
-            name="subject"
-            label="Subject"
-            onChange={handleChangeProfessor}
-            displayEmpty
-            inputProps={{ 'aria-label': 'Subject' }}
-            fullWidth
+            onChange={(value) => setFieldValue('subject', value)}
           >
             {subjectOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
+              <Option key={option.value} value={option.value}>
                 {option.label}
-              </MenuItem>
+              </Option>
             ))}
           </Select>
+        </Form.Item>
+      </div>
+      <div className="form-row">
+        <Form.Item label="Imágenes">
           <ImageUploader
             folderName={valuesProfessor.name}
             setFieldValue={setFieldValue}
           />
-          <h4>Características del Tutor</h4>
-          {characteristicsOptions.map((option) => (
-            <label key={option.id}>
-              <input
-                type="checkbox"
-                onChange={() => {
-                  const updatedCharacteristics =
-                    valuesProfessor.characteristics.includes(option.id)
-                      ? valuesProfessor.characteristics.filter(
-                          (id) => id !== option.id
-                        )
-                      : [...valuesProfessor.characteristics, option.id];
-                  setFieldValue('characteristics', updatedCharacteristics);
-                }}
-                checked={valuesProfessor.characteristics.includes(option.id)}
-              />{' '}
+        </Form.Item>
+      </div>
+      <h4>Características del Tutor</h4>
+      <div className="form-row">
+        {characteristicsOptions.map((option) => (
+          <Form.Item
+            key={option.id}
+            valuePropName="checked"
+          >
+            <Checkbox
+              onChange={() => {
+                const updatedCharacteristics =
+                  valuesProfessor.characteristics.includes(option.id)
+                    ? valuesProfessor.characteristics.filter(
+                        (id) => id !== option.id
+                      )
+                    : [...valuesProfessor.characteristics, option.id];
+                setFieldValue('characteristics', updatedCharacteristics);
+              }}
+              checked={valuesProfessor.characteristics.includes(option.id)}
+            >
               {option.name}
-            </label>
-          ))}
+            </Checkbox>
+          </Form.Item>
+        ))}
+      </div>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Enviar
+        </Button>
+      </Form.Item>
+    </Form>
+  )}
+</main>
 
-          <Button type="submit" variant="contained" color="primary">
-            Enviar
-          </Button>
-        </form>
-      )}
-    </main>
   );
 };
 
-export default Form;
+export default TeacherForm;
