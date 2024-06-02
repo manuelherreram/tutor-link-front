@@ -78,6 +78,7 @@ const Register = () => {
                 })
 
                 setShowResendButton(true)
+                navigate('/')
             } catch (error) {
                 console.error('Registration failed:', error)
                 if (
