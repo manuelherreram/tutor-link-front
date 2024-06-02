@@ -27,7 +27,7 @@ const initialValues= characteristic ??  {
 
  
   return (
-    <Form className="characteristics" onFinish={handleSubmit}>
+    <Form className="characteristics" onFinish={handleSubmit}   >
       <h3>NUEVA CARACTERÍSTICA</h3>
       <Form.Item
         label="Ingrese el nombre de la característica"

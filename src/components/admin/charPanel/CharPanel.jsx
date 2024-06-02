@@ -34,7 +34,8 @@ const CharPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
   ];
 
   return (
-    <div className='container-charPanel'>
+    <div className='container-page'>
+      <div className='container-charPanel'>
       <h3 className="title-charPanel">Características</h3>
       <Table 
         dataSource={dataSource} 
@@ -42,6 +43,8 @@ const CharPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
         pagination={{ pageSize: 7}} 
         rowKey={record => record.id} 
       />
+      </div>
+      
       <Button type="primary" onClick={onAdd} style={{ marginTop: 16 }}>
         Agregar Característica
       </Button>

@@ -34,9 +34,11 @@ const CatPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
   ];
 
   return (
-    <div className=' container-catPanel'>
+    <div className='container-page'>
+      <div className='container-catPanel'>
       <h3 className='title-catPanel'>Categorías</h3>
       <Table dataSource={dataSource} columns={columns} pagination={false} />
+      </div>
       <Button type="primary" onClick={onAdd} style={{ marginTop: 16 }}>
         Agregar Categoría
       </Button>
