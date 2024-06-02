@@ -125,10 +125,11 @@ const Register = () => {
 
     return (
         <div className="container-register">
-            <form className="container-form" onSubmit={formik.handleSubmit}>
-                <h3>Registro de estudiante</h3>
+            <form className="container-form-register" onSubmit={formik.handleSubmit}>
+                <h3   className='h3'>Registro de estudiante</h3>
                 <TextField
                     name="name"
+                  
                     label="Nombre"
                     variant="outlined"
                     onChange={formik.handleChange}
