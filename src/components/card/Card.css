@@ -78,3 +78,14 @@
     font-family: poppins;
 
 }
+.card-image {
+    position: relative;
+}
+
+.favorite-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: red;
+    font-size: 24px;
+}
