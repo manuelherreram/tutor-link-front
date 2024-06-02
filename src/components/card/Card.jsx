@@ -1,14 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import './Card.css'
 import { HeartOutlined,  HeartFilled} from '@ant-design/icons';
+import { useAuth } from '../../contexts/AuthContext';
+import {  notification } from 'antd';
+
 
 const Card = ({name, category, image, description, id}) => {
     const [isFavorited, setIsFavorited] = useState(false);
+    const {userLoggedIn} = useAuth();
+   const navigate= useNavigate()
     
     const toggleFavorite = () => {
-        setIsFavorited(!isFavorited);
-    };
+        if (userLoggedIn) { 
+          setIsFavorited(!isFavorited);
+          
+        } else {
+            notification.error({
+                message: 'Error',
+                description: 'Inicia asesión para poder guardar tus favoritos',
+                duration: 3, 
+              });
+          navigate('/login')
+        }
+      };
 
    
 return(
