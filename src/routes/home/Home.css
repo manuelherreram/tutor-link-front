@@ -38,19 +38,17 @@
 }
 
 .container-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  /* correción para el footer */
-  grid-template-rows: repeat(5, 1fr);
-  grid-gap: 20px;
-  /* height: 100vh; */
-  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding: 20px 80px;
 }
 
 @media (max-width: 768px) {
   .container-cards {
-    grid-template-columns: 1fr;
+    padding: 20px 4px;
   }
+
 }
 
 
