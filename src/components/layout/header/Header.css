@@ -54,7 +54,7 @@ h4 {
 .user-info {
   display: flex;
   align-items: center;
-  flex-direction: column;
+  
 }
 
 .user-details {
@@ -65,9 +65,10 @@ h4 {
 
 .avatar {
   margin-bottom: 10px;
-  background-color: #005770;
-  width: 500px;
-  height: 500px;
+  background-color:#fa8c16;;
+  width: 50px;
+  height: 50px;
+  margin:10px
 }
 
 .btn-logout {
