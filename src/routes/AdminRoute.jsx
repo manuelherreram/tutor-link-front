@@ -11,7 +11,6 @@ const AdminRoute = ({ children }) => {
 
   // Si el usuario no es admin, redirige al home
   if (!isAdmin) {
-    console.log('el usuario no es admin');
     return <Navigate to="/" />;
   }
 
