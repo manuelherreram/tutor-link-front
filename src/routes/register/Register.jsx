@@ -1,5 +1,9 @@
 import { useState } from 'react'
-import { Button, TextField } from '@mui/material'
+import
+{ Input, Button}
+from
+"antd"
+;
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom'
@@ -104,11 +108,11 @@ const Register = () => {
         validationSchema: Yup.object({
             name: Yup.string()
                 .min(3, 'El nombre debe tener por lo menos 3 caracteres')
-                .max(10, 'El nombre no puede exceder los 10 caracteres')
+                .max(15, 'El nombre no puede exceder los 15 caracteres')
                 .required('Este campo es obligatorio'),
             lastName: Yup.string()
                 .min(3, 'El apellido debe tener por lo menos 3 caracteres')
-                .max(10, 'El apellido no puede exceder los 10 caracteres')
+                .max(15, 'El apellido no puede exceder los 15 caracteres')
                 .required('Este campo es obligatorio'),
             email: Yup.string()
                 .email('El email no corresponde')
@@ -126,38 +130,37 @@ const Register = () => {
     return (
         <div className="container-register">
             <form className="container-form-register" onSubmit={formik.handleSubmit}>
-                <h3   className='h3'>Registro de estudiante</h3>
-                <TextField
+                <h3   className='h3'>Registro de usuario</h3>
+                <Input
                     name="name"
-                  
-                    label="Nombre"
+                    placeholder="Nombre"
                     variant="outlined"
                     onChange={formik.handleChange}
                     value={formik.values.name}
                     error={formik.errors.name ? true : false}
                     helperText={formik.errors.name}
                 />
-                <TextField
+                <Input
                     name="lastName"
-                    label="Apellido"
+                    placeholder="Apellido"
                     variant="outlined"
                     onChange={formik.handleChange}
                     value={formik.values.lastName}
                     error={formik.errors.lastName ? true : false}
                     helperText={formik.errors.lastName}
                 />
-                <TextField
+                <Input
                     name="email"
-                    label="Email"
+                    placeholder="Email"
                     variant="outlined"
                     onChange={formik.handleChange}
                     value={formik.values.email}
                     error={formik.errors.email ? true : false}
                     helperText={formik.errors.email}
                 />
-                <TextField
+                <Input
                     name="password"
-                    label="Contraseña"
+                    placeholder="Contraseña"
                     variant="outlined"
                     type="password"
                     onChange={formik.handleChange}
