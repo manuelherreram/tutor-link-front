@@ -1,21 +1,19 @@
-import { useState, useEffect } from 'react'
-import Panel from '../../components/admin/panel/Panel'
-import { Button, Menu, Result } from 'antd'
-import { UserAddOutlined, WalletOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
-import './Admin.css'
+import  { useState, useEffect } from 'react';
+import Panel from '../../components/admin/panel/Panel';
+import Users from '../../components/admin/users/Users';
+import Characteristics from '../characteristics/Characteristics'
+import Categories from '../categories/Categories'
+import { Button, Menu, Result } from 'antd';
+import { UserAddOutlined, WalletOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import './Admin.css';
 
 const Admin = () => {
     const items = [
         {
-            label: 'Todos los Profesores',
-            key: 'profesores',
+            label: 'Administrar tutores',
+            key: 'tutores',
             icon: <WalletOutlined />,
-        },
-        {
-            label: 'Agregar un Profesor',
-            key: 'agregar',
-            icon: <UserAddOutlined />,
         },
         {
             label: 'Administrar características',
@@ -32,43 +30,41 @@ const Admin = () => {
             key: 'usuarios',
             icon: <WalletOutlined />,
         },
-    ]
+    ];
 
-    const [current, setCurrent] = useState('')
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
-    const [showPanel, setShowPanel] = useState(false) // State to control the panel visibility
-    const navigate = useNavigate()
+    const [current, setCurrent] = useState('');
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [showPanel, setShowPanel] = useState(false); // State to control the panel visibility
+    const [selectedComponent, setSelectedComponent] = useState(null); // State to control which component to render
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768)
-        window.addEventListener('resize', handleResize)
-        return () => window.removeEventListener('resize', handleResize)
-    }, [])
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleMenuClick = e => {
-        setCurrent(e.key)
+        setCurrent(e.key);
 
-        if (e.key === 'profesores') {
-            setShowPanel(true)
-        } else if (e.key === 'agregar') {
-            navigate('/admin/new')
-            setShowPanel(false)
+        if (e.key === 'tutores') {
+            setShowPanel(true);
+            setSelectedComponent(null);
         } else if (e.key === 'caracteristicas') {
-            navigate('/admin/characteristics')
-            setShowPanel(false)
-        }else if (e.key === 'usuarios'){
-          navigate('/admin/users')
-          setShowPanel(false)
+            setSelectedComponent(<Characteristics />);
+            setShowPanel(false);
+        } else if (e.key === 'usuarios') {
+            setSelectedComponent(<Users />);
+            setShowPanel(false);
+        } else if (e.key === 'categorias') {
+            setSelectedComponent(<Categories />);
+            setShowPanel(false);
         }
-        else if (e.key === 'categorias') {
-            navigate('/admin/categories')
-            setShowPanel(false)
-        }
-    }
+    };
 
     const handleGoHome = () => {
-        navigate('/') // Navigate to the root path
-    }
+        navigate('/'); // Navigate to the root path
+    };
 
     const renderContent = () => {
         if (isMobile) {
@@ -88,7 +84,7 @@ const Admin = () => {
                         }
                     />
                 </div>
-            )
+            );
         } else {
             return (
                 <>
@@ -98,13 +94,14 @@ const Admin = () => {
                         mode="horizontal"
                         items={items}
                     />
+                    {selectedComponent}
                     {showPanel && <Panel showPanel={showPanel} />}
                 </>
-            )
+            );
         }
-    }
+    };
 
-    return <div className="admin-container">{renderContent()}</div>
-}
+    return <div className="admin-container">{renderContent()}</div>;
+};
 
-export default Admin
+export default Admin;
