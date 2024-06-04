@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Input, Button } from 'antd';
+import { Input, Button, Form } from 'antd';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
@@ -11,11 +11,12 @@ import {
 } from 'firebase/auth';
 import { createUser } from '../../api/api';
 import { auth } from '../../firebase/firebaseConfig';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 const Register = () => {
   const [showResendButton, setShowResendButton] = useState(false);
   const navigate = useNavigate();
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const handleResendVerification = async () => {
     try {
       auth.languageCode = 'es';
@@ -29,10 +30,7 @@ const Register = () => {
         });
       }
     } catch (error) {
-      console.error(
-        'Error sending email verification:',
-        error.code === 'auth/too-many-requests'
-      );
+      console.error('Error sending email verification:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -47,7 +45,7 @@ const Register = () => {
       lastName: '',
       email: '',
       password: '',
-      phone: 0,
+      phone: '',
       address: '',
       city: '',
       country: '',
@@ -90,17 +88,20 @@ const Register = () => {
         navigate('/');
       } catch (error) {
         console.error('Registration failed:', error);
-        if (
-          error.code === 'auth/email-already-in-use' ||
-          error.response.data ===
-            'Registration failed: The user with the provided email already exists (EMAIL_EXISTS).'
-        ) {
-          console.log(error, 'error-response');
+        if (error.code === 'auth/email-already-in-use') {
           setErrors({
             email: 'Esta dirección de correo ya está en uso.',
           });
         } else if (error.code === 'auth/weak-password') {
           setErrors({ password: 'La contraseña es muy débil.' });
+        } else if (
+          error.response &&
+          error.response.data ===
+            'Registration failed: The user with the provided email already exists (EMAIL_EXISTS).'
+        ) {
+          setErrors({
+            email: 'Esta dirección de correo ya está en uso.',
+          });
         } else if (error.response) {
           setErrors({ general: error.response.data.message });
         } else {
@@ -108,6 +109,11 @@ const Register = () => {
             general: 'Ocurrió un error durante el registro.',
           });
         }
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error durante el registro.',
+        });
       }
     },
     validationSchema: Yup.object({
@@ -128,92 +134,144 @@ const Register = () => {
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
           'La contraseña debe tener al menos una letra mayúscula, una letra minúscula y un dígito'
         ),
+      phone: Yup.string().matches(
+        /^\d{10}$/,
+        'El teléfono debe tener 10 dígitos'
+      ),
+      address: Yup.string().min(
+        5,
+        'La dirección debe tener por lo menos 5 caracteres'
+      ),
+      city: Yup.string().min(
+        3,
+        'La ciudad debe tener por lo menos 3 caracteres'
+      ),
+      country: Yup.string().min(
+        3,
+        'El país debe tener por lo menos 3 caracteres'
+      ),
     }),
     validateOnChange: false,
   });
 
   return (
     <div className="container-register">
-      <form className="container-form-register" onSubmit={formik.handleSubmit}>
+      <Form className="container-form-register" onFinish={formik.handleSubmit}>
         <h3 className="h3">Registro de usuario</h3>
-        <Input
-          name="name"
-          placeholder="Nombre"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.name}
-          error={formik.errors.name ? true : false}
-          //   helperText={formik.errors.name}
-        />
-        <Input
-          name="lastName"
-          placeholder="Apellido"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.lastName}
-          error={formik.errors.lastName ? true : false}
-        />
-        <Input
-          name="email"
-          placeholder="Email"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-          error={formik.errors.email ? true : false}
-        />
-        <Input
-          name="password"
-          placeholder="Contraseña"
-          variant="outlined"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          error={formik.errors.password ? true : false}
-        />
-        <Input
-          name="phone"
-          placeholder="Teléfono"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.phone}
-          error={formik.errors.phone ? true : false}
-        />
-        <Input
-          name="address"
-          placeholder="Dirección"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.address}
-          error={formik.errors.address ? true : false}
-        />
-        <Input
-          name="city"
-          placeholder="Ciudad"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.city}
-          error={formik.errors.city ? true : false}
-        />
-        <Input
-          name="country"
-          placeholder="Country"
-          variant="outlined"
-          onChange={formik.handleChange}
-          value={formik.values.country}
-          error={formik.errors.country ? true : false}
-        />
+        <Form.Item
+          validateStatus={formik.errors.name ? 'error' : ''}
+          help={formik.errors.name}
+        >
+          <Input
+            name="name"
+            placeholder="Nombre"
+            onChange={formik.handleChange}
+            value={formik.values.name}
+            aria-describedby="name-helper-text"
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={formik.errors.lastName ? 'error' : ''}
+          help={formik.errors.lastName}
+        >
+          <Input
+            name="lastName"
+            placeholder="Apellido"
+            onChange={formik.handleChange}
+            value={formik.values.lastName}
+            aria-describedby="lastName-helper-text"
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={formik.errors.email ? 'error' : ''}
+          help={formik.errors.email}
+        >
+          <Input
+            name="email"
+            placeholder="Email"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            aria-describedby="email-helper-text"
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={formik.errors.password ? 'error' : ''}
+          help={formik.errors.password}
+        >
+          <Input.Password
+            name="password"
+            placeholder="Contraseña"
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            iconRender={(visible) =>
+              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+            }
+            visibilityToggle
+            aria-describedby="password-helper-text"
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={formik.errors.phone ? 'error' : ''}
+          help={formik.errors.phone}
+        >
+          <Input
+            name="phone"
+            placeholder="Teléfono"
+            onChange={formik.handleChange}
+            value={formik.values.phone}
+            aria-describedby="phone-helper-text"
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={formik.errors.address ? 'error' : ''}
+          help={formik.errors.address}
+        >
+          <Input
+            name="address"
+            placeholder="Dirección"
+            onChange={formik.handleChange}
+            value={formik.values.address}
+            aria-describedby="address-helper-text"
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={formik.errors.city ? 'error' : ''}
+          help={formik.errors.city}
+        >
+          <Input
+            name="city"
+            placeholder="Ciudad"
+            onChange={formik.handleChange}
+            value={formik.values.city}
+            aria-describedby="city-helper-text"
+          />
+        </Form.Item>
+        <Form.Item
+          validateStatus={formik.errors.country ? 'error' : ''}
+          help={formik.errors.country}
+        >
+          <Input
+            name="country"
+            placeholder="País"
+            onChange={formik.handleChange}
+            value={formik.values.country}
+            aria-describedby="country-helper-text"
+          />
+        </Form.Item>
         {formik.errors.general && (
           <div className="error-message">{formik.errors.general}</div>
         )}
-        <Button type="submit" variant="contained">
-          Registrar
-        </Button>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Registrar
+          </Button>
+        </Form.Item>
         {showResendButton && (
-          <Button onClick={handleResendVerification}>
+          <Button onClick={handleResendVerification} type="default">
             Reenviar correo de verificación
           </Button>
         )}
-      </form>
+      </Form>
     </div>
   );
 };
