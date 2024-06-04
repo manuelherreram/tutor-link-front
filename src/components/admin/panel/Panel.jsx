@@ -12,7 +12,7 @@ import { useAuth } from '../../../contexts/AuthContext'
 
 const { Column } = Table
 
-const Panel = ({ showPanel }) => {
+const Panel = ({ showPanel,onAddNewTeacher }) => {
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false)
@@ -180,7 +180,8 @@ const Panel = ({ showPanel }) => {
     return (
         <div className="container-panel">
             <div className="title-panel">
-                <h3>Listado de Profesores</h3>
+                <h3>Listado de Tutores</h3>
+                <Button type="primary" onClick={onAddNewTeacher}>+ Agregar Nuevo</Button>
             </div>
             {isLoading ? (
                 <div className="loading">Cargando profesores...</div>

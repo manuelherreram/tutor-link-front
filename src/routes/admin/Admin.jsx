@@ -3,6 +3,7 @@ import Panel from '../../components/admin/panel/Panel';
 import Users from '../../components/admin/users/Users';
 import Characteristics from '../characteristics/Characteristics'
 import Categories from '../categories/Categories'
+import NewTeacher from '../newTeacher/NewTeacher'
 import { Button, Menu, Result } from 'antd';
 import { UserAddOutlined, WalletOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +35,7 @@ const Admin = () => {
 
     const [current, setCurrent] = useState('');
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [showNewTeacher, setShowNewTeacher] = useState(false); 
     const [showPanel, setShowPanel] = useState(false); // State to control the panel visibility
     const [selectedComponent, setSelectedComponent] = useState(null); // State to control which component to render
     const navigate = useNavigate();
@@ -49,6 +51,7 @@ const Admin = () => {
 
         if (e.key === 'tutores') {
             setShowPanel(true);
+            setShowNewTeacher(false)
             setSelectedComponent(null);
         } else if (e.key === 'caracteristicas') {
             setSelectedComponent(<Characteristics />);
@@ -64,6 +67,10 @@ const Admin = () => {
 
     const handleGoHome = () => {
         navigate('/'); // Navigate to the root path
+    };
+    const handleAddNewTeacher = () => {
+        setShowNewTeacher(true);
+        setShowPanel(false)
     };
 
     const renderContent = () => {
@@ -95,7 +102,8 @@ const Admin = () => {
                         items={items}
                     />
                     {selectedComponent}
-                    {showPanel && <Panel showPanel={showPanel} />}
+                    {showPanel && <Panel showPanel={showPanel} onAddNewTeacher={handleAddNewTeacher} />}
+            {showNewTeacher && <NewTeacher />} 
                 </>
             );
         }
