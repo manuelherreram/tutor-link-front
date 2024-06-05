@@ -111,7 +111,7 @@ const Detail = () => {
           {/* Contenido de la modal */}
           <h2>Galería de Imágenes</h2>
           {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
-          <button onClick={closeModal}>Cerrar</button>
+          <Button type="primary" onClick={closeModal}>Cerrar</Button>
         </Modal>
       </div>
     </div>
