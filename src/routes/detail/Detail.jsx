@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import { getDataById } from "../../api/api";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import "./Detail.css";
-import Modal from "react-modal";
-import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
+import { useEffect, useState } from 'react';
+import { getDataById } from '../../api/api';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import './Detail.css';
+import Modal from 'react-modal';
+import ImageGallery from 'react-image-gallery';
+import 'react-image-gallery/styles/css/image-gallery.css';
 
 const Detail = () => {
   const { id } = useParams();
@@ -45,69 +47,73 @@ const Detail = () => {
   }, [teacherSelected]);
 
   return (
-    <div className="container-detail">
+    <div>
       <div className="section-detail">
         <h2>{teacherSelected && teacherSelected.name}</h2>
-        <button className="btn-go-back" onClick={() => navigate(-1)}>
-          ⬅️
-        </button>
+        <Button
+          className="btn-go-back"
+          onClick={() => navigate(-1)}
+          type="primary"
+          icon={<ArrowLeftOutlined />}
+        ></Button>
       </div>
-
-      {teacherSelected ? (
-        <div className="container-teacher">
-          <p>{teacherSelected.subject.title}</p>
-          <p> {teacherSelected.description}</p>
-        </div>
-      ) : (
-        <p>Cargando datos del tutor...</p>
-      )}
-      {teacherSelected && teacherSelected.images && (
-        <div>
-          <section className="container-image">
-            <div className="cont-first-img">
-              <img
-                src={teacherSelected.images[0].url}
-                alt={`imagen1`}
-                className="first-image"
-              />
-            </div>
-            <div className="container-grid">
+      <div className="container-detail">
+        {teacherSelected ? (
+          <div className="container-teacher">
+            <p>{teacherSelected.subject.title}</p>
+            <p> {teacherSelected.description}</p>
+          </div>
+        ) : (
+          <p>Cargando datos del tutor...</p>
+        )}
+        {teacherSelected && teacherSelected.images && (
+          <div>
+            <section className="container-image">
+              <div className="cont-first-img">
+                <img
+                  src={teacherSelected.images[0].url}
+                  alt={`imagen1`}
+                  className="first-image"
+                />
+              </div>
+              <div className="container-grid">
+                <div className="cont-other-img">
+                  {teacherSelected.images.slice(1, 5).map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.url}
+                      alt={`imagen${index + 2}`}
+                      className="item-image"
+                    />
+                  ))}
+                </div>
+                <Button type="primary" className="more" onClick={openModal}>
+                  ver más
+                </Button>
+              </div>
+            </section>
+            <div>
+              <h3> Características: </h3>
               <div className="cont-other-img">
-                {teacherSelected.images.slice(1, 5).map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.url}
-                    alt={`imagen${index + 2}`}
-                    className="item-image"
-                  />
+                {teacherSelected.characteristics.map((character) => (
+                  <div key={character.id}> {character.name} </div>
                 ))}
               </div>
-              <button className="more" onClick={openModal}>
-                ver más
-              </button>
-            </div>
-          </section>
-          <div>
-            <h3> Características: </h3>
-            <div className="cont-other-img">
-              {teacherSelected.characteristics.map((character) => (
-                <div key={character.id}> {character.name} </div>
-              ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Galería de Imágenes"
-      >
-        {/* Contenido de la modal */}
-        <h2>Galería de Imágenes</h2>
-        {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
-        <button onClick={closeModal}>Cerrar</button>
-      </Modal>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          contentLabel="Galería de Imágenes"
+        >
+          {/* Contenido de la modal */}
+          <h2>Galería de Imágenes</h2>
+          {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
+          <button onClick={closeModal}>Cerrar</button>
+        </Modal>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 .container-detail {
-  margin: 90px 40px 0 40px;
+  margin: 20px 40px 0 40px;
   padding-bottom: 80px;
+
 }
 .btn-go-back {
   text-align: right;
@@ -10,7 +11,7 @@
 .section-detail {
   display: flex;
   justify-content: space-between;
-  margin: 20px;
+  margin: 20px 50px 10px;
   height: 40px;
 }
 .container-teacher {
@@ -22,6 +23,7 @@
   display: flex;
   justify-content: space-between;
   border-radius: 15px;
+  margin-bottom: 20px;
 }
 .cont-first-img {
   flex: 0.6;
@@ -60,8 +62,7 @@
   height: 95%;
 }
 .more {
-  width: 100px;
-  height: 20px;
+
   margin: 10px;
   cursor: pointer;
 }
