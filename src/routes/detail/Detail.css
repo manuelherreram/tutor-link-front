@@ -62,7 +62,11 @@
   height: 95%;
 }
 .more {
-
   margin: 10px;
   cursor: pointer;
+}
+
+.ant-picker-outlined{
+  border-color:#fa8c16;
+  font-family: 'Poppins';
 }
