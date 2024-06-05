@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
-import { getUsers } from '../api/api';
+
 
 
 const AuthContext = React.createContext();
@@ -26,13 +26,9 @@ export function AuthProvider({ children }) {
         try {
           // Fetch the ID token using getIdTokenResult
           const idTokenResult = await getIdTokenResult(user);
-          setIdToken(idTokenResult.token);
-
-          const users = await getUsers(idTokenResult.token);
           
-          const usersData = await getUsers(idTokenResult.token);
-          const currentUserData = usersData.find(u => u.uid === user.uid);
-          setIsAdmin(currentUserData && currentUserData.role === 'ADMIN');
+          setIdToken(idTokenResult.token);
+          setIsAdmin(idTokenResult.claims.role === 'ADMIN');
         } catch (error) {
           console.error('Error fetching ID token or user data:', error);
         }
