@@ -57,6 +57,7 @@ const Admin = () => {
             setSelectedComponent(<Characteristics />);
             setShowPanel(false);
         } else if (e.key === 'usuarios') {
+            setShowNewTeacher(false)
             setSelectedComponent(<Users />);
             setShowPanel(false);
         } else if (e.key === 'categorias') {
