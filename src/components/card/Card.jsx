@@ -1,36 +1,36 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import './Card.css'
 import { HeartOutlined,  HeartFilled} from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import {  notification } from 'antd';
+import {useFavorites} from '../../contexts/FavoriteContexts'
 
 
 const Card = ({name, category, image, description, id}) => {
-    const [isFavorited, setIsFavorited] = useState(false);
+    const {favorites, toggleFavorite} = useFavorites();
+    const isFavorited = favorites.includes(id);
     const {userLoggedIn} = useAuth();
    const navigate= useNavigate()
     
-    const toggleFavorite = () => {
-        if (userLoggedIn) { 
-          setIsFavorited(!isFavorited);
-          
-        } else {
-            notification.error({
-                message: 'Error',
-                description: 'Inicia asesión para poder guardar tus favoritos',
-                duration: 3, 
-              });
-          navigate('/login')
-        }
-      };
+   const handleToggleFavorite = () => {
+    if (userLoggedIn) {
+        toggleFavorite(id);
+    } else {
+        notification.error({
+            message: 'Error',
+            description: 'Inicia sesión para poder guardar tus favoritos',
+            duration: 3,
+        });
+        navigate('/login');
+    }
+};
 
    
 return(
     <div className="card">
             <div className="card-image">
                 <img src={image} alt="" />
-                <div className="favorite-icon" onClick={toggleFavorite}>
+                <div className="favorite-icon" onClick={handleToggleFavorite}>
                     {isFavorited ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined style={{ color: 'white' }} />}
                 </div>
             </div>

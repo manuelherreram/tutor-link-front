@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 /*-----------Teachers---------------------------*/
-
 //Listar a los profesores
 export const getData = async (accessToken) => {
   try {
@@ -60,7 +59,7 @@ export const verificarDNIServidor = async (dni) => {
     throw error;
   }
 };
-
+//Eliminar un profesor
 export const deleteTeacher = async (id, accessToken) => {
   try {
     const response = await axios.delete(

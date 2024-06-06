@@ -50,7 +50,25 @@ const Profile = () => {
             </div>
         );
     }
-
+    useEffect(() => {
+        const fetchFavoritos = async () => {
+            try {
+                // Hacer una llamada a la API para obtener los favoritos del usuario
+                // Supongamos que tienes una función fetchFavoritos en tu API que devuelve los favoritos del usuario
+                const favoritosData = await fetchFavoritos(currentUser.id);
+                setFavoritos(favoritosData);
+            } catch (error) {
+                setError('No se pudieron cargar los favoritos del usuario.');
+            }
+        };
+    
+        if (currentUser) {
+            setIsVerified(currentUser.emailVerified);
+            fetchFavoritos();
+        } else {
+            setError('No se pudo cargar la información del usuario.');
+        }
+    }, [currentUser]);
     return (
         <div className='container-profile'>
             <ArrowLeftOutlined
