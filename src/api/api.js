@@ -214,84 +214,119 @@
 import axios from "axios";
 const baseURL = "http://localhost:8080/api";
 
-const api = axios.create({
-  baseURL,
-});
-
-const handleError = (error) => {
-  console.error(`Error fetching data:`, error);
-  throw error;
-};
-
-const getData = async (endpoint, accessToken) => {
+// Function to handle API requests
+const apiRequest = async (method, url, data = {}, headers = {}) => {
   try {
-    const response = await api.get(endpoint, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios({ method, url, data, headers });
     return response.data;
   } catch (error) {
-    handleError(error);
-  }
-};
-
-const postData = async (endpoint, data, token) => {
-  try {
-    const response = await api.post(endpoint, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
-};
-
-const deleteData = async (endpoint, accessToken) => {
-  try {
-    const response = await api.delete(endpoint, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log("Data deleted successfully:", response.data);
-  } catch (error) {
-    handleError(error);
+    console.error(`Error in ${method} request to ${url}:`, error);
+    throw error;
   }
 };
 
 // Teachers
-export const getTeachers = (accessToken) =>
-  getData(`/admin/teachers`, accessToken);
-export const getTeacherById = (id) => getData(`/public/${id}`);
-export const registerTeacher = (data, token) =>
-  postData(`/admin/teachers`, data, token);
-export const verifyDNI = (dni) => getData(`/admin/teachers`); // You might need to refine this function
-export const deleteTeacher = (id, accessToken) =>
-  deleteData(`/admin/teachers/${id}`, accessToken);
-export const fetchTeachersBySubject = (subject) =>
-  getData(`/profesores`, { params: { categoria: subject } });
+export const getTeachers = async (accessToken) => {
+  const url = `${baseURL}/admin/teachers`;
+  return apiRequest("get", url, {}, { Authorization: `Bearer ${accessToken}` });
+};
+
+export const getTeacherById = async (id) => {
+  const url = `${baseURL}/public/${id}`;
+  return apiRequest("get", url);
+};
+
+export const registerTeacher = async (data, token) => {
+  const url = `${baseURL}/admin/teachers`;
+  return apiRequest("post", url, data, {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  });
+};
+
+export const verifyDNI = async (dni) => {
+  const url = `${baseURL}/admin/teachers`;
+  const response = await apiRequest("get", url);
+  const teachers = response.data;
+
+  if (!Array.isArray(teachers)) {
+    throw new Error("Expected an array of teachers");
+  }
+  const dniExists = teachers.some((teacher) => teacher.dni === dni);
+  return !dniExists;
+};
+
+export const deleteTeacher = async (id, accessToken) => {
+  const url = `${baseURL}/admin/teachers/${id}`;
+  return apiRequest(
+    "delete",
+    url,
+    {},
+    { Authorization: `Bearer ${accessToken}` }
+  );
+};
+
+export const fetchTeachersBySubject = async (subject) => {
+  const url = "/api/profesores";
+  return apiRequest("get", url, {}, { params: { categoria: subject } });
+};
 
 // Categories
-export const registerCategory = (data, token) =>
-  postData(`/admin/subjects/add`, data, token);
+export const registerCategory = async (data, token) => {
+  const url = `${baseURL}/admin/subjects/add`;
+  return apiRequest("post", url, data, {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  });
+};
 
 // Characteristics
-export const listCharacteristics = (idtoken) =>
-  getData(`/admin/characteristic/list`, idtoken);
-export const registerCharacteristic = (data, idtoken) =>
-  postData(`/admin/characteristic/add`, data, idtoken);
-export const updateCharacteristic = (data, idtoken) =>
-  postData(`/admin/characteristic/actualizar`, data, idtoken);
-export const deleteCharacteristic = (id, idtoken) =>
-  deleteData(`/admin/characteristic/eliminar/${id}`, idtoken);
+export const listCharacteristics = async (idtoken) => {
+  const url = `${baseURL}/admin/characteristic/list`;
+  return apiRequest("get", url, {}, { Authorization: `Bearer ${idtoken}` });
+};
+
+export const registerCharacteristic = async (data, idtoken) => {
+  const url = `${baseURL}/admin/characteristic/add`;
+  return apiRequest("post", url, data, {
+    Authorization: `Bearer ${idtoken}`,
+    "Content-Type": "application/json",
+  });
+};
+
+export const updateCharacteristic = async (data, idtoken) => {
+  const url = `${baseURL}/admin/characteristic/actualizar`;
+  return apiRequest("put", url, data, {
+    Authorization: `Bearer ${idtoken}`,
+    "Content-Type": "application/json",
+  });
+};
+
+export const deleteCharacteristic = async (id, idtoken) => {
+  const url = `${baseURL}/admin/characteristic/eliminar/${id}`;
+  return apiRequest("delete", url, {}, { Authorization: `Bearer ${idtoken}` });
+};
 
 // Users
-export const getUsers = (accessToken) => getData(`/admin/users`, accessToken);
-export const setUserRole = (accessToken, uid, role) =>
-  postData(`/admin/set-role`, { uid, role }, accessToken);
-export const createUser = (userData) =>
-  postData(`/public/createuser`, userData);
+export const getUsers = async (accessToken) => {
+  const url = `${baseURL}/admin/users`;
+  return apiRequest("get", url, {}, { Authorization: `Bearer ${accessToken}` });
+};
+
+export const setUserRole = async (accessToken, uid, role) => {
+  const url = `${baseURL}/admin/set-role`;
+  return apiRequest(
+    "put",
+    url,
+    { uid, role },
+    {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    }
+  );
+};
+
+export const createUser = async (userData) => {
+  const url = `${baseURL}/public/createuser`;
+  return apiRequest("post", url, userData);
+};
