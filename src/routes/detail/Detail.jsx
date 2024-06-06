@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { getDataById } from "../../api/api";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./Detail.css";
 import Modal from "react-modal";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import React from 'react';
+import Policies from './Policies';
 
 const Detail = () => {
   const { id } = useParams();
@@ -13,14 +14,18 @@ const Detail = () => {
   const [teacherSelected, setTeacherSelected] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showPolicies, setShowPolicies] = useState(false);
 
   const openModal = () => {
     setModalIsOpen(true);
   };
 
-  // Función para cerrar la modal
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const togglePolicies = () => {
+    setShowPolicies(!showPolicies);
   };
 
   useEffect(() => {
@@ -56,7 +61,7 @@ const Detail = () => {
       {teacherSelected ? (
         <div className="container-teacher">
           <p>{teacherSelected.subject.title}</p>
-          <p> {teacherSelected.description}</p>
+          <p>{teacherSelected.description}</p>
         </div>
       ) : (
         <p>Cargando datos del tutor...</p>
@@ -82,19 +87,31 @@ const Detail = () => {
                   />
                 ))}
               </div>
-              <button className="more" onClick={openModal}>
-                ver más
-              </button>
+              <div className="buttons-container">
+                <button className="more" onClick={openModal}>
+                  Ver más
+                </button>
+                <button className="toggle-policies" onClick={togglePolicies}>
+                  {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
+                </button>
+              </div>
+              <div className="characteristics-wrapper">
+                <h3>Características:</h3>
+                <div className="characteristics-list">
+                  {teacherSelected.characteristics.map((character) => (
+                    <div key={character.id} className="character-item">
+                      {character.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
-          <div>
-            <h3> Características: </h3>
-            <div className="cont-other-img">
-              {teacherSelected.characteristics.map((character) => (
-                <div key={character.id}> {character.name} </div>
-              ))}
+          {showPolicies && (
+            <div className="policies-wrapper">
+              <Policies />
             </div>
-          </div>
+          )}
         </div>
       )}
 
@@ -103,7 +120,6 @@ const Detail = () => {
         onRequestClose={closeModal}
         contentLabel="Galería de Imágenes"
       >
-        {/* Contenido de la modal */}
         <h2>Galería de Imágenes</h2>
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
         <button onClick={closeModal}>Cerrar</button>
