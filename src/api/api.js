@@ -212,215 +212,86 @@
 // };
 
 import axios from "axios";
+const baseURL = "http://localhost:8080/api";
 
-const BASE_URL = "http://localhost:8080/api";
-
-const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+const api = axios.create({
+  baseURL,
 });
 
-const setAuthHeader = (token) => ({
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-
-// Utility function for error handling
-const handleError = (error, message) => {
-  console.error(`${message}:`, error);
+const handleError = (error) => {
+  console.error(`Error fetching data:`, error);
   throw error;
 };
 
-/*-----------Teachers---------------------------*/
-
-// Listar a los profesores
-export const getTeachers = async (accessToken) => {
+const getData = async (endpoint, accessToken) => {
   try {
-    const response = await axiosInstance.get(
-      "/admin/teachers",
-      setAuthHeader(accessToken)
-    );
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error fetching teachers");
-  }
-};
-
-// Buscar un profesor por su ID
-export const getTeacherById = async (id) => {
-  try {
-    const response = await axiosInstance.get(`/public/${id}`);
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error fetching teacher by ID");
-  }
-};
-
-// Registrar a un nuevo profesor
-export const registerTeacher = async (data, token) => {
-  try {
-    const response = await axiosInstance.post(
-      "/admin/teachers",
-      data,
-      setAuthHeader(token)
-    );
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error registering teacher");
-  }
-};
-
-// Validar DNI del profesor
-export const validateTeacherDNI = async (dni) => {
-  try {
-    const response = await axiosInstance.get("/admin/teachers");
-    const teachers = response.data;
-
-    if (!Array.isArray(teachers)) {
-      throw new Error("Expected an array of teachers");
-    }
-
-    return !teachers.some((teacher) => teacher.dni === dni);
-  } catch (error) {
-    handleError(error, "Error validating DNI");
-  }
-};
-
-// Eliminar un profesor
-export const deleteTeacher = async (id, accessToken) => {
-  try {
-    const response = await axiosInstance.delete(
-      `/admin/teachers/${id}`,
-      setAuthHeader(accessToken)
-    );
-    console.log("Teacher deleted successfully:", response.data);
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error deleting teacher");
-  }
-};
-
-// Filtrar profesores por subject
-export const fetchTeachersBySubject = async (subject) => {
-  try {
-    const response = await axiosInstance.get("/profesores", {
-      params: { categoria: subject },
+    const response = await api.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return response.data;
   } catch (error) {
-    handleError(error, "Error fetching teachers by subject");
+    handleError(error);
   }
 };
 
-/*------------------Categories------------------*/
-
-export const registerCategory = async (data, token) => {
+const postData = async (endpoint, data, token) => {
   try {
-    const response = await axiosInstance.post(
-      "/admin/subjects/add",
-      data,
-      setAuthHeader(token)
-    );
+    const response = await api.post(endpoint, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
-    handleError(error, "Error registering category");
+    handleError(error);
   }
 };
 
-/*-----------Characteristics---------------------------*/
-
-// Listar características
-export const listCharacteristics = async (token) => {
+const deleteData = async (endpoint, accessToken) => {
   try {
-    const response = await axiosInstance.get(
-      "/admin/characteristic/list",
-      setAuthHeader(token)
-    );
-    return response.data;
+    const response = await api.delete(endpoint, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log("Data deleted successfully:", response.data);
   } catch (error) {
-    handleError(error, "Error fetching characteristics");
+    handleError(error);
   }
 };
 
-// Crear característica
-export const registerCharacteristic = async (data, token) => {
-  try {
-    const response = await axiosInstance.post(
-      "/admin/characteristic/add",
-      data,
-      setAuthHeader(token)
-    );
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error registering characteristic");
-  }
-};
+// Teachers
+export const getTeachers = (accessToken) =>
+  getData(`/admin/teachers`, accessToken);
+export const getTeacherById = (id) => getData(`/public/${id}`);
+export const registerTeacher = (data, token) =>
+  postData(`/admin/teachers`, data, token);
+export const verifyDNI = (dni) => getData(`/admin/teachers`); // You might need to refine this function
+export const deleteTeacher = (id, accessToken) =>
+  deleteData(`/admin/teachers/${id}`, accessToken);
+export const fetchTeachersBySubject = (subject) =>
+  getData(`/profesores`, { params: { categoria: subject } });
 
-// Actualizar característica
-export const updateCharacteristic = async (data, token) => {
-  try {
-    const response = await axiosInstance.put(
-      "/admin/characteristic/actualizar",
-      data,
-      setAuthHeader(token)
-    );
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error updating characteristic");
-  }
-};
+// Categories
+export const registerCategory = (data, token) =>
+  postData(`/admin/subjects/add`, data, token);
 
-// Eliminar característica
-export const deleteCharacteristic = async (id, token) => {
-  try {
-    const response = await axiosInstance.delete(
-      `/admin/characteristic/eliminar/${id}`,
-      setAuthHeader(token)
-    );
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error deleting characteristic");
-  }
-};
+// Characteristics
+export const listCharacteristics = (idtoken) =>
+  getData(`/admin/characteristic/list`, idtoken);
+export const registerCharacteristic = (data, idtoken) =>
+  postData(`/admin/characteristic/add`, data, idtoken);
+export const updateCharacteristic = (data, idtoken) =>
+  postData(`/admin/characteristic/actualizar`, data, idtoken);
+export const deleteCharacteristic = (id, idtoken) =>
+  deleteData(`/admin/characteristic/eliminar/${id}`, idtoken);
 
-/*------------------Users------------------*/
-
-// Obtener todos los usuarios
-export const getUsers = async (accessToken) => {
-  try {
-    const response = await axiosInstance.get(
-      "/admin/users",
-      setAuthHeader(accessToken)
-    );
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error fetching users");
-  }
-};
-
-// Setear rol de usuario
-export const setUserRole = async (accessToken, uid, role) => {
-  try {
-    const response = await axiosInstance.put(
-      "/admin/set-role",
-      { uid, role },
-      setAuthHeader(accessToken)
-    );
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error setting user role");
-  }
-};
-
-// Crear usuario
-export const createUser = async (userData) => {
-  try {
-    const response = await axiosInstance.post("/public/createuser", userData);
-    return response.data;
-  } catch (error) {
-    handleError(error, "Error creating user");
-  }
-};
+// Users
+export const getUsers = (accessToken) => getData(`/admin/users`, accessToken);
+export const setUserRole = (accessToken, uid, role) =>
+  postData(`/admin/set-role`, { uid, role }, accessToken);
+export const createUser = (userData) =>
+  postData(`/public/createuser`, userData);
