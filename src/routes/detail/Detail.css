@@ -65,3 +65,32 @@
   margin: 10px;
   cursor: pointer;
 }
+
+/* Styles for the social share buttons */
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.share-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.share-buttons button img {
+  width: 24px;
+  height: 24px;
+}
+
+.share-buttons button:hover {
+  background-color: #f0f0f0;
+}

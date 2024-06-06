@@ -6,6 +6,12 @@ import "./Detail.css";
 import Modal from "react-modal";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import {
+  WhatsappShare,
+  FacebookShare,
+  LinkedinShare,
+  TwitterShare,
+} from "react-share-kit";
 
 const Detail = () => {
   const { id } = useParams();
@@ -18,7 +24,7 @@ const Detail = () => {
     setModalIsOpen(true);
   };
 
-  // Función para cerrar la modal
+  // Function to close the modal
   const closeModal = () => {
     setModalIsOpen(false);
   };
@@ -43,6 +49,9 @@ const Detail = () => {
       setGalleryImages(formattedImages);
     }
   }, [teacherSelected]);
+
+  const shareUrl = window.location.href;
+  const shareTitle = teacherSelected ? teacherSelected.name : "Check this out!";
 
   return (
     <div className="container-detail">
@@ -98,12 +107,19 @@ const Detail = () => {
         </div>
       )}
 
+      <div className="share-buttons">
+        <WhatsappShare url={shareUrl} title={shareTitle} separator=":: " />
+        <FacebookShare url={shareUrl} quote={shareTitle} />
+        <LinkedinShare url={shareUrl} title={shareTitle} />
+        <TwitterShare url={shareUrl} title={shareTitle} />
+      </div>
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Galería de Imágenes"
       >
-        {/* Contenido de la modal */}
+        {/* Modal content */}
         <h2>Galería de Imágenes</h2>
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
         <button onClick={closeModal}>Cerrar</button>
