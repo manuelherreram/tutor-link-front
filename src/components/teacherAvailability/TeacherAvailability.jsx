@@ -27,9 +27,11 @@ const TeacherAvailability = ({ teacherId }) => {
   }, [teacherId]);
 
   const disabledDate = (current) => {
-    return !availability.some((availableDate) => 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    return current && (current < today || !availability.some(availableDate => 
       availableDate.date.toDateString() === current.toDate().toDateString()
-    );
+    ));
   };
 
   return (
