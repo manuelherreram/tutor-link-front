@@ -1,11 +1,11 @@
 .policies-container {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 60px;
   }
   
   .policies-title {
     text-decoration: underline;
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 20px;
     text-align: center;
   }
@@ -27,11 +27,12 @@
   }
   
   .policy-title {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     margin-bottom: 10px;
   }
   
   .policy-description {
-    font-size: 16px;
+    font-size: 12px;
+    text-align: justify;
   }

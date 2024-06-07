@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
-import { getDataById } from "../../api/api";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { getDataById } from '../../api/api';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useFavorites } from '../../contexts/FavoriteContexts';
-import "./Detail.css";
-import Modal from "react-modal";
-import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
+import './Detail.css';
+import Modal from 'react-modal';
+import ImageGallery from 'react-image-gallery';
+import 'react-image-gallery/styles/css/image-gallery.css';
 import Policies from './Policies';
-import { HeartOutlined, HeartFilled,ArrowLeftOutlined } from '@ant-design/icons';
-import { useAuth } from "../../contexts/AuthContext";
-import { Button,message } from "antd";
-import TeacherAvailability from "../../components/teacherAvailability/TeacherAvailability";
-
-
+import {
+  HeartOutlined,
+  HeartFilled,
+  ArrowLeftOutlined,
+} from '@ant-design/icons';
+import { useAuth } from '../../contexts/AuthContext';
+import { Button, message } from 'antd';
+import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
 
 const Detail = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
   const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
   const [teacherSelected, setTeacherSelected] = useState();
@@ -56,43 +58,52 @@ const Detail = () => {
     }
   }, [teacherSelected]);
 
-useEffect(()=>{
-fetchFavorites(userId)
-},[])
-const handleToggleFavorite = async () => {
-  if (!userId) {
-    message.info('Debes iniciar sesión para marcar favoritos.');
-    setTimeout(() => {
-      navigate('/login');
-    }, 2000);
+  useEffect(() => {
+    fetchFavorites(userId);
+  }, []);
+  const handleToggleFavorite = async () => {
+    if (!userId) {
+      message.info('Debes iniciar sesión para marcar favoritos.');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
 
-    return;
-  }
-  await toggleFavorite(userId, id);
-};
+      return;
+    }
+    await toggleFavorite(userId, id);
+  };
 
   useEffect(() => {
     console.log('mis favoritos:', favorites);
   }, [favorites]);
- const isFavorite = favorites.map(({id})=>id).includes(id);
+  const isFavorite = favorites.map(({ id }) => id).includes(id);
 
   return (
     <div className="container-detail">
       <div className="section-detail">
         <h2>{teacherSelected && teacherSelected.name}</h2>
         <Button className="btn-go-back" onClick={() => navigate(-1)}>
-          <ArrowLeftOutlined className="go-back"/>
+          <ArrowLeftOutlined className="go-back" />
         </Button>
       </div>
 
       {teacherSelected ? (
         <div className="container-teacher">
-          <p>{teacherSelected.subject.title}</p>
-          <p>{teacherSelected.description}</p>
+          <div className="container-title-detail">
+            <p>{teacherSelected.subject.title}</p>
+            <p>{teacherSelected.description}</p>
+          </div>
+
           {isFavorite ? (
-            <HeartFilled  onClick={handleToggleFavorite} style={{ color: 'red', fontSize: '24px' }}/>
+            <HeartFilled
+              onClick={handleToggleFavorite}
+              style={{ color: 'red', fontSize: '24px' }}
+            />
           ) : (
-            <HeartOutlined className="not-favorite-icon" onClick={handleToggleFavorite} />
+            <HeartOutlined
+              className="not-favorite-icon"
+              onClick={handleToggleFavorite}
+            />
           )}
         </div>
       ) : (
@@ -127,18 +138,22 @@ const handleToggleFavorite = async () => {
                   {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
                 </button>
               </div>
-              <div className="characteristics-wrapper">
-                <h3>Características:</h3>
-                <div className="characteristics-list">
-                  {teacherSelected.characteristics.map((character) => (
-                    <div key={character.id} className="character-item">
-                      {character.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </section>
+          <div className="container-characteristics-detail">
+            <div className="characteristics-wrapper">
+              <h3>Características:</h3>
+              <div className="characteristics-list">
+                {teacherSelected.characteristics.map((character) => (
+                  <div key={character.id} className="character-item">
+                    {character.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+            {teacherSelected && <TeacherAvailability teacherId={id} />}
+          </div>
+
           {showPolicies && (
             <div className="policies-wrapper">
               <Policies />
@@ -156,9 +171,6 @@ const handleToggleFavorite = async () => {
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
         <button onClick={closeModal}>Cerrar</button>
       </Modal>
-      {teacherSelected && (
-        <TeacherAvailability teacherId={id} />
-      )}
     </div>
   );
 };
