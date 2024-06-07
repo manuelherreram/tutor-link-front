@@ -77,6 +77,13 @@ export const deleteTeacher = async (id, accessToken) => {
   }
 };
 
+//Disponibilidad de un profesor
+export const getAvailabilitiesById = async (id) => {
+  let res = await axios.get(`http://localhost:8080/api/availabilities/teacher/${id}`);
+  return res.data;
+};
+
+
 //para filtrar por subject
 export const fetchTeachers = async (subject) => {
   const response = await axios.get('/api/profesores', {

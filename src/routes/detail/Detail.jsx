@@ -10,7 +10,7 @@ import Policies from './Policies';
 import { HeartOutlined, HeartFilled,ArrowLeftOutlined } from '@ant-design/icons';
 import { useAuth } from "../../contexts/AuthContext";
 import { Button,message } from "antd";
-
+import TeacherAvailability from "../../components/teacherAvailability/TeacherAvailability";
 
 
 
@@ -156,6 +156,9 @@ const handleToggleFavorite = async () => {
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
         <button onClick={closeModal}>Cerrar</button>
       </Modal>
+      {teacherSelected && (
+        <TeacherAvailability teacherId={id} />
+      )}
     </div>
   );
 };
