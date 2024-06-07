@@ -13,10 +13,11 @@ import { Button } from "antd";
 
 
 
+
 const Detail = () => {
   const { id } = useParams(); 
   const navigate = useNavigate();
-  const { toggleFavorite, favorites } = useFavorites();
+  const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
   const [teacherSelected, setTeacherSelected] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -54,13 +55,17 @@ const Detail = () => {
       setGalleryImages(formattedImages);
     }
   }, [teacherSelected]);
-
+useEffect(()=>{
+fetchFavorites(userId)
+},[])
   const handleToggleFavorite = async () => {
       await toggleFavorite(userId, id); 
    
   };
-
-  const isFavorite = favorites.includes(id);
+ console.log(userId)
+ console.log(id)
+ console.log(favorites)
+ const isFavorite = favorites.map(({id})=>id).includes(id);
 
   return (
     <div className="container-detail">
@@ -76,7 +81,7 @@ const Detail = () => {
           <p>{teacherSelected.subject.title}</p>
           <p>{teacherSelected.description}</p>
           {isFavorite ? (
-            <HeartFilled className="favorite-icon" onClick={handleToggleFavorite} />
+            <HeartFilled className=" " onClick={handleToggleFavorite} />
           ) : (
             <HeartOutlined className="not-favorite-icon" onClick={handleToggleFavorite} />
           )}

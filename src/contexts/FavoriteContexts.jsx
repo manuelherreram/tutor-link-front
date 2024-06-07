@@ -1,6 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { addFavorite, removeFavorite, listFavorites } from '../api/apiFavs';
-import { useAuth } from '../contexts/AuthContext';
 
 const FavoritesContext = createContext();
 
@@ -10,45 +9,37 @@ export function useFavorites() {
 
 export function FavoriteProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
-  const { userId } = useAuth();
-  
-
-  const toggleFavorite = async (teacherId) => {
+console.log(favorites)
+  const toggleFavorite = async (userId, teacherId) => {
     try {
-      const isFavorited = favorites.includes(teacherId);
+      const isFavorited = favorites.map(({id})=>id).includes(teacherId);
 
       if (isFavorited) {
         await removeFavorite(userId, teacherId);
-        setFavorites(prevFavorites => prevFavorites.filter(favId => favId !== teacherId));
+        setFavorites(prevFavorites => prevFavorites.filter(favTeacher => favTeacher.id !== teacherId));
       } else {
         await addFavorite(userId, teacherId);
-        setFavorites(prevFavorites => [...prevFavorites, teacherId]);
+        setFavorites(prevFavorites => [...prevFavorites, {id:teacherId}]);
       }
     } catch (error) {
       console.error('Error toggling favorite:', error);
     }
   };
 
-
-
-
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const favoritesList = await listFavorites(userId);
-        setFavorites(favoritesList);
-      } catch (error) {
-        console.error('Error fetching favorites:', error);
-      }
-    };
-
-    fetchFavorites();
-  }, [userId]);
+  const fetchFavorites = async (userId) => {
+    try {
+      const favoritesList = await listFavorites(userId);
+      setFavorites(favoritesList);
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+    }
+  };
 
   const value = {
     favorites,
     setFavorites,
     toggleFavorite,
+    fetchFavorites,
   };
 
   return (
