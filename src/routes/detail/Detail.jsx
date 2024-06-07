@@ -81,7 +81,7 @@ fetchFavorites(userId)
           <p>{teacherSelected.subject.title}</p>
           <p>{teacherSelected.description}</p>
           {isFavorite ? (
-            <HeartFilled className=" " onClick={handleToggleFavorite} />
+            <HeartFilled className=" " onClick={handleToggleFavorite} style={{color:'red'}}/>
           ) : (
             <HeartOutlined className="not-favorite-icon" onClick={handleToggleFavorite} />
           )}
