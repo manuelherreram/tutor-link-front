@@ -1,55 +1,64 @@
 import { Link, useNavigate } from 'react-router-dom';
-import './Card.css'
-import { HeartOutlined,  HeartFilled} from '@ant-design/icons';
+import { useEffect } from 'react';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
-import {  notification } from 'antd';
-import {useFavorites} from '../../contexts/FavoriteContexts'
+import { useFavorites } from '../../contexts/FavoriteContexts';
+import { message } from 'antd';
+import './Card.css';
 
+const Card = ({ name, category, image, description, id }) => {
+  const { favorites, toggleFavorite, fetchFavorites } = useFavorites();
+  const { userId } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    fetchFavorites(userId);
+  }, []);
 
-const Card = ({name, category, image, description, id}) => {
-    const {favorites, toggleFavorite} = useFavorites();
-    const isFavorited = favorites.includes(id);
-    const {userLoggedIn} = useAuth();
-   const navigate= useNavigate()
-    
-   const handleToggleFavorite = () => {
-    if (userLoggedIn) {
-        toggleFavorite(id);
-    } else {
-        notification.error({
-            message: 'Error',
-            description: 'Inicia sesión para poder guardar tus favoritos',
-            duration: 3,
-        });
+  const handleToggleFavorite = async () => {
+    if (!userId) {
+      message.info('Debes iniciar sesión para marcar favoritos.');
+      setTimeout(() => {
         navigate('/login');
-    }
-};
+      }, 2000);
 
-   
-return(
+      return;
+    }
+    await toggleFavorite(userId, id);
+  };
+
+  const isFavorite = favorites.map(({ id }) => id).includes(id);
+
+  return (
     <div className="card">
-            <div className="card-image">
-                <img src={image} alt="" />
-                <div className="favorite-icon" onClick={handleToggleFavorite}>
-                    {isFavorited ? <HeartFilled style={{ color: 'red' }} /> : <HeartOutlined style={{ color: 'white' }} />}
-                </div>
-            </div>
-            <div className='card-body'>
-                <div className='card-name'>
-                    <p>{ name }</p>
-                </div>
-                <div className='card-category'>
-                    <p>{ category }</p>
-                </div>
-                <div className='card-description'>
-                    <p>{ description }</p>
-                </div>
-            </div>
-            <div className='card-footer'>
-                <Link to={`detalle/${id}`}><button className='card-button'>Conectar</button></Link>
-            </div>
+      <div className="card-image">
+        <img src={image} alt="" />
+        <div className="favorite-icon" onClick={handleToggleFavorite}>
+          {isFavorite ? (
+            <HeartFilled style={{ color: 'red' }} />
+          ) : (
+            <HeartOutlined style={{ color: 'white' }} />
+          )}
         </div>
-    );
+      </div>
+      <div className="card-body">
+        <div className="card-name">
+          <p>{name}</p>
+        </div>
+        <div className="card-category">
+          <p>{category}</p>
+        </div>
+        <div className="card-description">
+          <p>{description}</p>
+        </div>
+      </div>
+      <div className="card-footer">
+        <Link to={`detalle/${id}`}>
+          <button className="card-button">Conectar</button>
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 export default Card;

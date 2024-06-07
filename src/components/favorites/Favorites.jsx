@@ -3,6 +3,8 @@ import { Table, Button, message } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useFavorites } from '../../contexts/FavoriteContexts';
 import { useAuth } from '../../contexts/AuthContext';
+import './Favorites.css'
+
 
 const Favorites = () => {
     const { favorites, toggleFavorite, fetchFavorites } = useFavorites();

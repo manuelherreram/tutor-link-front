@@ -3,9 +3,10 @@
  flex-direction: column;
 height: 74vh;
 margin-top:30px;
-width: 71vw;
+width: 70vw;
 }
 .favorites-title{
     margin-left: 250px;
+    margin-bottom: 30px;
 
 }

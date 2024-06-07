@@ -9,17 +9,19 @@ export function useFavorites() {
 
 export function FavoriteProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
-console.log(favorites)
+
   const toggleFavorite = async (userId, teacherId) => {
     try {
-      const isFavorited = favorites.map(({id})=>id).includes(teacherId);
+      const isFavorited = favorites.map(({ id }) => id).includes(teacherId);
 
       if (isFavorited) {
         await removeFavorite(userId, teacherId);
-        setFavorites(prevFavorites => prevFavorites.filter(favTeacher => favTeacher.id !== teacherId));
+        setFavorites((prevFavorites) =>
+          prevFavorites.filter((favTeacher) => favTeacher.id !== teacherId)
+        );
       } else {
         await addFavorite(userId, teacherId);
-        setFavorites(prevFavorites => [...prevFavorites, {id:teacherId}]);
+        setFavorites((prevFavorites) => [...prevFavorites, { id: teacherId }]);
       }
     } catch (error) {
       console.error('Error toggling favorite:', error);
@@ -28,11 +30,14 @@ console.log(favorites)
 
   const fetchFavorites = async (userId) => {
     try {
-      const favoritesList = await listFavorites(userId);
+      if(userId){
+         const favoritesList = await listFavorites(userId);
       setFavorites(favoritesList);
-    } catch (error) {
+    } 
+    }catch (error) {
       console.error('Error fetching favorites:', error);
-    }
+      }
+     
   };
 
   const value = {

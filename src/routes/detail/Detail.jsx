@@ -9,7 +9,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import Policies from './Policies';
 import { HeartOutlined, HeartFilled,ArrowLeftOutlined } from '@ant-design/icons';
 import { useAuth } from "../../contexts/AuthContext";
-import { Button } from "antd";
+import { Button,message } from "antd";
 
 
 
@@ -55,16 +55,25 @@ const Detail = () => {
       setGalleryImages(formattedImages);
     }
   }, [teacherSelected]);
+
 useEffect(()=>{
 fetchFavorites(userId)
 },[])
-  const handleToggleFavorite = async () => {
-      await toggleFavorite(userId, id); 
-   
-  };
- console.log(userId)
- console.log(id)
- console.log(favorites)
+const handleToggleFavorite = async () => {
+  if (!userId) {
+    message.info('Debes iniciar sesión para marcar favoritos.');
+    setTimeout(() => {
+      navigate('/login');
+    }, 2000);
+
+    return;
+  }
+  await toggleFavorite(userId, id);
+};
+
+  useEffect(() => {
+    console.log('mis favoritos:', favorites);
+  }, [favorites]);
  const isFavorite = favorites.map(({id})=>id).includes(id);
 
   return (
@@ -81,7 +90,7 @@ fetchFavorites(userId)
           <p>{teacherSelected.subject.title}</p>
           <p>{teacherSelected.description}</p>
           {isFavorite ? (
-            <HeartFilled className=" " onClick={handleToggleFavorite} style={{color:'red'}}/>
+            <HeartFilled  onClick={handleToggleFavorite} style={{ color: 'red', fontSize: '24px' }}/>
           ) : (
             <HeartOutlined className="not-favorite-icon" onClick={handleToggleFavorite} />
           )}
