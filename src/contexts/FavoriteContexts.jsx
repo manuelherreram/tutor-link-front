@@ -1,51 +1,59 @@
-import { createContext,useContext,useState } from "react";
-import { addFavorite } from "../api/apiFavs";
-import {removeFavorite} from "../api/apiFavs"
-import {useAuth} from '../contexts/AuthContext'
-const FavoritesContext= createContext();
+import { createContext, useContext, useState, useEffect } from 'react';
+import { addFavorite, removeFavorite, listFavorites } from '../api/apiFavs';
+import { useAuth } from '../contexts/AuthContext';
+
+const FavoritesContext = createContext();
 
 export function useFavorites() {
-    return useContext(FavoritesContext);
-  }
-   export function FavoriteProvider({ children }) {
-   
-    const [favorites, setFavorites] = useState([]);
-    const {apiUserId}=useAuth()
+  return useContext(FavoritesContext);
+}
+
+export function FavoriteProvider({ children }) {
+  const [favorites, setFavorites] = useState([]);
+  const { userId } = useAuth();
   
 
-    const toggleFavorite = async (apiUserId, id) => {
-      try {
-          // Comprueba si el id ya está en la lista de favoritos
-          const isFavorited = favorites.includes(id);
+  const toggleFavorite = async (teacherId) => {
+    try {
+      const isFavorited = favorites.includes(teacherId);
 
-          if (isFavorited) {
-              // Si ya es favorito, elimínalo de la lista de favoritos
-              await removeFavorite(apiUserId,id);
-          } else {
-              // Si no es favorito, agrégalo a la lista de favoritos
-              await addFavorite(apiUserId,id);
-          }
-
-      
-          setFavorites((prevFavorites) =>
-              isFavorited
-                  ? prevFavorites.filter((favId) => favId !== id)
-                  : [...prevFavorites, id]
-          );
-      } catch (error) {
-          console.error('Error toggling favorite:', error);
-          throw error;
+      if (isFavorited) {
+        await removeFavorite(userId, teacherId);
+        setFavorites(prevFavorites => prevFavorites.filter(favId => favId !== teacherId));
+      } else {
+        await addFavorite(userId, teacherId);
+        setFavorites(prevFavorites => [...prevFavorites, teacherId]);
       }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
   };
 
-    const value = {
-      favorites,
-      setFavorites,
-      toggleFavorite,
+
+
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const favoritesList = await listFavorites(userId);
+        setFavorites(favoritesList);
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+      }
     };
-    return (
-      <FavoritesContext.Provider value={value}>
-        { children}
-      </FavoritesContext.Provider>
-    );
-  }
+
+    fetchFavorites();
+  }, [userId]);
+
+  const value = {
+    favorites,
+    setFavorites,
+    toggleFavorite,
+  };
+
+  return (
+    <FavoritesContext.Provider value={value}>
+      {children}
+    </FavoritesContext.Provider>
+  );
+}

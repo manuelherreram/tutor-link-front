@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
-
+import {getUserId} from '../api/api'
 
 
 const AuthContext = React.createContext();
@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [idToken, setIdToken] = useState(null); 
   const [isAdmin, setIsAdmin] = useState(false); 
-  const [apiUserId, setApiUserId] = useState(null); 
+  const [userId, setUserId] = useState(null); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -32,7 +32,8 @@ export function AuthProvider({ children }) {
           setIsAdmin(idTokenResult.claims.role === 'ADMIN');
            // Obtener el ID de la API a partir del UID de Firebase
            const apiId = await getUserId(user.uid);
-           setApiUserId(apiId);
+           setUserId(apiId.id);
+           console.log(userId)
         } catch (error) {
           console.error('Error fetching ID token or user data:', error);
         }
@@ -42,7 +43,7 @@ export function AuthProvider({ children }) {
         setUserLoggedIn(false);
         setIdToken(null); // Clear ID token when user logs out
         setIsAdmin(false);
-        setApiUserId(null); // Clear API user ID when user logs out
+        setUserId(null); 
       }
 
       setLoading(false);
@@ -54,7 +55,7 @@ export function AuthProvider({ children }) {
   const value = {
     userLoggedIn,
     currentUser,
-    apiUserId,
+    userId,
     idToken,
     isAdmin,
     setCurrentUser, // Add setter for currentUser

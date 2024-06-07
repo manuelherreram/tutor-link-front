@@ -1,36 +1,44 @@
-import { useEffect, useState } from 'react';
-import { getDataById } from '../../api/api';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { Button, DatePicker, Tooltip } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import './Detail.css';
-import Modal from 'react-modal';
-import ImageGallery from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css';
+import { useEffect, useState } from "react";
+import { getDataById } from "../../api/api";
+import { useParams, useNavigate } from "react-router-dom";
+import { useFavorites } from '../../contexts/FavoriteContexts';
+import "./Detail.css";
+import Modal from "react-modal";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
+import Policies from './Policies';
+import { HeartOutlined, HeartFilled,ArrowLeftOutlined } from '@ant-design/icons';
+import { useAuth } from "../../contexts/AuthContext";
+import { Button } from "antd";
+
+
 
 const Detail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); 
   const navigate = useNavigate();
+  const { toggleFavorite, favorites } = useFavorites();
   const [teacherSelected, setTeacherSelected] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { RangePicker } = DatePicker;
+  const [showPolicies, setShowPolicies] = useState(false);
+  const { userId } = useAuth();
 
   const openModal = () => {
     setModalIsOpen(true);
   };
 
-  // Función para cerrar la modal
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const togglePolicies = () => {
+    setShowPolicies(!showPolicies);
   };
 
   useEffect(() => {
     const getById = async () => {
       let res = await getDataById(id);
       setTeacherSelected(res);
-      console.log(teacherSelected);
     };
 
     getById();
@@ -47,107 +55,93 @@ const Detail = () => {
     }
   }, [teacherSelected]);
 
-//Función para calendario
-  const disabledDate = (current) => {
-    // Suponiendo que las fechas disponibles son del 10 al 20 de cada mes
-    return current && (current.date() < 10 || current.date() > 20);
+  const handleToggleFavorite = async () => {
+      await toggleFavorite(userId, id); 
+   
   };
-  const renderExtraFooter = () => (
-    <div>
-      <Tooltip title="Fechas no disponibles" placement="bottom">
-        <div
-          style={{ background: '#ff4d4f', width: '100%', height: '10px' }}
-        ></div>
-      </Tooltip>
-      <Tooltip title="Fechas disponibles" placement="bottom">
-        <div
-          style={{ background: '#52c41a', width: '100%', height: '10px' }}
-        ></div>
-      </Tooltip>
-    </div>
-  );
+
+  const isFavorite = favorites.includes(id);
 
   return (
-    <div>
+    <div className="container-detail">
       <div className="section-detail">
         <h2>{teacherSelected && teacherSelected.name}</h2>
-        <Button
-          className="btn-go-back"
-          onClick={() => navigate(-1)}
-          type="primary"
-          icon={<ArrowLeftOutlined />}
-        ></Button>
+        <Button className="btn-go-back" onClick={() => navigate(-1)}>
+          <ArrowLeftOutlined className="go-back"/>
+        </Button>
       </div>
-      <div className="container-detail">
-        {teacherSelected ? (
-          <div className="container-teacher">
-            <p>{teacherSelected.subject.title}</p>
-            <p> {teacherSelected.description}</p>
-          </div>
-        ) : (
-          <p>Cargando datos del tutor...</p>
-        )}
-        {teacherSelected && teacherSelected.images && (
-          <div>
-            <section className="container-image">
-              <div className="cont-first-img">
-                <img
-                  src={teacherSelected.images[0].url}
-                  alt={`imagen1`}
-                  className="first-image"
-                />
-              </div>
-              <div className="container-grid">
-                <div className="cont-other-img">
-                  {teacherSelected.images.slice(1, 5).map((image, index) => (
-                    <img
-                      key={index}
-                      src={image.url}
-                      alt={`imagen${index + 2}`}
-                      className="item-image"
-                    />
-                  ))}
-                </div>
-                <Button type="primary" className="more" onClick={openModal}>
-                  ver más
-                </Button>
-                <div style={{ padding: 24 }}>
-                  <h3>Fechas disponibles Tutor</h3>
-              <RangePicker
-                disabledDate={disabledDate}
-                renderExtraFooter={renderExtraFooter}
-                onChange={(dates, dateStrings) =>
-                  console.log(dates, dateStrings)
-                }
+
+      {teacherSelected ? (
+        <div className="container-teacher">
+          <p>{teacherSelected.subject.title}</p>
+          <p>{teacherSelected.description}</p>
+          {isFavorite ? (
+            <HeartFilled className="favorite-icon" onClick={handleToggleFavorite} />
+          ) : (
+            <HeartOutlined className="not-favorite-icon" onClick={handleToggleFavorite} />
+          )}
+        </div>
+      ) : (
+        <p>Cargando datos del tutor...</p>
+      )}
+      {teacherSelected && teacherSelected.images && (
+        <div>
+          <section className="container-image">
+            <div className="cont-first-img">
+              <img
+                src={teacherSelected.images[0].url}
+                alt={`imagen1`}
+                className="first-image"
               />
             </div>
-              </div>
-            </section>
-           
-            <div>
-              <h3> Características: </h3>
+            <div className="container-grid">
               <div className="cont-other-img">
-                {teacherSelected.characteristics.map((character) => (
-                  <div key={character.id}> {character.name} </div>
+                {teacherSelected.images.slice(1, 5).map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.url}
+                    alt={`imagen${index + 2}`}
+                    className="item-image"
+                  />
                 ))}
               </div>
+              <div className="buttons-container">
+                <button className="more" onClick={openModal}>
+                  Ver más
+                </button>
+                <button className="toggle-policies" onClick={togglePolicies}>
+                  {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
+                </button>
+              </div>
+              <div className="characteristics-wrapper">
+                <h3>Características:</h3>
+                <div className="characteristics-list">
+                  {teacherSelected.characteristics.map((character) => (
+                    <div key={character.id} className="character-item">
+                      {character.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          </section>
+          {showPolicies && (
+            <div className="policies-wrapper">
+              <Policies />
+            </div>
+          )}
+        </div>
+      )}
 
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel="Galería de Imágenes"
-        >
-          {/* Contenido de la modal */}
-          <h2>Galería de Imágenes</h2>
-          {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
-          <Button type="primary" onClick={closeModal}>
-            Cerrar
-          </Button>
-        </Modal>
-      </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Galería de Imágenes"
+      >
+        <h2>Galería de Imágenes</h2>
+        {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
+        <button onClick={closeModal}>Cerrar</button>
+      </Modal>
     </div>
   );
 };

@@ -20,7 +20,7 @@ export const getData = async (accessToken) => {
   }
 };
 
-//buscar un profesor por su id
+//Buscar un profesor por su id
 export const getDataById = async (id) => {
   let res = await axios.get(`http://localhost:8080/api/public/${id}`);
   return res.data;
@@ -209,4 +209,15 @@ export const createUser = async (userData) => {
     throw error;
   }
 };
+//Para encontrar el id de un user
+export const getUserId = async (uid) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/public/uid/${uid}`, {
+         });
 
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching userId:', error);
+    throw error; 
+  }
+};

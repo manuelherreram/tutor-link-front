@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, Avatar, Typography, Switch, Space, Alert } from 'antd';
+import  { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Card, Avatar, Typography, Switch, Space, Alert, Button } from 'antd';
 import { UserOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import './Profile.css';
@@ -50,40 +50,27 @@ const Profile = () => {
             </div>
         );
     }
-    useEffect(() => {
-        const fetchFavoritos = async () => {
-            try {
-                // Hacer una llamada a la API para obtener los favoritos del usuario
-                // Supongamos que tienes una función fetchFavoritos en tu API que devuelve los favoritos del usuario
-                const favoritosData = await fetchFavoritos(currentUser.id);
-                setFavoritos(favoritosData);
-            } catch (error) {
-                setError('No se pudieron cargar los favoritos del usuario.');
-            }
-        };
-    
-        if (currentUser) {
-            setIsVerified(currentUser.emailVerified);
-            fetchFavoritos();
-        } else {
-            setError('No se pudo cargar la información del usuario.');
-        }
-    }, [currentUser]);
+
     return (
         <div className='container-profile'>
+            <div className='container-top-elements'>
             <ArrowLeftOutlined
-                style={{ fontSize: '24px', cursor: 'pointer', marginBottom: '20px', marginLeft: '40px', color: '#1d5d90' }}
                 onClick={() => navigate('/')}
             />
-            <Card style={{ width: 300, margin: '0 auto', textAlign: 'center' }}>
+            <Link to="/favorites">
+                <Button>Ver Favoritos</Button>
+            </Link>
+            </div>
+            
+            <Card className='card-container'>
                 <Avatar
                     size={100}
                     icon={<UserOutlined />}
-                    style={{ marginBottom: 20 }}
+                    className='avatar'
                 />
-                <Title level={2}>{currentUser.displayName || 'Usuario Desconocido'}</Title>
-                <Text type="secondary">{currentUser.email || 'Correo no disponible'}</Text>
-                <div style={{ marginTop: 20 }}>
+                <Title className='title'>{currentUser.displayName || 'Usuario Desconocido'}</Title>
+                <Text className='secondary-text'>{currentUser.email || 'Correo no disponible'}</Text>
+                <div className='switch-container'>
                     <Space>
                         <Text>Verificado</Text>
                         <Switch

@@ -1,0 +1,11 @@
+.container-favorites{
+ display:flex;
+ flex-direction: column;
+height: 74vh;
+margin-top:30px;
+width: 71vw;
+}
+.favorites-title{
+    margin-left: 250px;
+
+}

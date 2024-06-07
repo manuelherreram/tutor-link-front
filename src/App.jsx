@@ -16,6 +16,7 @@ import Categories from './routes/categories/Categories.jsx';
 import Users from './components/admin/users/Users.jsx';
 import Profile from './routes/Profile/Profile.jsx';
 import { FavoriteProvider } from './contexts/FavoriteContexts.jsx';
+import Favorites from './components/favorites/Favorites.jsx';
 function App() {
   return (
     <>
@@ -38,6 +39,14 @@ function App() {
                   element={
                     <PrivateRoute>
                       <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/favorites"
+                  element={
+                    <PrivateRoute>
+                      <Favorites/>
                     </PrivateRoute>
                   }
                 />
