@@ -61,13 +61,13 @@ const Detail = () => {
   useEffect(() => {
     fetchFavorites(userId);
   }, []);
+  
   const handleToggleFavorite = async () => {
     if (!userId) {
       message.info('Debes iniciar sesión para marcar favoritos.');
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-
       return;
     }
     await toggleFavorite(userId, id);
@@ -76,15 +76,17 @@ const Detail = () => {
   useEffect(() => {
     console.log('mis favoritos:', favorites);
   }, [favorites]);
+  
   const isFavorite = favorites.map(({ id }) => id).includes(id);
 
   return (
     <div className="container-detail">
       <div className="section-detail">
         <h2>{teacherSelected && teacherSelected.name}</h2>
-        <Button className="btn-go-back" onClick={() => navigate(-1)}>
+        <button className="btn-go-back" onClick={() => navigate(-1)}>
           <ArrowLeftOutlined className="go-back" />
-        </Button>
+          Volver
+        </button>
       </div>
 
       {teacherSelected ? (
@@ -109,6 +111,7 @@ const Detail = () => {
       ) : (
         <p>Cargando datos del tutor...</p>
       )}
+      
       {teacherSelected && teacherSelected.images && (
         <div>
           <section className="container-image">
