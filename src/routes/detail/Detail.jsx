@@ -15,6 +15,13 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
+import {
+  WhatsappShare,
+  FacebookShare,
+  LinkedinShare,
+  TwitterShare,
+} from "react-share-kit";
+
 
 const Detail = () => {
   const { id } = useParams();
@@ -61,13 +68,13 @@ const Detail = () => {
   useEffect(() => {
     fetchFavorites(userId);
   }, []);
-  
   const handleToggleFavorite = async () => {
     if (!userId) {
       message.info('Debes iniciar sesión para marcar favoritos.');
       setTimeout(() => {
         navigate('/login');
       }, 2000);
+
       return;
     }
     await toggleFavorite(userId, id);
@@ -76,17 +83,19 @@ const Detail = () => {
   useEffect(() => {
     console.log('mis favoritos:', favorites);
   }, [favorites]);
-  
   const isFavorite = favorites.map(({ id }) => id).includes(id);
+
+  const shareUrl = window.location.href;
+  const shareTitle = teacherSelected ? teacherSelected.name : "Check this out!";
 
   return (
     <div className="container-detail">
       <div className="section-detail">
         <h2>{teacherSelected && teacherSelected.name}</h2>
-        <button className="btn-go-back" onClick={() => navigate(-1)}>
+        <Button className="btn-go-back" onClick={() => navigate(-1)}>
           <ArrowLeftOutlined className="go-back" />
           Volver
-        </button>
+        </Button>
       </div>
 
       {teacherSelected ? (
@@ -111,7 +120,6 @@ const Detail = () => {
       ) : (
         <p>Cargando datos del tutor...</p>
       )}
-      
       {teacherSelected && teacherSelected.images && (
         <div>
           <section className="container-image">
@@ -165,6 +173,12 @@ const Detail = () => {
         </div>
       )}
 
+      <div className="share-buttons">
+        <WhatsappShare url={shareUrl} title={shareTitle} separator=":: " />
+        <FacebookShare url={shareUrl} quote={shareTitle} />
+        <LinkedinShare url={shareUrl} title={shareTitle} />
+        <TwitterShare url={shareUrl} title={shareTitle} />
+      </div>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

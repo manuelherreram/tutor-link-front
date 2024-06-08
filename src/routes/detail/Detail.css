@@ -29,8 +29,8 @@
 .container-title-detail p:first-child {
   font-size: 18px;
   font-weight: bold;
-  color: #333; /* Color de texto */
-  margin-bottom: 10px; /* Espacio inferior */
+  color: #333;
+  margin-bottom: 10px; 
 }
 
 .container-teacher {
@@ -92,7 +92,7 @@
   margin-top: 10px;
 }
 
-.btn-go-back {
+.container-detail .btn-go-back {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,11 +107,11 @@
   transition: background-color 0.3s ease, transform 0.3s ease; 
 }
 
-.btn-go-back:hover {
-  background-color: #fa8c16; 
-  transform: translateY(-2px); 
+.container-detail .btn-go-back:hover {
+  background-color: #fa8c16 !important;
+  transform: translateY(-2px) !important; 
+  color: rgb(4, 4, 4) !important;
 }
-
 .btn-go-back:focus {
   outline: none; 
 }
@@ -126,7 +126,7 @@
   height: 35px;
   margin: 10px 0;
   cursor: pointer;
-  background-color: #ffa500; /* Naranja */
+  background-color: #ffa500; 
   color: rgb(4, 4, 4);
   border: none;
   border-radius: 5px;
@@ -173,4 +173,28 @@
 .not-favorite-icon {
   color: rgb(24, 23, 23);
   font-size: 24px;
+}
+
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 200px;
+  gap: 10px;
+}
+
+.share-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.share-buttons button img {
+  width: 24px;
+  height: 24px;
 }
