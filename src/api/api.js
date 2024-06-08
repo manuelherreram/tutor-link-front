@@ -121,13 +121,9 @@ export const registerCategories = async (data, token) => {
 
 /*-----------Characteristics---------------------------*/
 // Listar características
-export const listChar = async (idtoken) => {
+export const listChar = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/public/characteristic/list`, {
-      headers: {
-        Authorization: `Bearer ${idtoken}`,
-      },
-    });
+    const response = await axios.get(`${BASE_URL}/public/characteristics/list`)
     return response.data;
   } catch (error) {
     console.error('Error listing characteristics:', error);
@@ -138,7 +134,7 @@ export const listChar = async (idtoken) => {
 // Crear característica
 export const registerChar = async (data, idtoken) => {
   try {
-    const response = await axios.post(`${BASE_URL}/admin/characteristic/add`, data, {
+    const response = await axios.post(`${BASE_URL}/admin/characteristics/add`, data, {
       headers: {
         Authorization: `Bearer ${idtoken}`,
         'Content-Type': 'application/json',
@@ -154,7 +150,7 @@ export const registerChar = async (data, idtoken) => {
 // Actualizar característica
 export const updateChar = async (data, idtoken) => {
   try {
-    const response = await axios.put(`${BASE_URL}/admin/characteristic/actualizar`, data, {
+    const response = await axios.put(`${BASE_URL}/admin/characteristics/actualizar`, data, {
       headers: {
         Authorization: `Bearer ${idtoken}`,
         'Content-Type': 'application/json',
@@ -170,7 +166,7 @@ export const updateChar = async (data, idtoken) => {
 // Eliminar característica
 export const deleteChar = async (id, idtoken) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/admin/characteristic/eliminar/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/admin/characteristics/eliminar/${id}`, {
       headers: {
         Authorization: `Bearer ${idtoken}`,
       },

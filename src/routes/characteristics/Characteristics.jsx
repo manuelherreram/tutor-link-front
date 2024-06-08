@@ -14,7 +14,7 @@ const Characteristics = () => {
 
   const fetchData = async () => {
     try {
-      const response = await listChar(idToken);
+      const response = await listChar();
       console.log('Datos de la API:', response);
       setData(response);
     } catch (error) {
@@ -49,7 +49,7 @@ const Characteristics = () => {
     } finally {
       setIsAdding(false);
       setNewChar(null);
-      fetchData(idToken);
+      fetchData();
     }
   };
  
@@ -74,7 +74,7 @@ const Characteristics = () => {
   const handleDelete = async (id) => {
     try {
       await deleteChar(id, idToken);
-      fetchData(idToken);
+      fetchData();
       showNotification('success', 'Característica eliminada exitosamente');
     } catch (error) {
       console.error('Error deleting data:', error);
