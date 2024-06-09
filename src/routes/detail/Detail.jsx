@@ -26,10 +26,11 @@ import {
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
+  const {toggleFavorite, favorites, fetchFavorites } = useFavorites();
   const [teacherSelected, setTeacherSelected] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [shareModalIsOpen, setShareModalIsOpen] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
   const { userId } = useAuth();
 
@@ -39,6 +40,14 @@ const Detail = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const openShareModal = () => {
+    setShareModalIsOpen(true);
+  };
+
+  const closeShareModal = () => {
+    setShareModalIsOpen(false);
   };
 
   const togglePolicies = () => {
@@ -148,6 +157,9 @@ const Detail = () => {
                 <button className="toggle-policies" onClick={togglePolicies}>
                   {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
                 </button>
+                <button className="share" onClick={openShareModal}>
+                  Compartir
+                </button>
               </div>
             </div>
           </section>
@@ -173,12 +185,7 @@ const Detail = () => {
         </div>
       )}
 
-      <div className="share-buttons">
-        <WhatsappShare url={shareUrl} title={shareTitle} separator=":: " />
-        <FacebookShare url={shareUrl} quote={shareTitle} />
-        <LinkedinShare url={shareUrl} title={shareTitle} />
-        <TwitterShare url={shareUrl} title={shareTitle} />
-      </div>
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -186,7 +193,30 @@ const Detail = () => {
       >
         <h2>Galería de Imágenes</h2>
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
-        <button onClick={closeModal}>Cerrar</button>
+        <button className="close-button" onClick={closeModal}>Cerrar</button>
+      </Modal>
+
+      <Modal className="share-modal"
+        isOpen={shareModalIsOpen}
+        onRequestClose={closeShareModal}
+        contentLabel="Compartir Producto"
+      >
+        <div className="share-modal-content">
+          <h2>Compartir Producto</h2>
+          {teacherSelected && (
+            <>
+              <img src={teacherSelected.images[0].url} alt="Imagen principal" className="share-image" />
+              <p>{teacherSelected.description}</p>
+              <div className="share-buttons">
+                <WhatsappShare url={shareUrl} title={shareTitle} separator=":: " />
+                <FacebookShare url={shareUrl} quote={shareTitle} />
+                <LinkedinShare url={shareUrl} title={shareTitle} />
+                <TwitterShare url={shareUrl} title={shareTitle} />
+              </div>
+              <button className="close-button" onClick={closeShareModal}>Cerrar</button>
+            </>
+          )}
+        </div>
       </Modal>
     </div>
   );
