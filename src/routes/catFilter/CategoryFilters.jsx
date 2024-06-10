@@ -132,7 +132,7 @@ const clearFilters = () => {
                 ))}
                 </div>
             </div>
-            <div className="card-container">
+            <div className="card-result-container">
                 <div className='card-result'>
                     
                     {selectedCategories.length < 1 ? <span style={{color: "red", height: "100%"}}>No se han encontrado resultados</span> :
