@@ -1,5 +1,38 @@
 .container-profile{
-    margin-top: 20px;
-    margin-bottom: 40px;
+    margin: 20px;
     height: 80vh;
 }
+.anticon-arrow-left{
+    font-size: 24px;
+  cursor: pointer;
+    margin-bottom:  20px;
+    margin-left: 40px;
+    color: #1d5d90
+}
+.card-container {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .avatar {
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .secondary-text {
+    color: #999;
+    margin-top: 20px;
+  }
+  
+  .switch-container {
+    margin-top: 20px;
+  }
+  .container-top-elements{
+    display: flex;
+    justify-content: space-between;
+  }

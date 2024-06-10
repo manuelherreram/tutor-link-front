@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { getDataById } from "../../api/api";
 import { useParams } from "react-router-dom";
@@ -12,28 +13,56 @@ import {
   LinkedinShare,
   TwitterShare,
 } from "react-share-kit";
+=======
+import { useEffect, useState } from 'react';
+import { getDataById } from '../../api/api';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useFavorites } from '../../contexts/FavoriteContexts';
+import './Detail.css';
+import Modal from 'react-modal';
+import ImageGallery from 'react-image-gallery';
+import 'react-image-gallery/styles/css/image-gallery.css';
+import Policies from './Policies';
+import {
+  HeartOutlined,
+  HeartFilled,
+  ArrowLeftOutlined,
+} from '@ant-design/icons';
+import { useAuth } from '../../contexts/AuthContext';
+import { Button, message } from 'antd';
+import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
+>>>>>>> ce48060b097ae164db73ced624744e1f6944b0fb
 
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
   const [teacherSelected, setTeacherSelected] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showPolicies, setShowPolicies] = useState(false);
+  const { userId } = useAuth();
 
   const openModal = () => {
     setModalIsOpen(true);
   };
 
+<<<<<<< HEAD
   // Function to close the modal
+=======
+>>>>>>> ce48060b097ae164db73ced624744e1f6944b0fb
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const togglePolicies = () => {
+    setShowPolicies(!showPolicies);
   };
 
   useEffect(() => {
     const getById = async () => {
       let res = await getDataById(id);
       setTeacherSelected(res);
-      console.log(teacherSelected);
     };
 
     getById();
@@ -50,22 +79,58 @@ const Detail = () => {
     }
   }, [teacherSelected]);
 
+<<<<<<< HEAD
   const shareUrl = window.location.href;
   const shareTitle = teacherSelected ? teacherSelected.name : "Check this out!";
+=======
+  useEffect(() => {
+    fetchFavorites(userId);
+  }, []);
+  const handleToggleFavorite = async () => {
+    if (!userId) {
+      message.info('Debes iniciar sesión para marcar favoritos.');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+
+      return;
+    }
+    await toggleFavorite(userId, id);
+  };
+
+  useEffect(() => {
+    console.log('mis favoritos:', favorites);
+  }, [favorites]);
+  const isFavorite = favorites.map(({ id }) => id).includes(id);
+>>>>>>> ce48060b097ae164db73ced624744e1f6944b0fb
 
   return (
     <div className="container-detail">
       <div className="section-detail">
         <h2>{teacherSelected && teacherSelected.name}</h2>
-        <button className="btn-go-back" onClick={() => navigate(-1)}>
-          ⬅️
-        </button>
+        <Button className="btn-go-back" onClick={() => navigate(-1)}>
+          <ArrowLeftOutlined className="go-back" />
+        </Button>
       </div>
 
       {teacherSelected ? (
         <div className="container-teacher">
-          <p>{teacherSelected.subject.title}</p>
-          <p> {teacherSelected.description}</p>
+          <div className="container-title-detail">
+            <p>{teacherSelected.subject.title}</p>
+            <p>{teacherSelected.description}</p>
+          </div>
+
+          {isFavorite ? (
+            <HeartFilled
+              onClick={handleToggleFavorite}
+              style={{ color: 'red', fontSize: '24px' }}
+            />
+          ) : (
+            <HeartOutlined
+              className="not-favorite-icon"
+              onClick={handleToggleFavorite}
+            />
+          )}
         </div>
       ) : (
         <p>Cargando datos del tutor...</p>
@@ -91,19 +156,35 @@ const Detail = () => {
                   />
                 ))}
               </div>
-              <button className="more" onClick={openModal}>
-                ver más
-              </button>
+              <div className="buttons-container">
+                <button className="more" onClick={openModal}>
+                  Ver más
+                </button>
+                <button className="toggle-policies" onClick={togglePolicies}>
+                  {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
+                </button>
+              </div>
             </div>
           </section>
-          <div>
-            <h3> Características: </h3>
-            <div className="cont-other-img">
-              {teacherSelected.characteristics.map((character) => (
-                <div key={character.id}> {character.name} </div>
-              ))}
+          <div className="container-characteristics-detail">
+            <div className="characteristics-wrapper">
+              <h3>Características:</h3>
+              <div className="characteristics-list">
+                {teacherSelected.characteristics.map((character) => (
+                  <div key={character.id} className="character-item">
+                    {character.name}
+                  </div>
+                ))}
+              </div>
             </div>
+            {teacherSelected && <TeacherAvailability teacherId={id} />}
           </div>
+
+          {showPolicies && (
+            <div className="policies-wrapper">
+              <Policies />
+            </div>
+          )}
         </div>
       )}
 
@@ -119,7 +200,10 @@ const Detail = () => {
         onRequestClose={closeModal}
         contentLabel="Galería de Imágenes"
       >
+<<<<<<< HEAD
         {/* Modal content */}
+=======
+>>>>>>> ce48060b097ae164db73ced624744e1f6944b0fb
         <h2>Galería de Imágenes</h2>
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
         <button onClick={closeModal}>Cerrar</button>

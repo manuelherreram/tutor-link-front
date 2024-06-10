@@ -15,13 +15,15 @@ import CategoryFilters from './routes/catFilter/CategoryFilters.jsx';
 import Categories from './routes/categories/Categories.jsx';
 import Users from './components/admin/users/Users.jsx';
 import Profile from './routes/Profile/Profile.jsx';
-
+import { FavoriteProvider } from './contexts/FavoriteContexts.jsx';
+import Favorites from './components/favorites/Favorites.jsx';
 function App() {
   return (
     <>
       <BrowserRouter>
         <TeacherContextProvider>
           <AuthProvider>
+            <FavoriteProvider>
             <Routes>
               {/* Rutas no protegidas */}
               <Route element={<Layout />}>
@@ -30,12 +32,21 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/filter/:category" element={<CategoryFilters />} />
                 <Route path="/detalle/:id" element={<Detail />} />
+            
                 {/* Rutas protegidas */}
                 <Route
                   path="/Profile"
                   element={
                     <PrivateRoute>
                       <Profile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/favorites"
+                  element={
+                    <PrivateRoute>
+                      <Favorites/>
                     </PrivateRoute>
                   }
                 />
@@ -83,6 +94,7 @@ function App() {
                 />
               </Route>
             </Routes>
+            </FavoriteProvider>
           </AuthProvider>
         </TeacherContextProvider>
       </BrowserRouter>

@@ -2,21 +2,22 @@
   margin: 90px 40px 0 40px;
   padding-bottom: 80px;
 }
-.btn-go-back {
-  text-align: right;
-  font-size: 25px;
-  cursor: pointer;
-}
+
 .section-detail {
   display: flex;
   justify-content: space-between;
   margin: 20px;
   height: 40px;
 }
-.container-teacher {
+.container-title-detail {
   display: flex;
   flex-direction: column;
   margin: 15px;
+}
+.container-teacher {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 35px 0px 0px;
 }
 .container-image {
   display: flex;
@@ -59,12 +60,14 @@
   width: 100%;
   height: 95%;
 }
-.more {
-  width: 100px;
-  height: 20px;
-  margin: 10px;
-  cursor: pointer;
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 10px;
 }
+<<<<<<< HEAD
 
 /* Styles for the social share buttons */
 .share-buttons {
@@ -94,3 +97,68 @@
 .share-buttons button:hover {
   background-color: #f0f0f0;
 }
+=======
+.btn-go-back {
+  cursor: pointer;
+  width: 80px;
+}
+.anticon-arrow-left.go-back {
+  margin-right: 35px;
+  margin-bottom: 5px;
+  color: #f0f0f0;
+}
+.anticon-arrow-left.go-back:hover {
+  color: #fa8c16;
+}
+
+.more,
+.toggle-policies {
+  width: 120px;
+  height: 35px;
+  margin: 10px 0;
+  cursor: pointer;
+  background-color: #ffa500; /* Naranja */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.more:hover,
+.toggle-policies:hover {
+  background-color: #fa8c16; /* Naranja más oscuro */
+}
+.policies-wrapper {
+  margin-top: 20px;
+}
+.container-characteristics-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 40px 0px
+}
+.characteristics-wrapper {
+  margin-top: 20px;
+  width: 50%;
+  
+}
+.characteristics-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  
+}
+.character-item {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.not-favorite-icon {
+  color: rgb(24, 23, 23);
+  font-size: 24px;
+}
+
+>>>>>>> ce48060b097ae164db73ced624744e1f6944b0fb

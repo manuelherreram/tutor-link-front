@@ -1,53 +1,54 @@
 import axios from 'axios';
 
-/*-----------Teachers---------------------------*/
+const BASE_URL = 'http://localhost:8080/api';
 
-//Listar a los profesores
+/*-----------Teachers---------------------------*/
+// Listar a los profesores
 export const getData = async (accessToken) => {
   try {
-    const response = await axios.get(
-      'http://localhost:8080/api/admin/teachers',
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
+    const response = await axios.get(`${BASE_URL}/admin/teachers`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response.data;
   } catch (error) {
-    console.error('Error fetching teachers:', error);
-    throw error; // Re-throw the error for handling in the component
+    console.error('Error fetching teachers:', error.response ? error.response.data : error.message);
+    throw error;
   }
 };
 
-//buscar un profesor por su id
+// Buscar un profesor por su id
 export const getDataById = async (id) => {
-  let res = await axios.get(`http://localhost:8080/api/public/${id}`);
-  return res.data;
+  try {
+    const response = await axios.get(`${BASE_URL}/public/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching teacher by ID:', error);
+    throw error;
+  }
 };
 
-//Registrar a un nuevo profesor
+// Registrar a un nuevo profesor
 export const register = async (data, token) => {
-  const response = await axios.post(
-    'http://localhost:8080/api/admin/teachers',
-    data,
-    {
+  try {
+    const response = await axios.post(`${BASE_URL}/admin/teachers`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-    }
-  );
-  return response.data;
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error registering teacher:', error);
+    throw error;
+  }
 };
 
-//Validar DNI del profesor
+// Validar DNI del profesor
 export const verificarDNIServidor = async (dni) => {
   try {
-    const response = await axios.get(
-      'http://localhost:8080/api/admin/teachers'
-    );
+    const response = await axios.get(`${BASE_URL}/admin/teachers`);
     const profesores = response.data;
 
     if (!Array.isArray(profesores)) {
@@ -61,16 +62,14 @@ export const verificarDNIServidor = async (dni) => {
   }
 };
 
+// Eliminar un profesor
 export const deleteTeacher = async (id, accessToken) => {
   try {
-    const response = await axios.delete(
-      `http://localhost:8080/api/admin/teachers/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await axios.delete(`${BASE_URL}/admin/teachers/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     console.log('Teacher deleted successfully:', response.data);
   } catch (error) {
     console.error('Error deleting teacher:', error);
@@ -78,132 +77,144 @@ export const deleteTeacher = async (id, accessToken) => {
   }
 };
 
-//para filtrar por subject
+// Disponibilidad de un profesor
+export const getAvailabilitiesById = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/availabilities/teacher/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching availabilities:', error);
+    throw error;
+  }
+};
+
+// Para filtrar por subject
 export const fetchTeachers = async (subject) => {
-  const response = await axios.get('/api/profesores', {
-    params: { categoria: subject },
-  });
-  return response.data;
+  try {
+    const response = await axios.get(`${BASE_URL}/profesores`, {
+      params: { categoria: subject },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching teachers by subject:', error);
+    throw error;
+  }
 };
 
 /*------------------CATEGORIES------------------*/
 
+// Registrar categorías
 export const registerCategories = async (data, token) => {
-  const response = await axios.post(
-    'http://localhost:8080/api/admin/subjects/add',
-    data,
-    {
+  try {
+    const response = await axios.post(`${BASE_URL}/admin/subjects/add`, data, {
       headers: {
-        
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
-    }
-  );
-  return response.data;
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error registering categories:', error);
+    throw error;
+  }
 };
+
 /*-----------Characteristics---------------------------*/
-//para listar características
-export const listChar = async (idtoken) => {
-  const response = await axios.get(
-    'http://localhost:8080/api/admin/characteristic/list',
-    {
-      headers: {
-        Authorization: `Bearer ${idtoken}`,
-      },
-    }
-  );
-  return response.data;
+// Listar características
+export const listChar = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/public/characteristics/list`)
+    return response.data;
+  } catch (error) {
+    console.error('Error listing characteristics:', error);
+    throw error;
+  }
 };
-//para crear característica
+
+// Crear característica
 export const registerChar = async (data, idtoken) => {
-  const response = await axios.post(
-    'http://localhost:8080/api/admin/characteristic/add',
-    data,
-    {
+  try {
+    const response = await axios.post(`${BASE_URL}/admin/characteristics/add`, data, {
       headers: {
         Authorization: `Bearer ${idtoken}`,
         'Content-Type': 'application/json',
       },
-    }
-  );
-  return response.data;
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error registering characteristic:', error);
+    throw error;
+  }
 };
-//Para actualizar Característica
 
+// Actualizar característica
 export const updateChar = async (data, idtoken) => {
-  const response = await axios.put(
-    `http://localhost:8080/api/admin/characteristic/actualizar`,
-    data,
-    {
+  try {
+    const response = await axios.put(`${BASE_URL}/admin/characteristics/actualizar`, data, {
       headers: {
         Authorization: `Bearer ${idtoken}`,
         'Content-Type': 'application/json',
       },
-    }
-  );
-  return response.data;
-
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating characteristic:', error);
+    throw error;
+  }
 };
 
-//Para eliminar caracterísctica
-
+// Eliminar característica
 export const deleteChar = async (id, idtoken) => {
-  const response = await axios.delete(
-    `http://localhost:8080/api/admin/characteristic/eliminar/${id}`,
-    {
+  try {
+    const response = await axios.delete(`${BASE_URL}/admin/characteristics/eliminar/${id}`, {
       headers: {
         Authorization: `Bearer ${idtoken}`,
       },
-    }
-  );
-  return response.data;
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting characteristic:', error);
+    throw error;
+  }
 };
 
 /*------------------USERS------------------*/
 
-//Para obtener todos los usuarios
+// Obtener todos los usuarios
 export const getUsers = async (accessToken) => {
   try {
-    const response = await axios.get('http://localhost:8080/api/admin/users', {
+    const response = await axios.get(`${BASE_URL}/admin/users`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
-    throw error; // Re-throw the error for handling in the component
+    throw error;
   }
 };
-// Setear Rol de User
+
+// Setear rol de usuario
 export const setUser = async (accessToken, uid, role) => {
   try {
-    const response = await axios.put(
-      'http://localhost:8080/api/admin/set-role',
-      { uid, role },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
+    const response = await axios.put(`${BASE_URL}/admin/set-role`, { uid, role }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('Error setting user role:', error);
     throw error;
   }
 };
-//Crear Usuarios
+
+// Crear usuarios
 export const createUser = async (userData) => {
   try {
-    const response = await axios.post(
-      'http://localhost:8080/api/public/createuser',
-      userData
-    );
+    const response = await axios.post(`${BASE_URL}/public/createuser`, userData);
     return response.data;
   } catch (error) {
     console.error('Error creating user:', error);
@@ -211,3 +222,13 @@ export const createUser = async (userData) => {
   }
 };
 
+// Encontrar el ID de un usuario
+export const getUserId = async (uid) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/public/uid/${uid}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user ID:', error);
+    throw error;
+  }
+};
