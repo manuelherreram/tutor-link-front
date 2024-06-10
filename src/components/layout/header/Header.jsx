@@ -1,79 +1,107 @@
-import './Header.css'
-import { Link, Navigate } from 'react-router-dom'
-import { useAuth } from '../../../contexts/AuthContext'
-import { signOut } from 'firebase/auth'
-import { auth } from '../../../firebase/firebaseConfig'
-import { Avatar } from '@mui/material'
-import { orange } from '@mui/material/colors'
+import './Header.css';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../../firebase/firebaseConfig';
+import { Avatar, Menu, Dropdown, Space } from 'antd';
+import { UserOutlined, DownOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-    const { currentUser, userLoggedIn } = useAuth()
+  const { currentUser, userLoggedIn, isAdmin } = useAuth();
+  const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        try {
-            await signOut(auth)
-            console.log('User signed out')
-        } catch (error) {
-            console.error('Logout failed:', error)
-        }
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      console.log('User signed out');
+      // Navegar a la página de inicio después del cierre de sesión
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
+  };
 
-    const getInitials = email => {
-        if (!email) return ''
-        return email.charAt(0).toUpperCase()
+  const getInitials = (email) => {
+    if (!email) return '';
+    return email.charAt(0).toUpperCase();
+  };
+
+  const handleMenuClick = ({ key }) => {
+    if (key === 'logout') {
+      handleLogout();
+    } else {
+      navigate(key);
     }
-    const handleAvatarClick = () => {
-        Navigate('/profile')
-    }
+  };
 
-    return (
-        <header className="container-header">
-            <div className="container-logo">
-                <Link to="/" className="element-header">
-                    <img
-                        src="/tutor-link-logo.png"
-                        alt="logotipo"
-                        className="img-header"
-                    />
-                </Link>
-                <Link to="/" className="element-header">
-                    <h4>Tu camino al éxito comienza aquí</h4>
-                </Link>
-            </div>
+  const menuItems = [
+    {
+      key: '/profile',
+      icon: <UserOutlined />,
+      label: 'Ver Perfil',
+    },
+    isAdmin && {
+      key: '/admin',
+      icon: <UserOutlined />,
+      label: 'Admin',
+    },
+    {
+      key: 'logout',
+      icon: <UserOutlined />,
+      label: 'Cerrar sesión',
+    },
+  ].filter(Boolean);
 
-            <nav>
-                {!userLoggedIn && (
-                    <Link to="/register">
-                        <button className="btn btn-sign">Registrar</button>
-                    </Link>
-                )}
-                {userLoggedIn ? (
-                    <div className="user-info">
-                        <Link to="/profile">
-                            <Avatar
-                                sx={{ bgcolor: orange[500], cursor: 'pointer' }}
-                                className="avatar"
-                            >
-                                {getInitials(currentUser.email)}
-                            </Avatar>
-                        </Link>
-                        <div className="user-details">
-                            <button
-                                className="btn btn-logout"
-                                onClick={handleLogout}
-                            >
-                                Cerrar sesión
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <Link to="/login">
-                        <button className="btn btn-login">Conectar</button>
-                    </Link>
-                )}
-            </nav>
-        </header>
-    )
-}
+  return (
+    <header className="container-header">
+      <div className="container-logo">
+        <Link to="/" className="element-header">
+          <img
+            src="/tutor-link-logo.png"
+            alt="logotipo"
+            className="img-header"
+          />
+        </Link>
+        <Link to="/" className="element-header">
+          <h4>Tu camino al éxito comienza aquí</h4>
+        </Link>
+      </div>
 
-export default Header
+      <nav>
+        {!userLoggedIn && (
+          <Link to="/register">
+            <button className="btn btn-sign">Registrar</button>
+          </Link>
+        )}
+        {userLoggedIn ? (
+          <Dropdown
+            overlay={
+              <Menu onClick={handleMenuClick}>
+                {menuItems.map((item) => (
+                  <Menu.Item key={item.key} icon={item.icon}>
+                    {item.label}
+                  </Menu.Item>
+                ))}
+              </Menu>
+            }
+            trigger={['click']}
+          >
+            <Space className="user-info" onClick={(e) => e.preventDefault()}>
+              <DownOutlined />
+              <Avatar className="avatar">
+                {getInitials(currentUser.email)}
+              </Avatar>
+            </Space>
+          </Dropdown>
+        ) : (
+          <Link to="/login">
+            <button className="btn btn-login">Conectar</button>
+          </Link>
+        )}
+      </nav>
+    </header>
+  );
+};
+
+export default Header;
