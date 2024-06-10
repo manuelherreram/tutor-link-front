@@ -15,6 +15,9 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
+import RatingList from '../../routes/ratings/RatingList';
+import AddRating from '../../routes/ratings/AddRating';
+import UpdateRating from '../../routes/ratings/UpdateRating';
 import {
   WhatsappShare,
   FacebookShare,
@@ -185,6 +188,12 @@ const Detail = () => {
         </div>
       )}
 
+      {teacherSelected && (
+        <div className="container-ratings">
+          <RatingList teacherId={id} />
+          <AddRating teacherId={id} onRatingAdded={() => {}} />
+        </div>
+      )}
 
       <Modal
         isOpen={modalIsOpen}
