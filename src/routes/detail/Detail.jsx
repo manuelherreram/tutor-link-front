@@ -15,6 +15,7 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
+import ReservationForm from '../../components/ReservationForm';
 
 const Detail = () => {
   const { id } = useParams();
@@ -25,6 +26,7 @@ const Detail = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
   const { userId } = useAuth();
+  const [selectedRange, setSelectedRange] = useState(null);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -77,6 +79,10 @@ const Detail = () => {
     console.log('mis favoritos:', favorites);
   }, [favorites]);
   const isFavorite = favorites.map(({ id }) => id).includes(id);
+
+  const handleSelectRange = (range) => {
+    setSelectedRange(range);
+  };
 
   return (
     <div className="container-detail">
@@ -151,7 +157,22 @@ const Detail = () => {
                 ))}
               </div>
             </div>
-            {teacherSelected && <TeacherAvailability teacherId={id} />}
+            <div>
+              {teacherSelected && (
+                <TeacherAvailability
+                  teacherId={id}
+                  userId={userId}
+                  onSelectRange={setSelectedRange}
+                />
+              )}
+              {selectedRange && (
+                <ReservationForm
+                  userId={userId}
+                  teacherId={parseInt(id)}
+                  selectedRange={selectedRange}
+                />
+              )}
+            </div>
           </div>
 
           {showPolicies && (
