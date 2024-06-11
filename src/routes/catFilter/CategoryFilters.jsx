@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams  } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 import Card  from "../../components/card/Card";
 import "./CategoryFilter.css";
-import { Badge, Pagination } from "antd";
+import { Badge, Button, Pagination } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 
 const CategoryFilters = () => {
     const { category } = useParams();
@@ -16,7 +19,7 @@ const CategoryFilters = () => {
 
     const [page, setPage] = useState(1)
 
-    let params = ''
+    const navigate = useNavigate();
 
 console.log(category);
 
@@ -77,15 +80,67 @@ console.log(products);
 const cardPerPage = 6;
 const renderCards = products.slice((page - 1) * cardPerPage, page * cardPerPage);
 
+
+const swalWithAntButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn ant-btn btn-primary",
+      cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+  });
+
+
+
+
+
 const clearFilters = () => {
-    setSelectedCharacteristics([]);
-    setSelectedCategories([category]);
-    setPage(1);
+    
+    swalWithAntButtons.fire({
+        title: "Está seguro de eliminar",
+        text: "Característica: Matemáticas!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Si, eliminala!",
+        cancelButtonText: "No, cancelar!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            swalWithAntButtons.fire({
+                title: "Característica borrada!",
+                
+                icon: "success"
+            });
+            console.log("borrado")
+            setSelectedCharacteristics([]);
+            setSelectedCategories([category]);
+            setPage(1);
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            Swal.fire({
+                title: "Cancelado",
+                
+                icon: "error"
+            });
+        }
+    });
 }
+
+
+
+
+
+
+
+
 
     return (
         <div className='filters-result'>
             <div className='category-filters'>
+            <ArrowLeftOutlined className="arrow-icon"
+                onClick={() => navigate('/')}
+            />
                 <div className='filters'>
                 
                 {categories.map((categories) => (                   

@@ -118,6 +118,20 @@ export const registerCategories = async (data, token) => {
     throw error;
   }
 };
+// Eliminar categorías
+export const deleteCategories = async (id, token) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/admin/subjects/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting categories:', error);
+    throw error;
+  }
+};
 
 /*-----------Characteristics---------------------------*/
 // Listar características

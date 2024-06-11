@@ -134,4 +134,8 @@
   margin-top: 10px;
 }
   
-  
+.arrow-icon{
+  margin-left: 10px;
+  position: sticky;
+  top: 125px
+}
