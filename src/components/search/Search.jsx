@@ -25,6 +25,10 @@ const Search = ({ onSearchResults }) => {
     const [options, setOptions] = useState([])
     const [isDateFlexible, setIsDateFlexible] = useState(false)
 
+    const today = moment()
+    const disabledDate = current => {
+        return current && current < moment().startOf('day')
+    }
     const handleSearch = async value => {
         setSearchValue(value)
         if (value) {
@@ -193,6 +197,7 @@ const Search = ({ onSearchResults }) => {
                         onChange={handleDateChange}
                         format="YYYY-MM-DD"
                         className="custom-date-picker"
+                        disabledDate={disabledDate}
                     />
                 </div>
             )}
@@ -201,7 +206,7 @@ const Search = ({ onSearchResults }) => {
                 onChange={handleCheckboxChange}
                 className="checkbox-date"
             >
-                Aún no decidido mis fechas
+                Aún no decidido la fechas
             </Checkbox>
             <Button
                 className="btn-submit"
