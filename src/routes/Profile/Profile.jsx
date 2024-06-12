@@ -1,105 +1,118 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, Avatar, Typography, Switch, Space, Alert, Button } from 'antd';
-import { UserOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserById } from '../../api/api';
 import './Profile.css';
-import { Content } from 'antd/es/layout/layout';
+
 
 const { Title, Text } = Typography;
 
 const Profile = () => {
-    const navigate = useNavigate();
-    const { currentUser, userId } = useAuth();
-    const [isVerified, setIsVerified] = useState(currentUser?.emailVerified || false);
-    const [error, setError] = useState(null);
-    const [userData, setUserData] = useState({});
+  const { currentUser, userId } = useAuth();
+  const [isVerified, setIsVerified] = useState(
+    currentUser?.emailVerified || false
+  );
+  const [error, setError] = useState(null);
+  const [userData, setUserData] = useState({});
 
-    useEffect(() => {
-        if (currentUser) {
-            setIsVerified(currentUser.emailVerified);
-        } else {
-            setError('No se pudo cargar la información del usuario.');
-        }
-    }, [currentUser]);
+  useEffect(() => {
+    if (currentUser) {
+      setIsVerified(currentUser.emailVerified);
+    } else {
+      setError('No se pudo cargar la información del usuario.');
+    }
+  }, [currentUser]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await getUserById(userId);
-                setUserData(res);
-            } catch (error) {
-                setError('Error al cargar la información del usuario.');
-            }
-        };
-
-        fetchData();
-    }, [userId]);
-
-    const handleVerificationChange = (checked) => {
-        setIsVerified(checked);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getUserById(userId);
+        setUserData(res);
+      } catch (error) {
+        setError('Error al cargar la información del usuario.');
+      }
     };
 
-    if (error) {
-        return (
-            <div className='container-profile'>
-                <Alert
-                    message="Error"
-                    description={error}
-                    type="error"
-                    showIcon
-                />
-            </div>
-        );
-    }
+    fetchData();
+  }, [userId]);
 
-    if (!currentUser) {
-        return (
-            <div className='container-profile'>
-                <Alert
-                    message="Cargando"
-                    description="Cargando información del usuario..."
-                    type="info"
-                    showIcon
-                />
-            </div>
-        );
-    }
+  const handleVerificationChange = (checked) => {
+    setIsVerified(checked);
+  };
 
+  if (error) {
     return (
-        <div className='container-profile'>
-            <ArrowLeftOutlined onClick={() => navigate('/')} />
-            <Card className='card-container'>
-                <Avatar
-                    size={100}
-                    icon={<UserOutlined />}
-                    className='avatar'
-                />
-                <Title className='title'>{currentUser.displayName || 'Usuario Desconocido'}</Title>
-                <Text className='secondary-text'>{currentUser.email || 'Correo no disponible'}</Text>
-                <div className='switch-container'>
-                    <Space>
-                        <Text className='text'>Verificado</Text>
-                        <Switch
-                            checked={isVerified}
-                            disabled
-                        />
-                    </Space>
-                </div>
-                <Content className='text'> Teléfono: {userData.phone || 'Teléfono No disponible'}</Content>
-                <p className='text'> Dirección: {userData.address || 'La dirección no está disponible'}</p>
-                <p className='text'> Ciudad: {userData.city|| 'La ciudad no está disponible'}</p>
-                <p className='text'> País: {userData.country || 'El país no está disponible'}</p>
-                <p className='text'> Rol: {userData.role || 'Rol sin asignar'}</p>
-                
-                
-            </Card>
-            <Link to="/favorites">
-                    <Button>Ver Favoritos</Button>
-            </Link>
-        </div>
+      <div className="container-profile">
+        <Alert message="Error" description={error} type="error" showIcon />
+      </div>
     );
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="container-profile">
+        <Alert
+          message="Cargando"
+          description="Cargando información del usuario..."
+          type="info"
+          showIcon
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="container-profile">
+      <Card className="card-profile">
+        <Avatar icon={<UserOutlined />} className="avatar-profile" />
+        <Title className="title">
+          {currentUser.displayName || 'Usuario Desconocido'}
+        </Title>
+        <div className="switch-container">
+          <Space>
+            <Text className="text">Verificado</Text>
+            <Switch checked={isVerified} disabled />
+          </Space>
+        </div>
+        <Text className="secondary-text">
+        <MailOutlined />  {currentUser.email || 'Correo no disponible'}
+        </Text>
+      
+      </Card>
+      <Card className="container-text">
+        <h3 className="title-card-text">Información del Usuario</h3>
+        <p className="text">
+          {' '}
+          <b>Teléfono:</b> {userData.phone || 'Teléfono No disponible'}
+        </p>
+        <p className="text">
+          {' '}
+          <b>Dirección:</b>{' '}
+          {userData.address || 'La dirección no está disponible'}
+        </p>
+        <p className="text">
+          {' '}
+          <b>Ciudad:</b> {userData.city || 'La ciudad no está disponible'}
+        </p>
+        <p className="text">
+          {' '}
+          <b>País:</b> {userData.country || 'El país no está disponible'}
+        </p>
+        <p className="text">
+          {' '}
+          <b>Rol:</b> {userData.role || 'Rol sin asignar'}
+        </p>
+        <Link to="/">
+          <Button className="btn-profile">Ir al inicio</Button>
+        </Link>
+        <Link to="/favorites">
+          <Button>Ver Favoritos</Button>
+        </Link>
+      </Card>
+    </div>
+  );
 };
 
 export default Profile;
