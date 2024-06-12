@@ -38,3 +38,7 @@ export const addSchedule = async (teacherId, date, startTime, endTime) => {
   });
   return res.data;
 };
+//Listar las reservaciones del usuario
+
+
+
