@@ -396,11 +396,12 @@ export const getUserId = async uid => {
 export const getRatingByTeacherId = async (teacherId) => {
   try {
     const response = await axios.get(`${BASE_URL}/teachers/ratings/${teacherId}`);
-    if (!Array.isArray(response.data)) {
-      console.error('La respuesta no es un array:', response.data);
+    if (response.data && Array.isArray(response.data.ratings)) {
+      return response.data.ratings;
+    } else {
+      console.error('La respuesta no contiene un array de calificaciones:', response.data);
       return [];
     }
-    return response.data;
   } catch (error) {
     console.error('Error fetching ratings by teacher id:', error);
     throw error;
