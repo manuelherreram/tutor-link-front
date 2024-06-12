@@ -72,10 +72,17 @@ const TeacherAvailability = ({ teacherId, onSelectRange }) => {
 
   const handleRangeChange = (dates) => {
     if (dates && dates.length === 2) {
+      const [start, end] = dates.map(date => dayjs(date));
+      
+      // Validación del rango de fechas seleccionado
+      if (!start.isValid() || !end.isValid() || start.isAfter(end)) {
+        message.error('El rango de fechas seleccionado no es válido.');
+        return;
+      }
+
       console.log('Rango seleccionado:', dates);
       onSelectRange(dates); 
-    }
-  };
+    }}
 
   return (
     <div className="calendar-container">
