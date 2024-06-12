@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Categories from '../../components/categoriesSection/CategoriesSection';
 import Search from '../../components/search/Search';
 import Card from '../../components/card/Card';

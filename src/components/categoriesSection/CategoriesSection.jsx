@@ -7,11 +7,11 @@ const CategoriesSection = () => {
         <div className='container-categories-section'>
             <ul className='element-categories-section'>
                 <li><Link to={'/filter/Matematicas'}>Matematicas</Link></li>
-                <li><Link to={'/filter/Historia'}>Historia</Link></li>
-                <li><Link to={'/filter/Geografia'}>Geografia</Link></li>
-                <li><a href="#">Danza</a></li>
-                <li><a href="#">Computación</a></li>
-                <li><a href="#">Lenguaje</a></li>
+                <li><Link to={'/filter/Historia'} >Historia</Link></li>
+                <li><Link to={'/filter/Geografia'}>Geografía</Link></li>
+                <li><Link to={'/filter/Ingles'}>Inglés</Link></li>
+                <li><Link to={'/filter/Computacion'}>Computación</Link></li>
+                <li><Link to={'/filter/Lenguaje'}>Lenguaje</Link></li>
             </ul>
         </div>
 

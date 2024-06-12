@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:8080/api'
-//const BASE_URL = "http://44.193.72.252:8080/api";
+const BASE_URL = "http://localhost:8080/api";
+// const BASE_URL = "http://44.193.72.252:8080/api";
 
 /*-----------Teachers---------------------------*/
 // Listar a los profesores
@@ -216,23 +216,34 @@ export const getAvailableTeachersBySubjectAndDate = async (
 
 // Registrar categorías
 export const registerCategories = async (data, token) => {
-    try {
-        const response = await axios.post(
-            `${BASE_URL}/admin/subjects/add`,
-            data,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            }
-        )
-        return response.data
-    } catch (error) {
-        console.error('Error registering categories:', error)
-        throw error
-    }
-}
+  try {
+    const response = await axios.post(`${BASE_URL}/admin/subjects/add`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error registering categories:", error);
+    throw error;
+  }
+};
+// Eliminar categorías
+export const deleteCategories = async (id, token) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/admin/subjects/eliminar/${id}`, 
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting categories:', error);
+    throw error;
+  }
+};
 
 /*-----------Characteristics---------------------------*/
 // Listar características

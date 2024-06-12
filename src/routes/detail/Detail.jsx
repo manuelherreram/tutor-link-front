@@ -232,9 +232,9 @@ const Detail = () => {
       >
         <h2>Galería de Imágenes</h2>
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
-        <button className="close-button" onClick={closeModal}>
+        <Button className="close-button" onClick={closeModal}>
           Cerrar
-        </button>
+        </Button>
       </Modal>
       {/* Compartir  */}
       <Modal

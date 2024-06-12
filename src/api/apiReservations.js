@@ -27,6 +27,8 @@ export const addReservation = async (userId, teacherId, start, end) => {
   });
   return res.data;
 };
+
+//Crear disponibilidad profesor
 export const addSchedule = async (teacherId, date, startTime, endTime) => {
   let res = await axios.post(`${BASE_URL}/availabilities`, {
     teacherId,

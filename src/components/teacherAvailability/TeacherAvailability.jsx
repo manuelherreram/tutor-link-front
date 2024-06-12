@@ -26,7 +26,7 @@ const TeacherAvailability = ({ teacherId, onSelectRange }) => {
         let availabilityRes = await getAvailabilitiesById(teacherId);
         setAvailability(
           availabilityRes.map((item) => ({
-            date: new Date(item.date),
+            date: dayjs(item.date), // Convertir a dayjs aquí
             startTime: item.startTime,
             endTime: item.endTime,
           }))
@@ -59,24 +59,31 @@ const TeacherAvailability = ({ teacherId, onSelectRange }) => {
   };
 
   const disabledDate = (current) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = dayjs().startOf('day'); // Usar dayjs aquí
     return (
       current &&
       (current < today ||
         !availability.some(
           (availableDate) =>
-            availableDate.date.toDateString() ===
-            current.toDate().toDateString()
+            availableDate.date.isSame(current, 'day') // Comparar con dayjs aquí
         ))
     );
   };
+
   const handleRangeChange = (dates) => {
     if (dates && dates.length === 2) {
+      const [start, end] = dates.map(date => dayjs(date));
+      
+      // Validación del rango de fechas seleccionado
+      if (!start.isValid() || !end.isValid() || start.isAfter(end)) {
+        message.error('El rango de fechas seleccionado no es válido.');
+        return;
+      }
+
       console.log('Rango seleccionado:', dates);
       onSelectRange(dates); 
-    }
-  };
+    }}
+
   return (
     <div className="calendar-container">
       <h3>Disponibilidad del Tutor:</h3>
