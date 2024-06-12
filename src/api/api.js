@@ -393,32 +393,31 @@ export const getUserId = async uid => {
 /*------------------RATINGS------------------*/
 
 // Calificaciones por Id de profesor
-export const getRatingByTeacherId = async teacherId => {
-    try {
-        const response = await axios.get(
-            `${BASE_URL}/ratings/teacher/${teacherId}`
-        )
-        if (!Array.isArray(response.data)) {
-            console.error('La respuesta no es un array:', response.data)
-            return []
-        }
-        return response.data
-    } catch (error) {
-        console.error('Error fetching ratings by teacher id:', error)
-        throw error
+export const getRatingByTeacherId = async (teacherId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/teachers/ratings/${teacherId}`);
+    if (response.data && Array.isArray(response.data.ratings)) {
+      return response.data.ratings;
+    } else {
+      console.error('La respuesta no contiene un array de calificaciones:', response.data);
+      return [];
     }
-}
+  } catch (error) {
+    console.error('Error fetching ratings by teacher id:', error);
+    throw error;
+  }
+};
 
 // Agregar calificación
-export const addRating = async ratingData => {
-    try {
-        const response = await axios.post(`/api/ratings`, ratingData)
-        return response.data
-    } catch (error) {
-        console.error('Error adding rating:', error)
-        throw error
-    }
-}
+export const addRating = async (ratingData) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/teachers/ratings/add`, ratingData);
+    return response.data;
+  } catch (error) {
+    console.error('Error adding rating:', error);
+    throw error;
+  }
+};
 
 // Actualizar una calificación
 export const updateRating = async (ratingId, ratingData) => {
