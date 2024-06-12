@@ -6,7 +6,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getUserById } from '../../api/api';
 import './Profile.css';
 
-
 const { Title, Text } = Typography;
 
 const Profile = () => {
@@ -77,40 +76,42 @@ const Profile = () => {
           </Space>
         </div>
         <Text className="secondary-text">
-        <MailOutlined />  {currentUser.email || 'Correo no disponible'}
+          <MailOutlined /> {currentUser.email || 'Correo no disponible'}
         </Text>
-      
       </Card>
-      <Card className="container-text">
-        <h3 className="title-card-text">Información del Usuario</h3>
-        <p className="text">
-          {' '}
-          <b>Teléfono:</b> {userData.phone || 'Teléfono No disponible'}
-        </p>
-        <p className="text">
-          {' '}
-          <b>Dirección:</b>{' '}
-          {userData.address || 'La dirección no está disponible'}
-        </p>
-        <p className="text">
-          {' '}
-          <b>Ciudad:</b> {userData.city || 'La ciudad no está disponible'}
-        </p>
-        <p className="text">
-          {' '}
-          <b>País:</b> {userData.country || 'El país no está disponible'}
-        </p>
-        <p className="text">
-          {' '}
-          <b>Rol:</b> {userData.role || 'Rol sin asignar'}
-        </p>
-        <Link to="/">
-          <Button className="btn-profile">Ir al inicio</Button>
-        </Link>
-        <Link to="/favorites">
-          <Button>Ver Favoritos</Button>
-        </Link>
-      </Card>
+      <div>
+        <Card className="container-text">
+          <h3 className="title-card-text">Información del Usuario</h3>
+          <p className="text">
+            {' '}
+            <b>Teléfono:</b> {userData.phone || 'Teléfono No disponible'}
+          </p>
+          <p className="text">
+            {' '}
+            <b>Dirección:</b>{' '}
+            {userData.address || 'La dirección no está disponible'}
+          </p>
+          <p className="text">
+            {' '}
+            <b>Ciudad:</b> {userData.city || 'La ciudad no está disponible'}
+          </p>
+          <p className="text">
+            {' '}
+            <b>País:</b> {userData.country || 'El país no está disponible'}
+          </p>
+          <p className="text">
+            {' '}
+            <b>Rol:</b> {userData.role || 'Rol sin asignar'}
+          </p>
+          <Link to="/">
+            <Button className="btn-profile">Ir al inicio</Button>
+          </Link>
+          <Link to="/favorites">
+            <Button>Ver Favoritos</Button>
+          </Link>
+        </Card>
+        <Card className='reservation'>Mis reservas</Card>
+      </div>
     </div>
   );
 };

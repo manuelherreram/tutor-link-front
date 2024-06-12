@@ -73,3 +73,13 @@
 .anticon-mail{
   margin-right: 5px;
 }
+.reservation{
+  display: flex;
+  color: #fa8c16;
+  flex-direction: column;
+  margin:20px;
+  border:1px solid #bbbbbb;
+  width: 40vw;
+  font-family: 'Poppins';
+}
+
