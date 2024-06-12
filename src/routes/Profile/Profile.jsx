@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Card, Avatar, Typography, Switch, Space, Alert, Button } from 'antd';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserById } from '../../api/api';
 import './Profile.css';
+import MyReservationsPanel from '../../components/myReservationsPanel/MyReservationsPanel';
 
 const { Title, Text } = Typography;
 
@@ -110,7 +111,10 @@ const Profile = () => {
             <Button>Ver Favoritos</Button>
           </Link>
         </Card>
-        <Card className='reservation'>Mis reservas</Card>
+        <div>
+          <Card className="reservation">Mis reservas <MyReservationsPanel userId={userId} /></Card>
+          
+        </div>
       </div>
     </div>
   );

@@ -39,6 +39,19 @@ export const addSchedule = async (teacherId, date, startTime, endTime) => {
   return res.data;
 };
 //Listar las reservaciones del usuario
+export const getReservationsUser = async (userId) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/reservations/user/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching reservations user:', error);
+    throw error;
+  }
+};
+
+
 
 
 
