@@ -198,6 +198,17 @@ export const getUsers = async (accessToken) => {
     throw error;
   }
 };
+//Buscar usuario por id
+
+export const getUserById = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/public/user/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user by id:", error);
+    throw error;
+  }
+};
 
 // Setear rol de usuario
 export const setUser = async (accessToken, uid, role) => {
