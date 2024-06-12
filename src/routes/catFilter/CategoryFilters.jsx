@@ -94,46 +94,12 @@ const swalWithAntButtons = Swal.mixin({
 
 
 const clearFilters = () => {
-    
-    swalWithAntButtons.fire({
-        title: "Está seguro de eliminar",
-        text: "Característica: Matemáticas!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Si, eliminala!",
-        cancelButtonText: "No, cancelar!",
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            swalWithAntButtons.fire({
-                title: "Característica borrada!",
-                
-                icon: "success"
-            });
-            console.log("borrado")
+
             setSelectedCharacteristics([]);
             setSelectedCategories([category]);
             setPage(1);
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            Swal.fire({
-                title: "Cancelado",
-                
-                icon: "error"
-            });
-        }
-    });
+       
 }
-
-
-
-
-
-
-
-
 
     return (
         <div className='filters-result'>

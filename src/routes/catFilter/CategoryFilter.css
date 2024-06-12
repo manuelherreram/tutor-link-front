@@ -72,7 +72,11 @@
     font-size: 15px;
     font-family: poppins;
     color: #666666;
-    width: 60%;
+    /* width: 60%; */
+
+    width: fit-content; /* Allow label to fit content */
+    padding: 5px 10px;
+
     margin-top: 20px;
     box-shadow: 2px 2px 10px 1px #00000040;
   }
@@ -138,4 +142,28 @@
   margin-left: 10px;
   position: sticky;
   top: 125px
+}
+
+
+@media only screen and (max-width: 768px) {
+  .filters-result {
+    grid-template-columns: 1fr; /* Stack filters on top of card results */
+  }
+ 
+  .category-filters,
+  .arrow-icon {
+    position: static; /* Remove sticky behavior on small screens */
+  }
+  .category-filters {
+    flex-direction: row;
+    margin-top: 120px;
+  }
+  .filters {
+    display: ruby;
+  }
+  .card-result{
+    width: 100%;
+    margin-left: 0px;
+  }
+
 }
