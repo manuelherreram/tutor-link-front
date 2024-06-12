@@ -2,8 +2,34 @@
 import { Table, Button, Space } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import './CatPanel.css'
+import Swal from 'sweetalert2';
 
 const CatPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
+
+  console.log(dataSource);
+
+  const handleDelete = (id, title) => {
+    Swal.fire({
+      title: '¿Estás seguro de eliminar la categoría ' + title + '?',
+      text: "¡Quedarán tutores sin materia asociada!",
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#fa8c16',
+      cancelButtonColor: '#46b9bc',
+      confirmButtonText: 'Sí, eliminarlo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onDelete(id);
+        Swal.fire(
+          {confirmButtonColor: '#fa8c16',
+          title: '¡Eliminado!',
+          text: 'La categoría ha sido eliminada.',
+          icon: 'success'}
+        );
+      }
+    });
+  };
   const columns = [
     {
       title: 'ID',
@@ -27,7 +53,7 @@ const CatPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {
       render: (text, record) => (
         <Space size="middle">
           <EditOutlined onClick={() => onEdit(record)} />
-          <DeleteOutlined onClick={() => onDelete(record.key)} />
+          <DeleteOutlined onClick={() => handleDelete(record.id, record.title)} />
         </Space>
       )
     }
