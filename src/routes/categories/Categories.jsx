@@ -3,29 +3,22 @@ import CatPanel from '../../components/admin/catPanel/CatPanel';
 import CatForm from '../../components/admin/catForm/CatForm1'
 import { useAuth } from '../../contexts/AuthContext';
 import './Categories.css'
-
+import { deleteCategories } from '../../api/api';
 
 
 const Categorias = () => {
+  const [dataSource, setDataSource] = useState([]);
+  const { idToken } = useAuth();
 
-
-    const [dataSource, setDataSource] = useState([]);
-    const { idToken } = useAuth();
-
-
-
-
-
-    useEffect(() => {
-        const url = `http://localhost:8080/api/public/subjects/list`;
-        fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-            setDataSource(data);
-        });
-    }, []);
-
-
+  useEffect(() => {
+    const url = `http://localhost:8080/api/public/subjects/list`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setDataSource(data);
+        console.log(data);
+      });
+  }, []);
 
   const [isAdding, setIsAdding] = useState(false);
 
@@ -38,11 +31,11 @@ const Categorias = () => {
       ...dataSource,
       {
         ...newFeature,
-        key: `${dataSource.length + 1}`,
-        id: `${dataSource.length + 1}`
+        key: newFeature.id
       }
     ];
     setDataSource(newData);
+    console.log(newData);
     setIsAdding(false);
   };
 
@@ -54,9 +47,14 @@ const Categorias = () => {
     // Aquí puedes agregar la lógica para editar una característica
   };
 
-  const handleDelete = (key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
-    setDataSource(newData);
+  const handleDelete = async (id, title) => {
+    try {
+      await deleteCategories(id, idToken);
+      const newData = dataSource.filter((item) => item.id !== id);
+      setDataSource(newData);
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
   };
 
   return (

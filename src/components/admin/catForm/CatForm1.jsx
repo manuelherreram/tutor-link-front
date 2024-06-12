@@ -8,6 +8,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import "./CatForm.css";
 import { registerCategories } from '../../../api/api';
 
+
 const CatForm = ({ onSave, onCancel }) => {
   const { idToken } = useAuth();
   const [imageList, setImageList] = useState([]);
@@ -15,8 +16,7 @@ const CatForm = ({ onSave, onCancel }) => {
   const { handleChange, handleSubmit, errors, values, setFieldValue } = useFormik({
     initialValues: {
       title: '',
-    //   url: '',
-    //   images: []
+      images: []
     },
     onSubmit: async (data, { setSubmitting }) => {
       try {
@@ -25,7 +25,7 @@ const CatForm = ({ onSave, onCancel }) => {
             imageList.map(async (file) => {
               const storageRef = ref(storage, `images/${file.name}`);
               const snapshot = await uploadBytes(storageRef, file);
-              const url = snapshot.metadata.fullPath; // Assuming this returns the URL
+              const url = await getDownloadURL(snapshot.ref);
               return url;
             })
           );
@@ -34,7 +34,7 @@ const CatForm = ({ onSave, onCancel }) => {
           console.log('No se seleccionaron imágenes.');
         }
         const response = await registerCategories(data, idToken);
-        onSave({ title: data.name, url: response.url });
+        onSave(response); // Asegúrate de pasar la respuesta directamente
       } catch (error) {
         console.error('Error al enviar los datos:', error);
       } finally {
@@ -53,12 +53,12 @@ const CatForm = ({ onSave, onCancel }) => {
       <h3>NUEVA CATEGORÍA</h3>
       <Form.Item
         label="Ingrese el nombre de la categoria"
-        validateStatus={errors.name ? 'error' : ''}
-        help={errors.name}
+        validateStatus={errors.title ? 'error' : ''}
+        help={errors.title}
       >
         <Input
-          name="name"
-          value={values.name}
+          name="title"
+          value={values.title}
           onChange={handleChange}
         />
       </Form.Item>
@@ -83,5 +83,7 @@ const CatForm = ({ onSave, onCancel }) => {
     </Form>
   );
 };
+
+
 
 export default CatForm;

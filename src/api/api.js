@@ -114,7 +114,8 @@ export const registerCategories = async (data, token) => {
 // Eliminar categorías
 export const deleteCategories = async (id, token) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/admin/subjects/${id}`, {
+    const response = await axios.delete(`${BASE_URL}/admin/subjects/eliminar/${id}`, 
+    {
       headers: {
         Authorization: `Bearer ${token}`,
       },

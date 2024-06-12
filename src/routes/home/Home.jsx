@@ -28,7 +28,7 @@ console.log(randomTeachers);
       </div>
       <div className="container-cards">
 
-        {randomTeachers.map(teacher => <Card key = {teacher.id} name={teacher.name} category={teacher.subject.title} image={teacher.images[0].url} description={teacher.description} id={teacher.id}/>)}
+        {randomTeachers.map(teacher => <Card key = {teacher.id} name={teacher.name} category={teacher.subjet != null ? teacher.subject.title : "Sin materia"} image={teacher.images[0].url} description={teacher.description} id={teacher.id}/>)}
 
       </div>
     </div>
