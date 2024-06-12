@@ -23,17 +23,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Poppins';
+
 }
 .container-date{
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 2px;
+
 }
 .btn-submit{
     height: 45px;
     border-radius: 25px;
     padding: 0px 30px;
+}
+.checkbox-date{
+    color: rgb(55, 55, 55);
+    border: black 2px;
+    font-family: 'Poppins';
+}
+.divider{
+    height: 45px;
 }
 @media screen and (max-width: 744px) {
     .container-search {

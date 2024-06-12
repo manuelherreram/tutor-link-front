@@ -6,6 +6,7 @@ import {
     notification,
     Checkbox,
     Button,
+    Divider,
 } from 'antd'
 import moment from 'moment'
 import './Search.css'
@@ -25,12 +26,12 @@ const Search = ({ onSearchResults }) => {
     const [isDateFlexible, setIsDateFlexible] = useState(false)
 
     const handleSearch = async value => {
-        setSearchValue(value);
+        setSearchValue(value)
         if (value) {
             try {
-                const response = await searchTeachersByKeyword(value);
-                const groupedSuggestions = groupSuggestionsBySubject(response);
-    
+                const response = await searchTeachersByKeyword(value)
+                const groupedSuggestions = groupSuggestionsBySubject(response)
+
                 // Add a suggestion showing the number of results
                 const summaryOption = {
                     value: value,
@@ -43,21 +44,23 @@ const Search = ({ onSearchResults }) => {
                             }}
                         >
                             <span>
-                                <SearchOutlined style={{ marginRight: '5px' }} />
+                                <SearchOutlined
+                                    style={{ marginRight: '5px' }}
+                                />
                                 {`"${value}" se encuentra en ${response.length} resultado(s)`}
                             </span>
                         </div>
                     ),
-                };
-    
-                setOptions([summaryOption, ...groupedSuggestions]);
+                }
+
+                setOptions([summaryOption, ...groupedSuggestions])
             } catch (error) {
-                console.error('Error retrieving teachers by keyword:', error);
+                console.error('Error retrieving teachers by keyword:', error)
             }
         } else {
-            setOptions([]);
+            setOptions([])
         }
-    };
+    }
 
     const handleSubmit = async () => {
         try {
@@ -65,8 +68,7 @@ const Search = ({ onSearchResults }) => {
             if (!keyword) {
                 notification.warning({
                     message: 'Palabra clave requerida',
-                    description:
-                        'Por favor, ingresa una palabra para buscar.',
+                    description: 'Por favor, ingresa una palabra para buscar.',
                 })
                 return
             }
@@ -166,37 +168,43 @@ const Search = ({ onSearchResults }) => {
                 style={{ width: '60%' }}
                 options={options}
                 onSearch={handleSearch}
-                onSelect={handleSelectSuggestion} 
+                onSelect={handleSelectSuggestion}
                 size="large"
             >
                 <Input
                     size="large"
-                    placeholder={"¿Qué quieres aprender el día de hoy?"}                    
+                    placeholder={'¿Qué quieres aprender el día de hoy?'}
                     onChange={e => setSearchValue(e.target.value)}
                     className="custom-search-input"
                     allowClear
                     addonBefore={<SearchOutlined style={{ color: 'black' }} />}
-
                 />
             </AutoComplete>
+            <Divider
+                type="vertical"
+                className="divider"
+                style={{ borderWidth: '4px', marginLeft: '13px' }}
+            />
+
             {!isDateFlexible && (
-                <div className='container-date'>
-                <RangePicker
-                    style={{ marginLeft: 10 }}
-                    onChange={handleDateChange}
-                    format="YYYY-MM-DD"
-                    className="custom-date-picker"
-                />
+                <div className="container-date">
+                    <RangePicker
+                        style={{ marginLeft: 10 }}
+                        onChange={handleDateChange}
+                        format="YYYY-MM-DD"
+                        className="custom-date-picker"
+                    />
                 </div>
             )}
             <Checkbox
                 style={{ marginLeft: 10 }}
                 onChange={handleCheckboxChange}
+                className="checkbox-date"
             >
-                Aún no tengo decidido mis fechas
+                Aún no decidido mis fechas
             </Checkbox>
             <Button
-            className='btn-submit'
+                className="btn-submit"
                 type="primary"
                 style={{ marginLeft: 10 }}
                 onClick={handleSubmit}
