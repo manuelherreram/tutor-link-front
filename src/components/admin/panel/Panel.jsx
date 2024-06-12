@@ -53,7 +53,7 @@ const Panel = ({ showPanel,onAddNewTeacher }) => {
                 return 'pink'
             case 'geografia':
                 return 'green'
-            case 'matematica':
+            case 'matematicas':
                 return 'yellow'
             case 'ingles':
                 return 'purple'

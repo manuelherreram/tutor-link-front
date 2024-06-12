@@ -18,45 +18,29 @@ import TeacherAvailability from '../../components/teacherAvailability/TeacherAva
 import RatingList from '../../routes/ratings/RatingList';
 import AddRating from '../../routes/ratings/AddRating';
 import UpdateRating from '../../routes/ratings/UpdateRating';
+
 import {
   WhatsappShare,
   FacebookShare,
   LinkedinShare,
   TwitterShare,
-} from "react-share-kit";
+} from 'react-share-kit';
 
+import ReservationForm from '../../components/ReservationForm';
 
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {toggleFavorite, favorites, fetchFavorites } = useFavorites();
+  const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
   const [teacherSelected, setTeacherSelected] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [shareModalIsOpen, setShareModalIsOpen] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
   const { userId } = useAuth();
+  const [selectedRange, setSelectedRange] = useState(null);
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const openShareModal = () => {
-    setShareModalIsOpen(true);
-  };
-
-  const closeShareModal = () => {
-    setShareModalIsOpen(false);
-  };
-
-  const togglePolicies = () => {
-    setShowPolicies(!showPolicies);
-  };
-
+  //Manejo Imágenes
   useEffect(() => {
     const getById = async () => {
       let res = await getDataById(id);
@@ -76,10 +60,19 @@ const Detail = () => {
       setGalleryImages(formattedImages);
     }
   }, [teacherSelected]);
+  //Manejo Galería Imágenes
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
 
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+  //Manejo Favoritos
   useEffect(() => {
     fetchFavorites(userId);
   }, []);
+
   const handleToggleFavorite = async () => {
     if (!userId) {
       message.info('Debes iniciar sesión para marcar favoritos.');
@@ -91,14 +84,33 @@ const Detail = () => {
     }
     await toggleFavorite(userId, id);
   };
-
   useEffect(() => {
     console.log('mis favoritos:', favorites);
   }, [favorites]);
   const isFavorite = favorites.map(({ id }) => id).includes(id);
 
+  //Manejo Compartir Redes
+  const openShareModal = () => {
+    setShareModalIsOpen(true);
+  };
+
+  const closeShareModal = () => {
+    setShareModalIsOpen(false);
+  };
+
+  //Manejo Policies
+  const togglePolicies = () => {
+    setShowPolicies(!showPolicies);
+  };
+
+  //Redes
   const shareUrl = window.location.href;
-  const shareTitle = teacherSelected ? teacherSelected.name : "Check this out!";
+  const shareTitle = teacherSelected ? teacherSelected.name : 'Check this out!';
+
+  //Manejo Disponibilidad
+  const handleSelectRange = (range) => {
+    setSelectedRange(range);
+  };
 
   return (
     <div className="container-detail">
@@ -133,6 +145,7 @@ const Detail = () => {
         <p>Cargando datos del tutor...</p>
       )}
       {teacherSelected && teacherSelected.images && (
+        //imágenes
         <div>
           <section className="container-image">
             <div className="cont-first-img">
@@ -177,9 +190,26 @@ const Detail = () => {
                 ))}
               </div>
             </div>
-            {teacherSelected && <TeacherAvailability teacherId={id} />}
+            {/* Disponibilidad  */}
+            <div>
+              {teacherSelected && (
+                <TeacherAvailability
+                  teacherId={id}
+                  userId={userId}
+                  onSelectRange={setSelectedRange}
+                />
+              )}
+              {/* Reserva  */}
+              {selectedRange && (
+                <ReservationForm
+                  userId={userId}
+                  teacherId={parseInt(id)}
+                  selectedRange={selectedRange}
+                />
+              )}
+            </div>
           </div>
-
+          {/* Policies  */}
           {showPolicies && (
             <div className="policies-wrapper">
               <Policies />
@@ -187,14 +217,14 @@ const Detail = () => {
           )}
         </div>
       )}
-
+      {/* Rating  */}
       {teacherSelected && (
         <div className="container-ratings">
           <RatingList teacherId={id} />
           <AddRating teacherId={id} onRatingAdded={() => {}} />
         </div>
       )}
-
+      {/* Galería  */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -202,10 +232,13 @@ const Detail = () => {
       >
         <h2>Galería de Imágenes</h2>
         {galleryImages.length > 0 && <ImageGallery items={galleryImages} />}
-        <button className="close-button" onClick={closeModal}>Cerrar</button>
+        <Button className="close-button" onClick={closeModal}>
+          Cerrar
+        </Button>
       </Modal>
-
-      <Modal className="share-modal"
+      {/* Compartir  */}
+      <Modal
+        className="share-modal"
         isOpen={shareModalIsOpen}
         onRequestClose={closeShareModal}
         contentLabel="Compartir Producto"
@@ -214,15 +247,25 @@ const Detail = () => {
           <h2>Compartir Producto</h2>
           {teacherSelected && (
             <>
-              <img src={teacherSelected.images[0].url} alt="Imagen principal" className="share-image" />
+              <img
+                src={teacherSelected.images[0].url}
+                alt="Imagen principal"
+                className="share-image"
+              />
               <p>{teacherSelected.description}</p>
               <div className="share-buttons">
-                <WhatsappShare url={shareUrl} title={shareTitle} separator=":: " />
+                <WhatsappShare
+                  url={shareUrl}
+                  title={shareTitle}
+                  separator=":: "
+                />
                 <FacebookShare url={shareUrl} quote={shareTitle} />
                 <LinkedinShare url={shareUrl} title={shareTitle} />
                 <TwitterShare url={shareUrl} title={shareTitle} />
               </div>
-              <button className="close-button" onClick={closeShareModal}>Cerrar</button>
+              <button className="close-button" onClick={closeShareModal}>
+                Cerrar
+              </button>
             </>
           )}
         </div>

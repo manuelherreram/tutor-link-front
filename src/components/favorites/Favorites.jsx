@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { Table, Button, message } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined,ArrowLeftOutlined } from '@ant-design/icons';
 import { useFavorites } from '../../contexts/FavoriteContexts';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './Favorites.css'
 
 
 const Favorites = () => {
+    const navigate = useNavigate()
     const { favorites, toggleFavorite, fetchFavorites } = useFavorites();
    console.log(favorites)
     const { userId } = useAuth();
@@ -57,6 +59,7 @@ const Favorites = () => {
 
     return (
         <div className="container-favorites">
+             <ArrowLeftOutlined onClick={() => navigate('/profile')} />
             <h3 className="favorites-title">Mis Favoritos</h3>
             <Table columns={columns} dataSource={favorites} rowKey="id" />
         </div>
