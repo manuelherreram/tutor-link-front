@@ -16,20 +16,20 @@ const AddRating = ({ teacherId, onRatingAdded }) => {
       message.warning('Por favor, completa todos los campos.');
       return;
     }
-
-    const rating = {
-      rating: value, // Cambié value a rating
+    
+    const ratingData = {
+      rating: value,
       comment,
       userId,
       teacherId
     };
 
     try {
-      await addRating(rating);
+      await addRating(ratingData);
       message.success('Calificación añadida con éxito!');
       setValue(0);
       setComment('');
-      onRatingAdded();
+      onRatingAdded(); // Refresca la lista de calificaciones
     } catch (error) {
       message.error('Error al añadir la calificación.');
     }
