@@ -190,21 +190,14 @@ const Detail = () => {
                 ))}
               </div>
             </div>
-            {/* Disponibilidad  */}
+            {/* Disponibilidad  y reserva*/}
             <div>
               {teacherSelected && (
                 <TeacherAvailability
                   teacherId={id}
+                  teacherSelected={teacherSelected}
                   userId={userId}
                   onSelectRange={setSelectedRange}
-                />
-              )}
-              {/* Reserva  */}
-              {selectedRange && (
-                <ReservationForm
-                  userId={userId}
-                  teacherId={parseInt(id)}
-                  selectedRange={selectedRange}
                 />
               )}
             </div>
