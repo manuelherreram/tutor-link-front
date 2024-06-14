@@ -1,37 +1,37 @@
 .policies-container {
-    width: 100%;
-    margin-top: 20px;
-  }
-  
-  .policies-title {
-    text-decoration: underline;
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .policies-columns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-  }
-  
-  .policy {
-    flex: 1 1 calc(33.333% - 20px); /* Tres columnas con espacio entre ellas */
-    min-width: 250px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .policy-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .policy-description {
-    font-size: 16px;
-  }
+  width: 100%;
+  margin-top: 60px;
+}
+
+.policies-title {
+  text-decoration: underline;
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.policies-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.policy {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Espacio inferior entre políticas */
+}
+
+.policy-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.policy-description {
+  font-size: 12px;
+  text-align: justify;
+}

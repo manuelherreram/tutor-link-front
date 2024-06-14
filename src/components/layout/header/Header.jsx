@@ -1,21 +1,22 @@
 import './Header.css';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase/firebaseConfig';
 import { Avatar, Menu, Dropdown, Space } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
-import { orange } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const { currentUser, userLoggedIn, isAdmin} = useAuth();
+  const { currentUser, userLoggedIn, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       console.log('User signed out');
+      // Navegar a la página de inicio después del cierre de sesión
+      navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -25,9 +26,7 @@ const Header = () => {
     if (!email) return '';
     return email.charAt(0).toUpperCase();
   };
-  const handleAvatarClick = () => {
-    navigate('/profile');
-  };
+
   const handleMenuClick = ({ key }) => {
     if (key === 'logout') {
       handleLogout();
@@ -35,21 +34,25 @@ const Header = () => {
       navigate(key);
     }
   };
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="/profile" icon={<UserOutlined />}>
-        Ver Perfil
-      </Menu.Item>
-      {isAdmin && (
-        <Menu.Item key="/admin" icon={<UserOutlined />}>
-          Admin
-        </Menu.Item>
-      )}
-      <Menu.Item key="logout" icon={<UserOutlined />}>
-        Cerrar sesión
-      </Menu.Item>
-    </Menu>
-  );
+
+  const menuItems = [
+    {
+      key: '/profile',
+      icon: <UserOutlined />,
+      label: 'Ver Perfil',
+    },
+    isAdmin && {
+      key: '/admin',
+      icon: <UserOutlined />,
+      label: 'Admin',
+    },
+    {
+      key: 'logout',
+      icon: <UserOutlined />,
+      label: 'Cerrar sesión',
+    },
+  ].filter(Boolean);
+
   return (
     <header className="container-header">
       <div className="container-logo">
@@ -72,17 +75,25 @@ const Header = () => {
           </Link>
         )}
         {userLoggedIn ? (
-          <Dropdown overlay={menu} trigger={['click']}>
-          <Space className="user-info" onClick={(e) => e.preventDefault()}>
-              <Avatar
-                  sx={{ bgcolor: orange[500], cursor: 'pointer' }}
-                  className="avatar"
-              >
-                  {getInitials(currentUser.email)}
-              </Avatar>
+          <Dropdown
+            overlay={
+              <Menu onClick={handleMenuClick}>
+                {menuItems.map((item) => (
+                  <Menu.Item key={item.key} icon={item.icon}>
+                    {item.label}
+                  </Menu.Item>
+                ))}
+              </Menu>
+            }
+            trigger={['click']}
+          >
+            <Space className="user-info" onClick={(e) => e.preventDefault()}>
               <DownOutlined />
-          </Space>
-      </Dropdown>
+              <Avatar className="avatar">
+                {getInitials(currentUser.email)}
+              </Avatar>
+            </Space>
+          </Dropdown>
         ) : (
           <Link to="/login">
             <button className="btn btn-login">Conectar</button>
