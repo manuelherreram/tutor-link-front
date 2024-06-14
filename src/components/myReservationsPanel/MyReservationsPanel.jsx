@@ -9,19 +9,22 @@ const MyReservationsPanel = ({ userId }) => {
   useEffect(() => {
     const fetchReservations = async () => {
       let res = await getReservationsUser(userId);
+      console.log(res)
       const transformedData = res.map((reservation) => {
         const date = new Date(reservation.startTime);
-        const fecha = date.toISOString().split('T')[0]; 
+        const fechaInicio = date.toISOString().split('T')[0]; 
         const horarioInicio = date.toTimeString().split(' ')[0]; 
-
         const endDate = new Date(reservation.endTime);
+        const fechaTermino =endDate.toISOString().split('T')[0]; 
         const horarioTermino = endDate.toTimeString().split(' ')[0]; 
 
         return {
           key: reservation.id,
-          userId: reservation.userId,
+          user: reservation.user.firstName+' '+reservation.user.lastName,
           teacher: reservation.teacher.name,
-          fecha,
+          asignatura:reservation.teacher.subjectTitle,
+          fechaInicio,
+          fechaTermino,
           horarioInicio,
           horarioTermino,
         };
@@ -32,15 +35,34 @@ const MyReservationsPanel = ({ userId }) => {
   }, [userId]);
 
   const columns = [
+    {
+      title: 'N° Reserva ',
+      dataIndex: 'key',
+      key: 'key',
+    },
+    {
+      title: 'Usuario ',
+      dataIndex: 'user',
+      key: 'user',
+    },
   {
     title: 'Tutor ',
     dataIndex: 'teacher',
     key: 'teacher',
+  },{
+    title: 'Asignatura ',
+    dataIndex: 'asignatura',
+    key: 'asignatura',
   },
   {
-    title: 'Fecha',
-    dataIndex: 'fecha',
-    key: 'fecha',
+    title: 'Fecha Inicio',
+    dataIndex: 'fechaInicio',
+    key: 'fechaInicio',
+  },
+  {
+    title: 'Fecha Término',
+    dataIndex: 'fechaTermino',
+    key: 'fechaTermino',
   },
   {
     title: 'Horario Inicio',
@@ -53,7 +75,7 @@ const MyReservationsPanel = ({ userId }) => {
     key: 'horarioTermino',
   },
 ];
-  return <Table  className='Panel-Reservations'dataSource={reservations} columns={columns} />;
+  return <Table  className='panel-reservations'dataSource={reservations} columns={columns} />;
 };
 
 export default MyReservationsPanel;

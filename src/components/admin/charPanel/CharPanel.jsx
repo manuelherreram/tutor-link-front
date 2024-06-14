@@ -1,5 +1,5 @@
 import { Table, Button, Space } from 'antd';
-import { EditOutlined, DeleteOutlined,FileSearchOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import './CharPanel.css';
 
 const CharPanel = ({ dataSource, onEdit, onDelete, onAdd }) => {

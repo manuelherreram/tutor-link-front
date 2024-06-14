@@ -1,7 +1,4 @@
-.Panel-Reservations{
-    color:#fa8c16;
-}
-.ant-table-wrapper{
-    margin: 10px 0px
-
+.panel-reservations{
+    height: 100vh;
+    margin-top: 30px;
 }

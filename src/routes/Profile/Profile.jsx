@@ -5,7 +5,6 @@ import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserById } from '../../api/api';
 import './Profile.css';
-import MyReservationsPanel from '../../components/myReservationsPanel/MyReservationsPanel';
 
 const { Title, Text } = Typography;
 
@@ -112,8 +111,9 @@ const Profile = () => {
           </Link>
         </Card>
         <div>
-          <Card className="reservation">Mis reservas <MyReservationsPanel userId={userId} /></Card>
-          
+          <Link to={'/reservations'}>
+            <Card className="reservation">Mis reservas </Card>
+          </Link>
         </div>
       </div>
     </div>

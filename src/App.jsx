@@ -17,6 +17,7 @@ import Users from './components/admin/users/Users.jsx';
 import Profile from './routes/Profile/Profile.jsx';
 import { FavoriteProvider } from './contexts/FavoriteContexts.jsx';
 import Favorites from './components/favorites/Favorites.jsx';
+import Reservations from './routes/reservations/Reservations.jsx';
 function App() {
   return (
     <>
@@ -33,7 +34,7 @@ function App() {
                 <Route path="/filter/:category" element={<CategoryFilters />} />
                 <Route path="/detalle/:id" element={<Detail />} />
             
-                {/* Rutas protegidas */}
+                {/* Rutas protegidas sólo para logueados */}
                 <Route
                   path="/Profile"
                   element={
@@ -47,6 +48,14 @@ function App() {
                   element={
                     <PrivateRoute>
                       <Favorites/>
+                    </PrivateRoute>
+                  }
+                />
+                  <Route
+                  path="/reservations"
+                  element={
+                    <PrivateRoute>
+                      <Reservations/>
                     </PrivateRoute>
                   }
                 />
