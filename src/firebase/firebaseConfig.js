@@ -18,7 +18,7 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
-console.log('Configuración de Firebase:', firebaseConfig);
+// console.log('Configuración de Firebase:', firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
 console.log('Aplicación Firebase inicializada:', app);
@@ -26,8 +26,8 @@ console.log('Aplicación Firebase inicializada:', app);
 // Obtiene una referencia al almacenamiento de Firebase
 const storage = getStorage(app);
 const storageRef = ref(storage);
-console.log('Referencia al almacenamiento Firebase:', storage);
-console.log(storageRef, 'storageRef1')
+// console.log('Referencia al almacenamiento Firebase:', storage);
+// console.log(storageRef, 'storageRef1')
 // Exporta la referencia al almacenamiento de Firebase para que otros archivos puedan usarlo
 const auth = getAuth(app); // Obtén el objeto auth
 

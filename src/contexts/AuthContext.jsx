@@ -22,7 +22,6 @@ export function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser({ ...user });
-        console.log(user)
         setUserLoggedIn(true);
 
         try {
@@ -33,7 +32,7 @@ export function AuthProvider({ children }) {
            // Obtener el ID de la API a partir del UID de Firebase
            const apiId = await getUserId(user.uid);
            setUserId(apiId.id);
-           console.log(userId)
+  
         } catch (error) {
           console.error('Error fetching ID token or user data:', error);
         }

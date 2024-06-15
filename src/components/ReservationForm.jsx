@@ -5,16 +5,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const ReservationForm = ({ userId, teacherId, selectedRange }) => {
-  
   const { userLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const [start, end] = selectedRange.map(date => dayjs(date));
-  console.log('Selected range for reservation:', start, end);
-
-
-
   const handleReserve = async () => {
+    const [start, end] = selectedRange.map((date) => dayjs(date));
+
     if (!selectedRange || selectedRange.length !== 2) {
       message.error('Por favor, seleccione un rango de fechas válido.');
       return;
@@ -25,10 +21,12 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
       navigate('/login');
       return;
     }
+
     if (start.isSame(end)) {
       message.error('El horario de inicio no puede ser igual al de término.');
       return;
     }
+
     try {
       await addReservation(userId, teacherId, start, end);
       message.success('Reserva realizada con éxito.');
@@ -40,9 +38,9 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
 
   return (
     <div>
-      <Button 
-        type="primary" 
-        onClick={handleReserve} 
+      <Button
+        type="primary"
+        onClick={handleReserve}
         disabled={!selectedRange || selectedRange.length !== 2}
       >
         Confirmar Reserva
@@ -52,3 +50,4 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
 };
 
 export default ReservationForm;
+

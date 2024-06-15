@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { getAvailabilitiesById } from '../../api/apiReservations';
 import './TeacherAvailability.css';
-import { useAuth } from '../../contexts/AuthContext'; 
-import ReservationForm from '../../components/ReservationForm'; 
+import { useAuth } from '../../contexts/AuthContext';
+import ReservationForm from '../../components/ReservationForm';
 
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
@@ -23,7 +23,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
-  const { userLoggedIn } = useAuth(); 
+  const { userLoggedIn } = useAuth();
   const { name, description } = teacherSelected;
 
   useEffect(() => {
@@ -59,6 +59,17 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
     return {
       disabledHours: () =>
         range(0, 24).filter((hour) => !availableHours.includes(hour)),
+      disabledMinutes: (selectedHour) => {
+        if (!availableHours.includes(selectedHour)) {
+          return range(0, 60);
+        }
+        const currentHour = dayjs().hour();
+        if (selectedHour === currentHour) {
+          return range(0, dayjs().minute());
+        }
+        return [];
+      },
+      disabledSeconds: () => [],
     };
   };
 
@@ -77,8 +88,13 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
     if (dates && dates.length === 2) {
       const [start, end] = dates.map((date) => dayjs(date));
 
-      if (!start.isValid() || !end.isValid() || start.isAfter(end) || start.isSame(end)) {
+      if (!start.isValid() || !end.isValid()) {
         message.error('El rango de fechas seleccionado no es válido.');
+        return;
+      }
+
+      if (!start.isSame(end, 'day')) {
+        message.error('Las horas seleccionadas deben estar en el mismo día.');
         return;
       }
 
@@ -95,7 +111,8 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
         <p>Cargando disponibilidad...</p>
       ) : availability.length === 0 ? (
         <p>
-          Actualmente no hay disponibilidad para este tutor. Por favor, consulte más tarde.
+          Actualmente no hay disponibilidad para este tutor. Por favor, consulte
+          más tarde.
         </p>
       ) : (
         <Space direction="vertical" size={12}>
@@ -104,7 +121,10 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
             disabledTime={rangePickerDisabledDateTime}
             showTime={{
               format: 'HH:mm',
-              defaultValue: [dayjs('08:00', 'HH:mm'), dayjs('20:00', 'HH:mm')],
+              defaultValue: [
+                dayjs('08:00', 'HH:mm'),
+                dayjs('20:00', 'HH:mm').subtract(1, 'minute'),
+              ],
             }}
             format="YYYY-MM-DD HH:mm"
             onChange={(dates) => handleRangeChange(dates)}
@@ -114,18 +134,20 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
 
       <Modal
         title="Confirmar Reserva"
-        open={isModalVisible}
+        visible={isModalVisible}
         onOk={() => setIsModalVisible(false)}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
-        <p>
-          Está a punto de reservar una hora con {name} {description} desde {selectedDates[0]?.format('YYYY-MM-DD HH:mm')} hasta {selectedDates[1]?.format('YYYY-MM-DD HH:mm')}
-        </p>
+        <div>
+          <div>Está a punto de reservar una hora con {name}</div>
+          <div>{description}</div>
+          <div>desde {selectedDates[0]?.format('YYYY-MM-DD HH:mm')}</div>
+          <div>hasta {selectedDates[1]?.format('YYYY-MM-DD HH:mm')}</div>
+        </div>
         {userLoggedIn ? (
           <ReservationForm
             userId={userId}
-            userLoggedIn={userLoggedIn}
             teacherId={teacherId}
             selectedRange={selectedDates}
           />

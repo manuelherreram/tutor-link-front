@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { getReservationsUser } from '../../api/apiReservations';
 import { Table } from 'antd';
 import  './MyReservationsPanel.css'
+import { useAuth } from '../../contexts/AuthContext';
 
 const MyReservationsPanel = ({ userId }) => {
   const [reservations, setReservations] = useState();
+  const {currentUser}=useAuth()
 
   useEffect(() => {
     const fetchReservations = async () => {
       let res = await getReservationsUser(userId);
-      console.log(res)
       const transformedData = res.map((reservation) => {
         const date = new Date(reservation.startTime);
         const fechaInicio = date.toISOString().split('T')[0]; 
@@ -23,6 +24,7 @@ const MyReservationsPanel = ({ userId }) => {
           user: reservation.user.firstName+' '+reservation.user.lastName,
           teacher: reservation.teacher.name,
           asignatura:reservation.teacher.subjectTitle,
+          email: currentUser.email,
           fechaInicio,
           fechaTermino,
           horarioInicio,
@@ -44,6 +46,11 @@ const MyReservationsPanel = ({ userId }) => {
       title: 'Usuario ',
       dataIndex: 'user',
       key: 'user',
+    },
+    {
+      title: 'Correo electrónico ',
+      dataIndex: 'email',
+      key: 'email',
     },
   {
     title: 'Tutor ',
@@ -75,7 +82,7 @@ const MyReservationsPanel = ({ userId }) => {
     key: 'horarioTermino',
   },
 ];
-  return <Table  className='panel-reservations'dataSource={reservations} columns={columns} />;
+  return <Table   className='panel-reservations'dataSource={reservations} columns={columns}   pagination={{ pageSize: 5}} />;
 };
 
 export default MyReservationsPanel;
