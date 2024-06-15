@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { DatePicker, Space, message, Modal } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -6,6 +6,7 @@ import { getAvailabilitiesById } from '../../api/apiReservations';
 import './TeacherAvailability.css';
 import { useAuth } from '../../contexts/AuthContext'; 
 import ReservationForm from '../../components/ReservationForm'; 
+
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
 
@@ -17,13 +18,14 @@ const range = (start, end) => {
   return result;
 };
 
-const TeacherAvailability = ({ userId, teacherId,teacherSelected }) => {
+const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
   const [availability, setAvailability] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedDates, setSelectedDates] = useState([]);
   const { userLoggedIn } = useAuth(); 
- const {name, description,images}=teacherSelected
+  const { name, description } = teacherSelected;
+
   useEffect(() => {
     const fetchAvailability = async () => {
       try {
@@ -54,12 +56,10 @@ const TeacherAvailability = ({ userId, teacherId,teacherSelected }) => {
         return range(startHour, endHour + 1);
       });
 
-    if (type === 'start' || type === 'end') {
-      return {
-        disabledHours: () =>
-          range(0, 24).filter((hour) => !availableHours.includes(hour)),
-      };
-    }
+    return {
+      disabledHours: () =>
+        range(0, 24).filter((hour) => !availableHours.includes(hour)),
+    };
   };
 
   const disabledDate = (current) => {
@@ -67,49 +67,23 @@ const TeacherAvailability = ({ userId, teacherId,teacherSelected }) => {
     return (
       current &&
       (current < today ||
-        !availability.some(
-          (availableDate) =>
-            availableDate.date.isSame(current, 'day')
+        !availability.some((availableDate) =>
+          availableDate.date.isSame(current, 'day')
         ))
     );
   };
 
   const handleRangeChange = (dates) => {
-    console.log('handleRangeChange called with dates:', dates);
-
     if (dates && dates.length === 2) {
-      const [start, end] = dates.map(date => dayjs(date));
-      console.log('Parsed dates:', { start, end });
+      const [start, end] = dates.map((date) => dayjs(date));
 
-      // Validación del rango de fechas seleccionado
-      if (!start.isValid() || !end.isValid()) {
-        console.error('Invalid dates:', { start, end });
+      if (!start.isValid() || !end.isValid() || start.isAfter(end) || start.isSame(end)) {
         message.error('El rango de fechas seleccionado no es válido.');
         return;
       }
 
-      if (start.isAfter(end)) {
-        console.error('Start date is after end date:', { start, end });
-        message.error('El rango de fechas seleccionado no es válido.');
-        return;
-      }
-
-      // Validación adicional para las horas
-      const startTime = start.hour();
-      const endTime = end.hour();
-      console.log('Start time:', startTime, 'End time:', endTime);
-
-      if (startTime > endTime) {
-        console.error('Start time is after end time:', { startTime, endTime });
-        message.error('La hora de inicio debe ser anterior a la hora de fin.');
-        return;
-      }
-
-      console.log('Valid range selected:', { start, end });
       setSelectedDates(dates);
       setIsModalVisible(true);
-    } else {
-      console.warn('Dates array is invalid or empty:', dates);
     }
   };
 
@@ -121,8 +95,7 @@ const TeacherAvailability = ({ userId, teacherId,teacherSelected }) => {
         <p>Cargando disponibilidad...</p>
       ) : availability.length === 0 ? (
         <p>
-          Actualmente no hay disponibilidad para este tutor. Por favor, consulte
-          más tarde.
+          Actualmente no hay disponibilidad para este tutor. Por favor, consulte más tarde.
         </p>
       ) : (
         <Space direction="vertical" size={12}>
@@ -134,10 +107,7 @@ const TeacherAvailability = ({ userId, teacherId,teacherSelected }) => {
               defaultValue: [dayjs('08:00', 'HH:mm'), dayjs('20:00', 'HH:mm')],
             }}
             format="YYYY-MM-DD HH:mm"
-            onChange={(dates) => {
-              console.log('RangePicker onChange fired with dates:', dates);
-              handleRangeChange(dates);
-            }}
+            onChange={(dates) => handleRangeChange(dates)}
           />
         </Space>
       )}
@@ -149,13 +119,15 @@ const TeacherAvailability = ({ userId, teacherId,teacherSelected }) => {
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
-        <p>Está a punto de reservar una hora con {name} {description}desde {selectedDates[0]?.format('YYYY-MM-DD HH:mm')} hasta {selectedDates[1]?.format('YYYY-MM-DD HH:mm')}</p>
+        <p>
+          Está a punto de reservar una hora con {name} {description} desde {selectedDates[0]?.format('YYYY-MM-DD HH:mm')} hasta {selectedDates[1]?.format('YYYY-MM-DD HH:mm')}
+        </p>
         {userLoggedIn ? (
-          <ReservationForm 
-           userId={userId}
-           userLoggedIn={userLoggedIn}
-            teacherId={teacherId} 
-            selectedRange={selectedDates} 
+          <ReservationForm
+            userId={userId}
+            userLoggedIn={userLoggedIn}
+            teacherId={teacherId}
+            selectedRange={selectedDates}
           />
         ) : (
           <p>Debes iniciar sesión para confirmar la reserva.</p>

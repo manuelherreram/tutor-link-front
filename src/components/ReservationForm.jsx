@@ -9,6 +9,11 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
   const { userLoggedIn } = useAuth();
   const navigate = useNavigate();
 
+  const [start, end] = selectedRange.map(date => dayjs(date));
+  console.log('Selected range for reservation:', start, end);
+
+
+
   const handleReserve = async () => {
     if (!selectedRange || selectedRange.length !== 2) {
       message.error('Por favor, seleccione un rango de fechas válido.');
@@ -24,10 +29,6 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
       message.error('El horario de inicio no puede ser igual al de término.');
       return;
     }
-
-    const [start, end] = selectedRange.map(date => dayjs(date));
-    console.log('Selected range for reservation:', start, end);
-
     try {
       await addReservation(userId, teacherId, start, end);
       message.success('Reserva realizada con éxito.');
