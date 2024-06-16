@@ -105,7 +105,7 @@ const Detail = () => {
   const handleSelectRange = (range) => {
     setSelectedRange(range);
   };
-
+  console.log(teacherSelected)
   return (
     <div className="container-detail">
       <div className="section-detail">
@@ -179,6 +179,7 @@ const Detail = () => {
               <div className="characteristics-list">
                 {teacherSelected.characteristics.map((character) => (
                   <div key={character.id} className="character-item">
+                    <img className="icon-characteristic" src={character.url} alt='icono'/>
                     {character.name}
                   </div>
                 ))}

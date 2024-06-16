@@ -134,7 +134,9 @@
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
+.icon-characteristic{
+  width:30px;
+}
 .more:hover,
 .toggle-policies:hover,
 .share:hover {
