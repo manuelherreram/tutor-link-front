@@ -7,11 +7,7 @@ import Modal from 'react-modal';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import Policies from './Policies';
-import {
-  HeartOutlined,
-  HeartFilled,
-  ArrowLeftOutlined,
-} from '@ant-design/icons';
+import {HeartOutlined, HeartFilled, ArrowLeftOutlined,} from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
@@ -25,8 +21,6 @@ import {
   LinkedinShare,
   TwitterShare,
 } from 'react-share-kit';
-
-import ReservationForm from '../../components/ReservationForm';
 
 const Detail = () => {
   const { id } = useParams();
