@@ -15,7 +15,6 @@ const Header = () => {
     try {
       await signOut(auth);
       console.log('User signed out');
-      // Navegar a la página de inicio después del cierre de sesión
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -75,23 +74,18 @@ const Header = () => {
           </Link>
         )}
         {userLoggedIn ? (
-          <Dropdown
-            overlay={
-              <Menu onClick={handleMenuClick}>
-                {menuItems.map((item) => (
-                  <Menu.Item key={item.key} icon={item.icon}>
-                    {item.label}
-                  </Menu.Item>
-                ))}
-              </Menu>
-            }
+          <Dropdown 
+            menu={{
+              items: menuItems,
+              onClick: handleMenuClick
+            }} 
             trigger={['click']}
           >
             <Space className="user-info" onClick={(e) => e.preventDefault()}>
-              <DownOutlined />
               <Avatar className="avatar">
                 {getInitials(currentUser.email)}
               </Avatar>
+              <DownOutlined style={{ cursor: 'pointer' }} /> {/* Estilo directamente */}
             </Space>
           </Dropdown>
         ) : (
