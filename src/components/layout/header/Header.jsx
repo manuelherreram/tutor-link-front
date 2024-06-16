@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase/firebaseConfig';
-import { Avatar, Menu, Dropdown, Space } from 'antd';
-import { UserOutlined, DownOutlined } from '@ant-design/icons';
+import { Avatar, Dropdown, Space } from 'antd';
+import { UserOutlined, DownOutlined,SettingOutlined,LogoutOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -42,12 +42,12 @@ const Header = () => {
     },
     isAdmin && {
       key: '/admin',
-      icon: <UserOutlined />,
+      icon: <SettingOutlined/>,
       label: 'Admin',
     },
     {
       key: 'logout',
-      icon: <UserOutlined />,
+      icon: <LogoutOutlined/>,
       label: 'Cerrar sesión',
     },
   ].filter(Boolean);
@@ -85,7 +85,7 @@ const Header = () => {
               <Avatar className="avatar">
                 {getInitials(currentUser.email)}
               </Avatar>
-              <DownOutlined style={{ cursor: 'pointer' }} /> {/* Estilo directamente */}
+              <DownOutlined style={{ cursor: 'pointer' }} />
             </Space>
           </Dropdown>
         ) : (
