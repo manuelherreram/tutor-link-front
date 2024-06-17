@@ -294,10 +294,10 @@ export const registerChar = async (data, idtoken) => {
 }
 
 // Actualizar característica
-export const updateChar = async (data, idtoken) => {
+export const updateChar = async (id, data, idtoken) => {
     try {
         const response = await axios.put(
-            `${BASE_URL}/admin/characteristics/actualizar`,
+            `${BASE_URL}/admin/characteristics/update/${id}`,
             data,
             {
                 headers: {
