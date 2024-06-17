@@ -50,11 +50,14 @@ export const register = async (data, token) => {
 }
 
 // Validar DNI del profesor
-export const verificarDNIServidor = async dni => {
+export const verificarDNIServidor = async (dni,accessToken ) => {
     try {
-        const response = await axios.get(`${BASE_URL}/admin/teachers`)
+       const response = await axios.get(`${BASE_URL}/admin/teachers`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
         const profesores = response.data
-
         if (!Array.isArray(profesores)) {
             throw new Error('Se esperaba un array de profesores')
         }

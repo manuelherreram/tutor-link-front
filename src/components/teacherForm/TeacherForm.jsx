@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import './TeacherForm.css';
 import { useAuth } from '../../contexts/AuthContext';
 import { ref, uploadBytes } from "firebase/storage";
+import { verificarDNIServidor } from '../../api/api';
 
 const { Option } = Select;
 
@@ -98,7 +99,23 @@ const TeacherForm = () => {
       dni: Yup.string()
         .min(8, 'El DNI debe tener por lo menos 8 caracteres')
         .max(11, 'El DNI debe tener máximo 11 caracteres')
-        .required('El campo es requerido'),
+        .required('El campo es requerido')
+        .test(
+          'DNI-único',
+          'El DNI ya está registrado',
+          async function (value) {
+            const { path, createError } = this;
+            try {
+              const isUnique = await verificarDNIServidor(value, idToken);
+              if (!isUnique) {
+                return createError({ path, message: 'El DNI ya está registrado' });
+              }
+              return true;
+            } catch (error) {
+              return createError({ path, message: 'Error al verificar el DNI' });
+            }
+          }
+        ),
       description: Yup.string(),
       subject: Yup.string().required('Seleccione un tema'),
     }),
