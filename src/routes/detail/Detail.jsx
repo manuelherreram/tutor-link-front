@@ -105,7 +105,6 @@ const Detail = () => {
   const handleSelectRange = (range) => {
     setSelectedRange(range);
   };
-  console.log(teacherSelected)
   return (
     <div className="container-detail">
       <div className="section-detail">

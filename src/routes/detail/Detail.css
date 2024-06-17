@@ -244,3 +244,11 @@
   background-color: #005777;
   transform: translateY(-2px);
 }
+.btn-cancel{
+  font-family: 'Poppins';
+  background-color: #999998;
+  color: rgb(255, 255, 255);
+  font-size: small;
+  padding: 5px;
+  border-radius: 5px;
+}
