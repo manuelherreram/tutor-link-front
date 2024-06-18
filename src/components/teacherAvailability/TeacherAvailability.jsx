@@ -134,7 +134,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
 
   return (
     <div className="calendar-container">
-      <h3>Disponibilidad del Tutor:</h3>
+      <h3 className="title-calendar">Disponibilidad del Tutor:</h3>
 
       {loading ? (
         <p>Cargando disponibilidad...</p>
@@ -143,6 +143,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
           Actualmente no hay disponibilidad para este tutor. Por favor, consulte más tarde.
         </p>
       ) : (
+        <div>
         <Space direction="vertical" size={12}>
           <RangePicker
             disabledDate={disabledDate}
@@ -158,10 +159,12 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
             onChange={(dates) => handleRangeChange(dates)}
           />
         </Space>
+        {!userLoggedIn && <p className='notification'>* Debes estar logueado para realizar reservas</p>}
+        </div>
       )}
 
       <Modal
-        title="Confirmar Reserva"
+        title={userLoggedIn ? "Confirmar Reserva" : "Iniciar Sesión para Reservar"}
         open={isModalVisible}
         onOk={() => setIsModalVisible(false)}
         onCancel={() => setIsModalVisible(false)}
@@ -183,8 +186,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
             />
           </div>
         ) : (
-          <div>
-            <strong>Debes iniciar sesión para confirmar la reserva.</strong>
+          <div className='mesagge'>
             <Button type="primary" onClick={handleLogin}>Iniciar sesión</Button>
           </div>
         )}
