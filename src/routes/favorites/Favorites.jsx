@@ -59,7 +59,7 @@ const Favorites = () => {
 
     return (
         <div className="container-favorites">
-             <ArrowLeftOutlined onClick={() => navigate('/profile')} />
+            <Button className="arrow-favorites" onClick={() => navigate('/profile')}><ArrowLeftOutlined  />Ir a mi perfil</Button>
             <h3 className="favorites-title">Mis Favoritos</h3>
             <Table columns={columns} dataSource={favorites} rowKey="id" />
         </div>

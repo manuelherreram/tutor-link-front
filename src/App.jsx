@@ -16,7 +16,7 @@ import Categories from "./routes/categories/Categories.jsx";
 import Users from "./components/admin/users/Users.jsx";
 import Profile from "./routes/Profile/Profile.jsx";
 import { FavoriteProvider } from "./contexts/FavoriteContexts.jsx";
-import Favorites from "./components/favorites/Favorites.jsx";
+import Favorites from "./routes/favorites/Favorites.jsx";
 import Reservations from "./routes/reservations/Reservations.jsx";
 function App() {
   useEffect(() => {
