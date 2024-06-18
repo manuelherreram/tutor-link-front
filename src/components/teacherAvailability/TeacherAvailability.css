@@ -1,3 +1,18 @@
 .ant-picker-outlined {
     border-color: #fa8c16;
 }
+.title-calendar{
+    margin-bottom:15px ;
+}
+.mesagge{
+    font-family: 'Poppins';
+    margin-right: 25px;
+    margin-top: 10px;
+}
+.notification{
+    font-family: 'Poppins';
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+  
+}
