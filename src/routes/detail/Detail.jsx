@@ -2,47 +2,54 @@ import { useEffect, useState } from 'react';
 import { getDataById } from '../../api/api';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFavorites } from '../../contexts/FavoriteContexts';
-import './Detail.css';
 import Modal from 'react-modal';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import Policies from './Policies';
-import {HeartOutlined, HeartFilled, ArrowLeftOutlined,} from '@ant-design/icons';
+import { HeartOutlined, HeartFilled, ArrowLeftOutlined } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
 import RatingList from '../../routes/ratings/RatingList';
 import AddRating from '../../routes/ratings/AddRating';
-import UpdateRating from '../../routes/ratings/UpdateRating';
-
+import ImageSection from '../../components/imageSection/ImageSection';
 import {
   WhatsappShare,
   FacebookShare,
   LinkedinShare,
   TwitterShare,
 } from 'react-share-kit';
+import './Detail.css'
 
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
-  const [teacherSelected, setTeacherSelected] = useState();
+  const { userId } = useAuth();
+
+  const [teacherSelected, setTeacherSelected] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [shareModalIsOpen, setShareModalIsOpen] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
-  const { userId } = useAuth();
   const [selectedRange, setSelectedRange] = useState(null);
 
-  //Manejo Imágenes
   useEffect(() => {
-    const getById = async () => {
-      let res = await getDataById(id);
-      setTeacherSelected(res);
+    const fetchData = async () => {
+      try {
+        const res = await getDataById(id);
+        setTeacherSelected(res);
+      } catch (error) {
+        console.error('Error fetching teacher data:', error);
+      }
     };
 
-    getById();
+    fetchData();
   }, [id]);
+
+  useEffect(() => {
+    fetchFavorites(userId);
+  }, [userId, fetchFavorites]);
 
   useEffect(() => {
     if (teacherSelected && teacherSelected.images) {
@@ -54,18 +61,6 @@ const Detail = () => {
       setGalleryImages(formattedImages);
     }
   }, [teacherSelected]);
-  //Manejo Galería Imágenes
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-  //Manejo Favoritos
-  useEffect(() => {
-    fetchFavorites(userId);
-  }, []);
 
   const handleToggleFavorite = async () => {
     if (!userId) {
@@ -73,17 +68,20 @@ const Detail = () => {
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-
       return;
     }
+
     await toggleFavorite(userId, id);
   };
-  useEffect(() => {
-    console.log('mis favoritos:', favorites);
-  }, [favorites]);
-  const isFavorite = favorites.map(({ id }) => id).includes(id);
 
-  //Manejo Compartir Redes
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   const openShareModal = () => {
     setShareModalIsOpen(true);
   };
@@ -92,19 +90,15 @@ const Detail = () => {
     setShareModalIsOpen(false);
   };
 
-  //Manejo Policies
   const togglePolicies = () => {
     setShowPolicies(!showPolicies);
   };
 
-  //Redes
   const shareUrl = window.location.href;
   const shareTitle = teacherSelected ? teacherSelected.name : 'Check this out!';
 
-  //Manejo Disponibilidad
-  const handleSelectRange = (range) => {
-    setSelectedRange(range);
-  };
+  const isFavorite = favorites.map(({ id }) => id).includes(id);
+
   return (
     <div className="container-detail">
       <div className="section-detail">
@@ -137,81 +131,68 @@ const Detail = () => {
       ) : (
         <p>Cargando datos del tutor...</p>
       )}
-      {teacherSelected && teacherSelected.images && (
-        //imágenes
-        <div>
-          <section className="container-image">
-            <div className="cont-first-img">
-              <img
-                src={teacherSelected.images[0].url}
-                alt={`imagen1`}
-                className="first-image"
-              />
-            </div>
-            <div className="container-grid">
-              <div className="cont-other-img">
-                {teacherSelected.images.slice(1, 5).map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.url}
-                    alt={`imagen${index + 2}`}
-                    className="item-image"
-                  />
-                ))}
+
+      {/* Sección de imágenes */}
+      {teacherSelected && (
+        <ImageSection teacherSelected={teacherSelected} />
+      )}
+
+      {/* Botones de acción */}
+      <div className="buttons-container">
+        <button className="more" onClick={openModal}>
+          Ver más
+        </button>
+        <button className="toggle-policies" onClick={togglePolicies}>
+          {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
+        </button>
+        <button className="share" onClick={openShareModal}>
+          Compartir
+        </button>
+      </div>
+
+      {/* Detalles adicionales */}
+      <div className="container-characteristics-detail">
+        <div className="characteristics-wrapper">
+          <h3>Características:</h3>
+          <div className="characteristics-list">
+            {teacherSelected?.characteristics.map((character) => (
+              <div key={character.id} className="character-item">
+                <img className="icon-characteristic" src={character.url} alt='icono'/>
+                {character.name}
               </div>
-              <div className="buttons-container">
-                <button className="more" onClick={openModal}>
-                  Ver más
-                </button>
-                <button className="toggle-policies" onClick={togglePolicies}>
-                  {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
-                </button>
-                <button className="share" onClick={openShareModal}>
-                  Compartir
-                </button>
-              </div>
-            </div>
-          </section>
-          <div className="container-characteristics-detail">
-            <div className="characteristics-wrapper">
-              <h3>Características:</h3>
-              <div className="characteristics-list">
-                {teacherSelected.characteristics.map((character) => (
-                  <div key={character.id} className="character-item">
-                    <img className="icon-characteristic" src={character.url} alt='icono'/>
-                    {character.name}
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Disponibilidad  y reserva*/}
-            <div>
-              {teacherSelected && (
-                <TeacherAvailability
-                  teacherId={id}
-                  teacherSelected={teacherSelected}
-                  userId={userId}
-                  onSelectRange={setSelectedRange}
-                />
-              )}
-            </div>
+            ))}
           </div>
-          {/* Policies  */}
-          {showPolicies && (
-            <div className="policies-wrapper">
-              <Policies />
-            </div>
+        </div>
+
+        {/* Disponibilidad y reserva */}
+        <div>
+          {teacherSelected && (
+            <TeacherAvailability
+              teacherId={id}
+              teacherSelected={teacherSelected}
+              userId={userId}
+              onSelectRange={setSelectedRange}
+            />
           )}
         </div>
+      </div>
+
+      {/* Políticas */}
+      {showPolicies && (
+        <div className="policies-wrapper">
+          <Policies />
+        </div>
       )}
-      {/* Rating  */}
+
+      {/* Rating */}
       {teacherSelected && (
         <div className="container-ratings">
           <RatingList teacherId={id} />
           <AddRating teacherId={id} onRatingAdded={() => {}} />
         </div>
       )}
-      {/* Galería  */}
+
+      {/* Modal de Galería */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -223,7 +204,8 @@ const Detail = () => {
           Cerrar
         </Button>
       </Modal>
-      {/* Compartir  */}
+
+      {/* Modal de Compartir */}
       <Modal
         className="share-modal"
         isOpen={shareModalIsOpen}

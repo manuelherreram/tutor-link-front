@@ -4,7 +4,6 @@ import Detail from "./routes/detail/Detail";
 import Layout from "./components/layout/Layout";
 import Home from "./routes/home/Home";
 import Admin from "./routes/admin/Admin.jsx";
-import { TeacherContextProvider } from "./contexts/TeacherContext.jsx";
 import NewTeacher from "./routes/newTeacher/NewTeacher";
 import Login from "./routes/login/Login.jsx";
 import Characteristics from "./routes/characteristics/Characteristics.jsx";
@@ -28,7 +27,6 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <TeacherContextProvider>
           <AuthProvider>
             <FavoriteProvider>
               <Routes>
@@ -114,7 +112,6 @@ function App() {
               </Routes>
             </FavoriteProvider>
           </AuthProvider>
-        </TeacherContextProvider>
       </BrowserRouter>
     </>
   );
