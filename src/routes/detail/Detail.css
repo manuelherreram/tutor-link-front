@@ -251,4 +251,11 @@
   font-size: small;
   padding: 5px;
   border-radius: 5px;
+  margin-left:10px;
+  border: none;
+}
+.btn-cancel:hover{
+  background-color: #205164;
+ border: none;
+
 }

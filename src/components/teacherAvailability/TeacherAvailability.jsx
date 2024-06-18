@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { DatePicker, Space, message, Modal } from 'antd';
+import { DatePicker, Space, message, Modal,Button} from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { getAvailabilitiesById } from '../../api/apiReservations';
 import './TeacherAvailability.css';
 import { useAuth } from '../../contexts/AuthContext';
 import ReservationForm from '../../components/ReservationForm';
+import { useNavigate } from 'react-router-dom';
 
 dayjs.extend(customParseFormat);
 const { RangePicker } = DatePicker;
@@ -25,6 +26,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
   const [selectedDates, setSelectedDates] = useState([]);
   const { userLoggedIn } = useAuth();
   const { name, description } = teacherSelected;
+const navigate= useNavigate()
 
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -102,6 +104,9 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
       setIsModalVisible(true);
     }
   };
+ const handleLogin =()=>{
+ navigate('/login')
+ }
 
   return (
     <div className="calendar-container">
@@ -134,25 +139,33 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
 
       <Modal
         title="Confirmar Reserva"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={() => setIsModalVisible(false)}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
-        <div>
-          <div>Está a punto de reservar una hora con {name}</div>
-          <div>{description}</div>
-          <div>desde {selectedDates[0]?.format('YYYY-MM-DD HH:mm')}</div>
-          <div>hasta {selectedDates[1]?.format('YYYY-MM-DD HH:mm')}</div>
-        </div>
+        
+       
         {userLoggedIn ? (
+          <div>
+        <div>
+          <strong>Está a punto de reservar una hora con {name}</strong>
+          <div>{description}</div>
+          <div>desde {selectedDates[0]?.format('DD-MM-YYYY HH:mm')}</div>
+          <div>hasta {selectedDates[1]?.format('DD-MM-YYYY HH:mm')}</div>
+        </div>
+        
           <ReservationForm
             userId={userId}
             teacherId={teacherId}
             selectedRange={selectedDates}
           />
+          </div>
         ) : (
-          <p>Debes iniciar sesión para confirmar la reserva.</p>
+          <div>
+            <strong>Debes iniciar sesión para confirmar la reserva.</strong>
+            <Button type="primary" onClick={handleLogin} >Iniciar sesión</Button>
+            </div>
         )}
       </Modal>
     </div>

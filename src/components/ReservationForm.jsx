@@ -58,7 +58,7 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
       className='btn-cancel'
         type="default"
         onClick={handleCancel}
-        style={{ marginLeft: '10px' }}
+        
       >
         Cancelar
       </button>
