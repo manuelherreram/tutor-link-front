@@ -1,0 +1,17 @@
+.container-favorites{
+ display:flex;
+ flex-direction: column;
+ justify-content: center;
+height: 74vh;
+margin-top:10px;
+}
+.favorites-title{
+ text-align: center;
+ margin-bottom: 30px;
+
+}
+.arrow-favorites{
+    margin-left: 35px;
+    width: 120px;
+}
+
