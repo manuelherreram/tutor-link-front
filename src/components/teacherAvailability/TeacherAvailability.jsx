@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DatePicker, Space, message, Modal,Button} from 'antd';
+import { DatePicker, Space, message, Modal, Button } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { getAvailabilitiesById } from '../../api/apiReservations';
@@ -26,7 +26,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
   const [selectedDates, setSelectedDates] = useState([]);
   const { userLoggedIn } = useAuth();
   const { name, description } = teacherSelected;
-const navigate= useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -100,13 +100,37 @@ const navigate= useNavigate()
         return;
       }
 
+      if (start.isAfter(end)) {
+        message.error('La hora de inicio no puede ser posterior a la hora de término.');
+        return;
+      }
+
+      if (start.isSame(end)) {
+        message.error('La hora de inicio no puede ser igual a la hora de término.');
+        return;
+      }
+
+      const isTimeWithinAvailability = availability.some((item) => {
+        return (
+          start.isSame(item.date, 'day') &&
+          start.isAfter(dayjs(item.date).hour(item.startTime.split(':')[0]).minute(item.startTime.split(':')[1])) &&
+          end.isBefore(dayjs(item.date).hour(item.endTime.split(':')[0]).minute(item.endTime.split(':')[1]))
+        );
+      });
+
+      if (!isTimeWithinAvailability) {
+        message.error('Por favor revise el horario seleccionado.');
+        return;
+      }
+
       setSelectedDates(dates);
       setIsModalVisible(true);
     }
   };
- const handleLogin =()=>{
- navigate('/login')
- }
+
+  const handleLogin = () => {
+    navigate('/login');
+  };
 
   return (
     <div className="calendar-container">
@@ -116,8 +140,7 @@ const navigate= useNavigate()
         <p>Cargando disponibilidad...</p>
       ) : availability.length === 0 ? (
         <p>
-          Actualmente no hay disponibilidad para este tutor. Por favor, consulte
-          más tarde.
+          Actualmente no hay disponibilidad para este tutor. Por favor, consulte más tarde.
         </p>
       ) : (
         <Space direction="vertical" size={12}>
@@ -131,7 +154,7 @@ const navigate= useNavigate()
                 dayjs('20:00', 'HH:mm').subtract(1, 'minute'),
               ],
             }}
-            format="YYYY-MM-DD HH:mm"
+            format="DD-MM-YYYY HH:mm"
             onChange={(dates) => handleRangeChange(dates)}
           />
         </Space>
@@ -144,28 +167,26 @@ const navigate= useNavigate()
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
-        
-       
         {userLoggedIn ? (
           <div>
-        <div>
-          <strong>Está a punto de reservar una hora con {name}</strong>
-          <div>{description}</div>
-          <div>desde {selectedDates[0]?.format('DD-MM-YYYY HH:mm')}</div>
-          <div>hasta {selectedDates[1]?.format('DD-MM-YYYY HH:mm')}</div>
-        </div>
-        
-          <ReservationForm
-            userId={userId}
-            teacherId={teacherId}
-            selectedRange={selectedDates}
-          />
+            <div>
+              <strong>Está a punto de reservar una hora con {name}</strong>
+              <div>{description}</div>
+              <div>desde {selectedDates[0]?.format('DD-MM-YYYY HH:mm')}</div>
+              <div>hasta {selectedDates[1]?.format('DD-MM-YYYY HH:mm')}</div>
+            </div>
+
+            <ReservationForm
+              userId={userId}
+              teacherId={teacherId}
+              selectedRange={selectedDates}
+            />
           </div>
         ) : (
           <div>
             <strong>Debes iniciar sesión para confirmar la reserva.</strong>
-            <Button type="primary" onClick={handleLogin} >Iniciar sesión</Button>
-            </div>
+            <Button type="primary" onClick={handleLogin}>Iniciar sesión</Button>
+          </div>
         )}
       </Modal>
     </div>
