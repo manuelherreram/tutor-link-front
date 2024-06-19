@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState,useEffect } from 'react';
 import { addFavorite, removeFavorite, listFavorites } from '../api/apiFavs';
-
+import { useAuth } from './AuthContext';
 const FavoritesContext = createContext();
 
 export function useFavorites() {
@@ -9,6 +9,7 @@ export function useFavorites() {
 
 export function FavoriteProvider({ children }) {
   const [favorites, setFavorites] = useState([]);
+  const {userId}=useAuth()
 
   const toggleFavorite = async (userId, teacherId) => {
     try {
@@ -39,6 +40,10 @@ export function FavoriteProvider({ children }) {
       }
      
   };
+
+  useEffect(() => {
+    fetchFavorites();
+  }, [userId]);
 
   const value = {
     favorites,

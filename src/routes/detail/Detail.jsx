@@ -26,7 +26,6 @@ const Detail = () => {
   const navigate = useNavigate();
   const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
   const { userId } = useAuth();
-
   const [teacherSelected, setTeacherSelected] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -34,6 +33,7 @@ const Detail = () => {
   const [showPolicies, setShowPolicies] = useState(false);
   const [selectedRange, setSelectedRange] = useState(null);
 
+  // Información tutor
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,10 +47,7 @@ const Detail = () => {
     fetchData();
   }, [id]);
 
-  useEffect(() => {
-    fetchFavorites(userId);
-  }, [userId, fetchFavorites]);
-
+//Manejo imágenes
   useEffect(() => {
     if (teacherSelected && teacherSelected.images) {
       const formattedImages = teacherSelected.images.map((image, index) => ({
@@ -62,18 +59,6 @@ const Detail = () => {
     }
   }, [teacherSelected]);
 
-  const handleToggleFavorite = async () => {
-    if (!userId) {
-      message.info('Debes iniciar sesión para marcar favoritos.');
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-      return;
-    }
-
-    await toggleFavorite(userId, id);
-  };
-
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -82,6 +67,29 @@ const Detail = () => {
     setModalIsOpen(false);
   };
 
+//Manejo favoritos
+  useEffect(() => {
+    fetchFavorites(userId);
+  }, []);
+
+  const handleToggleFavorite = async () => {
+    if (!userId) {
+      message.info('Debes iniciar sesión para marcar favoritos.');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+
+      return;
+    }
+    await toggleFavorite(userId, id);
+  };
+  useEffect(() => {
+    console.log('mis favoritos:', favorites);
+  }, [favorites]);
+  const isFavorite = favorites.map(({ id }) => id).includes(id);
+
+  
+  //Manejo compartir redes
   const openShareModal = () => {
     setShareModalIsOpen(true);
   };
@@ -90,14 +98,15 @@ const Detail = () => {
     setShareModalIsOpen(false);
   };
 
+  //Manejo políticas
   const togglePolicies = () => {
     setShowPolicies(!showPolicies);
   };
-
+//Redes
   const shareUrl = window.location.href;
   const shareTitle = teacherSelected ? teacherSelected.name : 'Check this out!';
 
-  const isFavorite = favorites.map(({ id }) => id).includes(id);
+
 
   return (
     <div className="container-detail">
