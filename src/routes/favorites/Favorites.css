@@ -1,7 +1,6 @@
 .container-favorites{
  display:flex;
  flex-direction: column;
- justify-content: center;
 height: 100vh;
 margin-top:10px;
 }
@@ -20,5 +19,21 @@ margin-top:10px;
 .deleteFav.anticon-delete:hover{
     color:rgb(39, 66, 218)
 }
+.no-favorites{
+ text-align: center;
+ height: 100vh;
+ margin-top:50px;
+}
 
+@media (max-width: 480px) {
+    .container-favorites{
+       display: flex;
+       flex-direction: column;
+  
+    }
+    .arrow-favorites{
+        margin:30px;
+        width: 120px;
+    }
+    }
 
