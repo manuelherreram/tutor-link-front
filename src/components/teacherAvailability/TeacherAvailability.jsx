@@ -66,7 +66,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
           return range(0, 60);
         }
         const currentHour = dayjs().hour();
-        if (selectedHour === currentHour) {
+        if (selectedHour <= currentHour) {
           return range(0, dayjs().minute());
         }
         return [];
@@ -152,7 +152,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
               format: 'HH:mm',
               defaultValue: [
                 dayjs('08:00', 'HH:mm'),
-                dayjs('20:00', 'HH:mm').subtract(1, 'minute'),
+                dayjs('20:00', 'HH:mm')
               ],
             }}
             format="DD-MM-YYYY HH:mm"
