@@ -108,10 +108,9 @@ h4 {
     align-items: center;
   }
 
-  h3 {
-    color: #1e506d;
-    font-style: italic;
-    margin-left: 10px;
+  a.element-header h4{
+    font-size: 12px;
+
   }
 
   #btn {
@@ -127,4 +126,9 @@ h4 {
     padding: 3px 5px; /* Ajustamos el tamaño del botón en móviles */
     margin: 5px;
   }
+  a.element-header h4{
+    font-size: 14px;
+
+  }
+ 
 }
