@@ -48,8 +48,8 @@ const Favorites = () => {
             render: (text, record) => (
                 <Button 
                     onClick={() => handleRemoveFavorite(record.id)} 
-                    icon={<DeleteOutlined />}
-                    danger
+                    icon={<DeleteOutlined className='deleteFav'/>}
+                 className='deleteFav'
                 >
                     Eliminar
                 </Button>
@@ -61,7 +61,7 @@ const Favorites = () => {
         <div className="container-favorites">
             <Button className="arrow-favorites" onClick={() => navigate('/profile')}><ArrowLeftOutlined  />Ir a mi perfil</Button>
             <h3 className="favorites-title">Mis Favoritos</h3>
-            <Table columns={columns} dataSource={favorites} rowKey="id" />
+            <Table columns={columns} dataSource={favorites} rowKey="id" pagination={{ pageSize: 5 }} />
         </div>
     );
 };
