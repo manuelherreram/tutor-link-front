@@ -11,7 +11,7 @@ const {userId}= useAuth()
 
   return (
     <div className="container-reservations">
-      <h3>Mis reservas</h3>
+   
       <MyReservationsPanel userId={userId} />
     </div>
   )

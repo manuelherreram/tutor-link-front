@@ -28,18 +28,8 @@ export const addReservation = async (userId, teacherId, start, end) => {
   return res.data;
 };
 
-//Crear disponibilidad profesor
-export const addSchedule = async (teacherId, date, startTime, endTime) => {
-  let res = await axios.post(`${BASE_URL}/availabilities`, {
-    teacherId,
-    date,
-    startTime,
-    endTime
-  });
-  return res.data;
-};
 //Listar las reservaciones del usuario
-export const getReservationsUser = async (userId) => {
+export const getUserReservations = async (userId) => {
   try {
     const response = await axios.get(
       `${BASE_URL}/reservations/user/${userId}`
@@ -50,7 +40,18 @@ export const getReservationsUser = async (userId) => {
     throw error;
   }
 };
-
+//Eliminar las reservaciones del usuario
+export const deleteUserReservation = async (id) => {
+  try {
+    const response = await axios.delete(
+      `${BASE_URL}/reservations/delete/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting the reservation:', error);
+    throw error;
+  }
+};
 
 
 
