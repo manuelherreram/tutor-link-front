@@ -211,6 +211,7 @@ const Detail = () => {
 
       {/* Modal de Galería */}
       <Modal
+      className="container-gallery"
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Galería de Imágenes"
