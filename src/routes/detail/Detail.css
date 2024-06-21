@@ -252,6 +252,10 @@ width: 90%;
 .rating-list{
   text-align: center;
 }
+.buttons-container{
+  display: flex;
+ align-items: center;
+}
 .calendar-container{
   display: flex;
   flex-direction: column;
