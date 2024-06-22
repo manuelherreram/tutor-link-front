@@ -81,13 +81,7 @@ const cardPerPage = 6;
 const renderCards = products.slice((page - 1) * cardPerPage, page * cardPerPage);
 
 
-const swalWithAntButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn ant-btn btn-primary",
-      cancelButton: "btn btn-danger"
-    },
-    buttonsStyling: false
-  });
+
 
 
 

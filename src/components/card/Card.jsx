@@ -54,7 +54,7 @@ const isFavorite = favorites.map(({ id }) => id).includes(id);
         </div>
       </div>
       <div className="card-footer">
-        <Link to={`detalle/${id}`}>
+        <Link to={`/detalle/${id}`}>
           <button className="card-button">Conectar</button>
         </Link>
       </div>
