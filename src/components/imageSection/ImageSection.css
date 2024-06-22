@@ -1,130 +1,59 @@
-/* .container-detail {
-    margin: 90px 40px 0 40px;
-    padding-bottom: 80px;
-  }
-  
-  .section-detail {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px;
-    height: 40px;
-  }
-  
-  .container-title-detail {
-    display: flex;
-    flex-direction: column;
-    margin: 15px;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .container-title-detail p {
-    margin: 0;
-    padding: 5px 0;
-  }
-  
-  .container-title-detail p:first-child {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .container-teacher {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 35px 0 0;
-  } */
-  
-.image-section{
-    margin-left: 80px;
-    margin-right: 80px;
+.container-image {
+  display: flex;
+  border-radius: 15px;
+  margin: 20px
+}
+.image-section {
+  width: 100%;
+}
+.cont-first-img {
+  flex: 0.5;
+  margin-right: 20px;
+  overflow: hidden;
+  border-radius: 15px;
+  display: flex;
+  align-items: stretch;
 }
 
+.cont-first-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.container-grid {
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.cont-other-img {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  height: 100%;
+}
+
+.item-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+
+@media (max-width: 480px) {
+ 
   .container-image {
     display: flex;
-    border-radius: 15px;
-  }
-  
-  .cont-first-img {
-    flex: 0.5;
-    margin-right: 20px;
-    overflow: hidden;
-    border-radius:15px;
-  }
-  
-  .cont-first-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .container-grid {
-    flex: 0.5;
-    display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    border-radius:15px;
-    overflow: hidden;
-  }
-  
-  .cont-other-img {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
-  }
-  
-  .item-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-
-  
-  
-
-  @media(max-width: 768px) {
-    .image-section {
-      margin-left: 40px;
-      margin-right: 40px;
-    }
     
-  }
-
-  @media(max-width: 480px) {
-    .image-section {
-      margin-left: 0px;
-      margin-right: 0px;
-    }
-    .cont-first-img {
-      flex: 0.8;
-      margin-right: 5px;
-    }
-    .container-grid {
-      flex: 0.2;
-    }
-    .cont-other-img {
-      grid-template-columns: repeat(1, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-    }
-    .ReactModal__Content {
-      inset: 0 !important;
-      margin-top: 130px;
-      width: 100%;
-      padding: 20px 10px;
-    }
-
-  }
-
-
-  
-
- 
- 
-
-  
+ }
+ .container-grid {
+  margin: 15px 0px
+}
+}

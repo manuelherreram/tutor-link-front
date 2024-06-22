@@ -6,7 +6,11 @@ import Modal from 'react-modal';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import Policies from './Policies';
-import { HeartOutlined, HeartFilled, ArrowLeftOutlined } from '@ant-design/icons';
+import {
+  HeartOutlined,
+  HeartFilled,
+  ArrowLeftOutlined,
+} from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
@@ -19,7 +23,7 @@ import {
   LinkedinShare,
   TwitterShare,
 } from 'react-share-kit';
-import './Detail.css'
+import './Detail.css';
 
 const Detail = () => {
   const { id } = useParams();
@@ -32,6 +36,7 @@ const Detail = () => {
   const [shareModalIsOpen, setShareModalIsOpen] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
   const [selectedRange, setSelectedRange] = useState(null);
+  const [isFavorite,setIsFavorite]=useState()
 
   // Información tutor
   useEffect(() => {
@@ -47,7 +52,7 @@ const Detail = () => {
     fetchData();
   }, [id]);
 
-//Manejo imágenes
+  //Manejo imágenes
   useEffect(() => {
     if (teacherSelected && teacherSelected.images) {
       const formattedImages = teacherSelected.images.map((image, index) => ({
@@ -67,12 +72,20 @@ const Detail = () => {
     setModalIsOpen(false);
   };
 
-//Manejo favoritos
+  //Manejo favoritos
   useEffect(() => {
     fetchFavorites(userId);
   }, []);
+  useEffect(() => {
+    if (favorites.length > 0) {
+      const idTeacher = parseInt(id);
+      const isFavorited = favorites.map(favorite => favorite.id.toString()).includes(idTeacher.toString());
+      setIsFavorite(isFavorited);
+    }
+  }, [favorites, id]);
 
   const handleToggleFavorite = async () => {
+    const idTeacher= parseInt(id)
     if (!userId) {
       message.info('Debes iniciar sesión para marcar favoritos.');
       setTimeout(() => {
@@ -81,13 +94,8 @@ const Detail = () => {
 
       return;
     }
-    await toggleFavorite(userId, id);
+    await toggleFavorite(userId, idTeacher);
   };
-  useEffect(() => {
-    console.log('mis favoritos:', favorites);
-  }, [favorites]);
-  const isFavorite = favorites.map(({ id }) => id).includes(id);
-
   
   //Manejo compartir redes
   const openShareModal = () => {
@@ -102,11 +110,9 @@ const Detail = () => {
   const togglePolicies = () => {
     setShowPolicies(!showPolicies);
   };
-//Redes
+  //Redes
   const shareUrl = window.location.href;
   const shareTitle = teacherSelected ? teacherSelected.name : 'Check this out!';
-
-
 
   return (
     <div className="container-detail">
@@ -142,9 +148,7 @@ const Detail = () => {
       )}
 
       {/* Sección de imágenes */}
-      {teacherSelected && (
-        <ImageSection teacherSelected={teacherSelected} />
-      )}
+      {teacherSelected && <ImageSection teacherSelected={teacherSelected} />}
 
       {/* Botones de acción */}
       <div className="buttons-container">
@@ -166,7 +170,11 @@ const Detail = () => {
           <div className="characteristics-list">
             {teacherSelected?.characteristics.map((character) => (
               <div key={character.id} className="character-item">
-                <img className="icon-characteristic" src={character.url} alt='icono'/>
+                <img
+                  className="icon-characteristic"
+                  src={character.url}
+                  alt="icono"
+                />
                 {character.name}
               </div>
             ))}
@@ -203,6 +211,7 @@ const Detail = () => {
 
       {/* Modal de Galería */}
       <Modal
+      className="container-gallery"
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Galería de Imágenes"

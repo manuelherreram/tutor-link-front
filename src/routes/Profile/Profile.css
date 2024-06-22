@@ -82,4 +82,29 @@
   width: 40vw;
   font-family: 'Poppins';
 }
+@media (max-width: 480px) {
+  .container-profile {
+    display: flex;
+   flex-direction: column;
+   align-items: center;
+  }
+  .card-profile{
+    width: 90%;
+    height: 100%;
+    border: 1px solid #bbbbbb;
+    margin: 20px 0px
+  }
+  .container-text{
+    width: 100%;
+    margin: 20px 0px
+  }
+  .reservation{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 20px 0px
+    
+  }
+  
+}
 
