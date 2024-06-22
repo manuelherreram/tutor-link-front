@@ -4,21 +4,16 @@ import Card  from "../../components/card/Card";
 import "./CategoryFilter.css";
 import { Badge, Button, Pagination } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import axios from "axios";
-import Swal from "sweetalert2";
 
 
 const CategoryFilters = () => {
     const { category } = useParams();
     const [selectedCategories, setSelectedCategories] = useState([category])
     const [categories, setCategories] = useState([])
-    const [products, setProducts] = useState([])
-    
+    const [products, setProducts] = useState([])    
     const [selectedCharacteristics, setSelectedCharacteristics] = useState([])
     const [characteristics, setCharacteristics] = useState([])
-
     const [page, setPage] = useState(1)
-
     const navigate = useNavigate();
 
 console.log(category);
@@ -73,26 +68,18 @@ useEffect(() => {
     });
 
 }, [selectedCategories, selectedCharacteristics]);
+
 console.log(products);
-
-
 
 const cardPerPage = 6;
 const renderCards = products.slice((page - 1) * cardPerPage, page * cardPerPage);
-
-
-
-
-
-
 
 
 const clearFilters = () => {
 
             setSelectedCharacteristics([]);
             setSelectedCategories([category]);
-            setPage(1);
-       
+            setPage(1);       
 }
 
     return (
@@ -108,7 +95,7 @@ const clearFilters = () => {
                         <input className='input-checkbox'
                         type="checkbox"
                         checked={selectedCategories.includes(categories.title)}
-                       disabled={category === categories.title}
+                        disabled={category === categories.title}
                         onChange={() => {
                             const newSelectedCategories = selectedCategories.includes(categories.title)
                             ? selectedCategories.filter((c) => c !== categories.title)

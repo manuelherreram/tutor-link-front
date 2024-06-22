@@ -4,10 +4,12 @@ import Search from "../../components/search/Search";
 import Card from "../../components/card/Card";
 import WhatsAppButton from "../../components/whatsappFloatingBtn/WhatsAppButton";
 import "./Home.css";
+import { Pagination } from "antd";
 
 const Home = () => {
   const [randomTeachers, setRandomTeachers] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/public/index")
@@ -22,6 +24,9 @@ const Home = () => {
   const teachersToDisplay =
     searchResults.length > 0 ? searchResults : randomTeachers;
 
+  const cardPerPage = 9;
+  const renderCards = teachersToDisplay.slice((page - 1) * cardPerPage, page * cardPerPage);  
+
   return (
     <div className="container-home">
       <div className="container-utilities">
@@ -32,7 +37,7 @@ const Home = () => {
         <Categories />
       </div>
       <div className="container-cards">
-        {teachersToDisplay.map((teacher) => (
+        {renderCards.map((teacher) => (
           <Card
             key={teacher.id}
             name={teacher.name}
@@ -43,6 +48,17 @@ const Home = () => {
           />
         ))}
       </div>
+      <div className="pagination">
+                    <Pagination
+                    defaultCurrent={1}
+                    defaultPageSize={cardPerPage}
+                    total={teachersToDisplay.length}
+                    showTotal={(total, range) => `${range[0]}-${range[1]} de ${total} items`}
+                    onChange={(page) => {
+                        setPage(page);
+                    }}
+                    /> 
+                </div>
       <WhatsAppButton />
     </div>
   );
