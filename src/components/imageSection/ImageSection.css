@@ -1,4 +1,4 @@
-.container-detail {
+/* .container-detail {
     margin: 90px 40px 0 40px;
     padding-bottom: 80px;
   }
@@ -37,15 +37,20 @@
     display: flex;
     justify-content: space-between;
     margin: 0 35px 0 0;
-  }
+  } */
   
+.image-section{
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
   .container-image {
     display: flex;
     border-radius: 15px;
   }
   
   .cont-first-img {
-    flex: 0.6;
+    flex: 0.5;
     margin-right: 20px;
     overflow: hidden;
     border-radius:15px;
@@ -58,7 +63,7 @@
   }
   
   .container-grid {
-    flex: 0.4;
+    flex: 0.5;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -79,9 +84,42 @@
     object-fit: cover;
     border-radius: 10px;
   }
-  
 
   
+  
+
+  @media(max-width: 768px) {
+    .image-section {
+      margin-left: 40px;
+      margin-right: 40px;
+    }
+    
+  }
+
+  @media(max-width: 480px) {
+    .image-section {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+    .cont-first-img {
+      flex: 0.8;
+      margin-right: 5px;
+    }
+    .container-grid {
+      flex: 0.2;
+    }
+    .cont-other-img {
+      grid-template-columns: repeat(1, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+    }
+    .ReactModal__Content {
+      inset: 0 !important;
+      margin-top: 130px;
+      width: 100%;
+      padding: 20px 10px;
+    }
+
+  }
 
 
   
