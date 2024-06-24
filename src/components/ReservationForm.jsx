@@ -39,7 +39,7 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
     setTimeout(()=>{
       message.success('Reserva realizada con éxito.Te llegará un correo electrónico con la información de tu reserva');
      
-    },2000)
+    },4000)
      
       navigate('/reservations');
     } catch (error) {
