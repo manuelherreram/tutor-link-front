@@ -18,13 +18,11 @@ export const getAvailabilitiesById = async (id) => {
 };
 //Reservar hora con un profesor
 export const addReservation = async (userId, teacherId, start, end) => {
-  let res = await axios.post(`${BASE_URL}/reservations`, {
+  let res = await axios.post(`${BASE_URL}/reservations/create`, {
     userId,
     teacherId,
     startTime: start.format('YYYY-MM-DDTHH:mm:ss'),
     endTime: end.format('YYYY-MM-DDTHH:mm:ss'),
-    place:'Sala de conferencias A',
-    status: 'PENDING',
   });
   return res.data;
 };
