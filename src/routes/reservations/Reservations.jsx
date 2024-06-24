@@ -2,12 +2,8 @@ import MyReservationsPanel from "../../components/myReservationsPanel/MyReservat
 import { useAuth } from "../../contexts/AuthContext"
 import './Reservations.css'
 
-
-
 const Reservations = () => {
 const {userId}= useAuth()
-
-
 
   return (
     <div className="container-reservations">

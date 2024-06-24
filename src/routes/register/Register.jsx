@@ -273,7 +273,7 @@ const Register = () => {
           </Button>
         )}
       </Form>
-      <img src='/public/tutores.jpg' alt="picture teacher" className="container-img-register"/>
+      <img src='/tutores.jpg' alt="picture teacher" className="container-img-register"/>
     </div>
 
   );
