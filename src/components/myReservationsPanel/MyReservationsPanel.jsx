@@ -14,12 +14,17 @@ const MyReservationsPanel = ({ userId }) => {
   const { currentUser } = useAuth();
   const [reservationDeleted, setReservationDeleted] = useState([]);
 
+  const getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
   useEffect(() => {
     const fetchReservations = async () => {
       let res = await getUserReservations(userId);
       const transformedData = res.map((reservation) => {
         const startDate = dayjs(reservation.startTime);
         const endDate = dayjs(reservation.endTime);
+        const place = `Sala de conferencias ${getRandomInt(1, 100)}`; // Generar número aleatorio para el lugar
 
         return {
           key: reservation.id,
@@ -28,8 +33,8 @@ const MyReservationsPanel = ({ userId }) => {
           teacher: reservation.teacher.name,
           asignatura: reservation.teacher.subjectTitle,
           email: currentUser.email,
+          place, 
           fechaInicio: startDate.format('DD-MM-YYYY'),
-          fechaTermino: endDate.format('DD-MM-YYYY'),
           horarioInicio: startDate.format('HH:mm'),
           horarioTermino: endDate.format('HH:mm'),
         };
@@ -44,11 +49,6 @@ const MyReservationsPanel = ({ userId }) => {
       title: 'N° Reserva',
       dataIndex: 'key',
       key: 'key',
-    },
-    {
-      title: 'Estado Reserva',
-      dataIndex: 'status',
-      key: 'status',
     },
     {
       title: 'Usuario',
@@ -71,14 +71,14 @@ const MyReservationsPanel = ({ userId }) => {
       key: 'asignatura',
     },
     {
-      title: 'Fecha Inicio',
-      dataIndex: 'fechaInicio',
-      key: 'fechaInicio',
+      title: 'Lugar',
+      dataIndex: 'place',
+      key: 'place',
     },
     {
-      title: 'Fecha Término',
-      dataIndex: 'fechaTermino',
-      key: 'fechaTermino',
+      title: 'Fecha ',
+      dataIndex: 'fechaInicio',
+      key: 'fechaInicio',
     },
     {
       title: 'Horario Inicio',
@@ -99,7 +99,7 @@ const MyReservationsPanel = ({ userId }) => {
           icon={<DeleteOutlined className="deleteReservation" />}
           onClick={() => handleDelete(record.key)}
         >
-          Anular 
+          Anular
         </Button>
       ),
     },
@@ -121,7 +121,7 @@ const MyReservationsPanel = ({ userId }) => {
 
   return reservations.length > 0 ? (
     <div>
-      <h3 className='title-reservations'>Mis Reservas</h3>
+      <h3 className="title-reservations">Mis Reservas</h3>
       <Table
         className="panel-reservations"
         dataSource={reservations}

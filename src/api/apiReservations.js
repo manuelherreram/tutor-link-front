@@ -23,6 +23,7 @@ export const addReservation = async (userId, teacherId, start, end) => {
     teacherId,
     startTime: start.format('YYYY-MM-DDTHH:mm:ss'),
     endTime: end.format('YYYY-MM-DDTHH:mm:ss'),
+    place:'Sala de conferencias A',
     status: 'PENDING',
   });
   return res.data;
