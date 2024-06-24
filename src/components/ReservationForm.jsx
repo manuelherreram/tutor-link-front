@@ -36,7 +36,11 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
 
     try {
       await addReservation(userId, teacherId, start, end);
-      message.success('Reserva realizada con éxito.');
+    setTimeout(()=>{
+      message.success('Reserva realizada con éxito.Te llegará un correo electrónico con la información de tu reserva');
+     
+    },2000)
+     
       navigate('/reservations');
     } catch (error) {
       message.error('Error al realizar la reserva.');
