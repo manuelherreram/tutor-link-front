@@ -21,8 +21,8 @@
   border: 1px solid rgb(197, 196, 196);
   padding: 25px;
   border-radius: 10px;
-  margin-top: -70px;
-  margin-right: 100px;
+  margin-top: -90px;
+  margin-right: 140px;
  
 }
 .ant-input-lg {
@@ -36,11 +36,24 @@
   border-radius: 8px;
   width: 40%;
 }
+
 @media (max-width: 768px) {
-  .container-login {
-   
-  }
-  .container-form-login {
+
+   .container-form-login {
     width: 300px;
   }
+}
+@media (max-width: 1530px) {
+  
+  .container-form-login {
+    margin-top: -50px;
+    margin-right: 50px;
+ }
+}
+@media (max-width: 1330px) {
+  
+  .container-form-login {
+    margin-top: -10px;
+    margin-right: 10px;
+ }
 }
