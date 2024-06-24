@@ -156,6 +156,7 @@ const Register = () => {
 
   return (
     <div className="container-register">
+        
       <Form className="container-form-register" onFinish={formik.handleSubmit}>
         <h3 className="h3">Registro de usuario</h3>
         <Form.Item
@@ -272,7 +273,9 @@ const Register = () => {
           </Button>
         )}
       </Form>
+      <img src='/public/tutores.jpg' alt="picture teacher" className="container-img-register"/>
     </div>
+
   );
 };
 
