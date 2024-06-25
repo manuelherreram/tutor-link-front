@@ -57,21 +57,12 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
         const endHour = parseInt(item.endTime.substring(0, 2), 10);
         return range(startHour, endHour + 1);
       });
-
+  
     return {
       disabledHours: () =>
         range(0, 24).filter((hour) => !availableHours.includes(hour)),
-      disabledMinutes: (selectedHour) => {
-        if (!availableHours.includes(selectedHour)) {
-          return range(0, 60);
-        }
-        const currentHour = dayjs().hour();
-        if (selectedHour <= currentHour) {
-          return range(0, dayjs().minute());
-        }
-        return [];
-      },
-      disabledSeconds: () => [],
+      disabledMinutes: () => null,
+      disabledSeconds: () => [], 
     };
   };
 
@@ -111,13 +102,16 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
       }
 
       const isTimeWithinAvailability = availability.some((item) => {
+        const startHour = parseInt(item.startTime.split(':')[0], 10);
+        const endHour = parseInt(item.endTime.split(':')[0], 10);
+      
         return (
           start.isSame(item.date, 'day') &&
-          start.isAfter(dayjs(item.date).hour(item.startTime.split(':')[0]).minute(item.startTime.split(':')[1])) &&
-          end.isBefore(dayjs(item.date).hour(item.endTime.split(':')[0]).minute(item.endTime.split(':')[1]))
+          start.hour() >= startHour &&
+          end.hour() <= endHour
         );
       });
-
+      
       if (!isTimeWithinAvailability) {
         message.error('Por favor revise el horario seleccionado.');
         return;
@@ -181,7 +175,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
 
             <ReservationForm
               userId={userId}
-              teacherId={teacherId}
+              teacherId={parseInt(teacherId)}
               selectedRange={selectedDates}
             />
           </div>
