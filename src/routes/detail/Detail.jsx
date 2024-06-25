@@ -16,8 +16,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
 import RatingList from '../../routes/ratings/RatingList';
-import AddRating from '../../routes/ratings/AddRating';
-import UpdateRating from '../../routes/ratings/UpdateRating';
 
 import {
   WhatsappShare,
@@ -27,6 +25,7 @@ import {
 } from 'react-share-kit';
 
 import ReservationForm from '../../components/ReservationForm';
+import AddRating from '../ratings/AddRating';
 
 const Detail = () => {
   const { id } = useParams();
@@ -221,7 +220,6 @@ const Detail = () => {
       {teacherSelected && (
         <div className="container-ratings">
           <RatingList teacherId={id} />
-          <AddRating teacherId={id} onRatingAdded={() => {}} />
         </div>
       )}
       {/* Galería  */}

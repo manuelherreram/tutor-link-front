@@ -419,13 +419,3 @@ export const addRating = async (ratingData) => {
   }
 };
 
-// Actualizar una calificación
-export const updateRating = async (ratingId, ratingData) => {
-  try {
-    const response = await axios.put(`/api/ratings/${ratingId}`, ratingData);
-    return response.data;
-  } catch (error) {
-    console.error("Error updating rating:", error);
-    throw error;
-  }
-};
