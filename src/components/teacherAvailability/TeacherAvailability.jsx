@@ -61,7 +61,7 @@ const TeacherAvailability = ({ userId, teacherId, teacherSelected }) => {
     return {
       disabledHours: () =>
         range(0, 24).filter((hour) => !availableHours.includes(hour)),
-      disabledMinutes: () => null,
+      disabledMinutes: () => [], 
       disabledSeconds: () => [], 
     };
   };
