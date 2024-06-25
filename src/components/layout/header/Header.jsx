@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase/firebaseConfig';
-import { Avatar, Menu, Dropdown, Space } from 'antd';
-import { UserOutlined, DownOutlined } from '@ant-design/icons';
+import { Avatar, Dropdown, Space } from 'antd';
+import { UserOutlined, DownOutlined,SettingOutlined,LogoutOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -15,7 +15,6 @@ const Header = () => {
     try {
       await signOut(auth);
       console.log('User signed out');
-      // Navegar a la página de inicio después del cierre de sesión
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -43,12 +42,12 @@ const Header = () => {
     },
     isAdmin && {
       key: '/admin',
-      icon: <UserOutlined />,
+      icon: <SettingOutlined/>,
       label: 'Admin',
     },
     {
       key: 'logout',
-      icon: <UserOutlined />,
+      icon: <LogoutOutlined/>,
       label: 'Cerrar sesión',
     },
   ].filter(Boolean);
@@ -75,23 +74,18 @@ const Header = () => {
           </Link>
         )}
         {userLoggedIn ? (
-          <Dropdown
-            overlay={
-              <Menu onClick={handleMenuClick}>
-                {menuItems.map((item) => (
-                  <Menu.Item key={item.key} icon={item.icon}>
-                    {item.label}
-                  </Menu.Item>
-                ))}
-              </Menu>
-            }
+          <Dropdown 
+            menu={{
+              items: menuItems,
+              onClick: handleMenuClick
+            }} 
             trigger={['click']}
           >
             <Space className="user-info" onClick={(e) => e.preventDefault()}>
-              <DownOutlined />
               <Avatar className="avatar">
                 {getInitials(currentUser.email)}
               </Avatar>
+              <DownOutlined style={{ cursor: 'pointer' }} />
             </Space>
           </Dropdown>
         ) : (

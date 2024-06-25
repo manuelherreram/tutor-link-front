@@ -10,6 +10,7 @@ const Characteristics = () => {
   const [data, setData] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [newChar, setNewChar] = useState(null);
+  const [editFeatureId, setEditFeatureId] = useState(null); 
   const { idToken } = useAuth();
 
   const fetchData = async () => {
@@ -21,25 +22,29 @@ const Characteristics = () => {
       console.error('Error fetching data:', error);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
+
   const handleAddClick = () => {
     setIsAdding(true);
     setNewChar(null);
+    setEditFeatureId(null); 
   };
 
   const handleSave = async (newFeature) => {
     try {
-      console.log(newChar);
-      if (newChar) {
-        const updatedFeature = await updateChar(newFeature, idToken);
+      if (editFeatureId) {
+        const updatedFeature = await updateChar(editFeatureId, newFeature, idToken); 
         const updatedData = data.map((item) =>
-          item.id === newChar.id ? { ...item, ...updatedFeature } : item
+          item.id === editFeatureId ? { ...item, ...updatedFeature } : item
         );
         setData(updatedData);
         showNotification('success', 'Característica actualizada exitosamente');
       } else {
+        console.log("Agregando nueva característica:", newFeature);
+
         const response = await registerChar(newFeature, idToken);
         setData([...data, { ...newFeature, id: response.id }]);
         showNotification('success', 'Característica agregada exitosamente');
@@ -49,25 +54,27 @@ const Characteristics = () => {
     } finally {
       setIsAdding(false);
       setNewChar(null);
-      fetchData();
+      setEditFeatureId(null); 
+      fetchData(); 
     }
   };
- 
   const showNotification = (type, message, description) => {
     notification[type]({
       message: message,
       description: description,
       placement: 'topRight',
-      
     });
   };
+
   const handleCancel = () => {
     setIsAdding(false);
     setNewChar(null);
+    setEditFeatureId(null); 
   };
 
   const handleEdit = (record) => {
     setNewChar(record);
+    setEditFeatureId(record.id); 
     setIsAdding(true);
   };
 

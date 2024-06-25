@@ -18,23 +18,40 @@ export const getAvailabilitiesById = async (id) => {
 };
 //Reservar hora con un profesor
 export const addReservation = async (userId, teacherId, start, end) => {
-  let res = await axios.post(`${BASE_URL}/reservations`, {
+  let res = await axios.post(`${BASE_URL}/reservations/create`, {
     userId,
     teacherId,
     startTime: start.format('YYYY-MM-DDTHH:mm:ss'),
     endTime: end.format('YYYY-MM-DDTHH:mm:ss'),
-    status: 'PENDING',
   });
   return res.data;
 };
 
-//Crear disponibilidad profesor
-export const addSchedule = async (teacherId, date, startTime, endTime) => {
-  let res = await axios.post(`${BASE_URL}/availabilities`, {
-    teacherId,
-    date,
-    startTime,
-    endTime
-  });
-  return res.data;
+//Listar las reservaciones del usuario
+export const getUserReservations = async (userId) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/reservations/user/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching reservations user:', error);
+    throw error;
+  }
 };
+//Eliminar las reservaciones del usuario
+export const deleteUserReservation = async (id) => {
+  try {
+    const response = await axios.delete(
+      `${BASE_URL}/reservations/delete/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting the reservation:', error);
+    throw error;
+  }
+};
+
+
+
+

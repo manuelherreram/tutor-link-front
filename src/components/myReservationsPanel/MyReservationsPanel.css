@@ -1,0 +1,19 @@
+.panel-reservations{
+    height: 100vh;
+    margin-top: 30px;
+}
+.title-reservations{
+    color:#fa8c16
+}
+.deleteReservation{
+    color:rgb(240, 248, 248)
+
+}
+.deleteReservation:hover{
+    color:rgb(81, 119, 243)
+
+}
+.no-reservations{
+    margin: 50px
+}
+

@@ -50,6 +50,11 @@
     .container-search {
         width: 80%;
     }
+    .container-search {
+        display: flex;
+        flex-direction: column;
+        height: 200px;
+    }
 
     .custom-search-input .ant-input,
     .custom-search-input .ant-input-group-addon .ant-btn {

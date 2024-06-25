@@ -50,19 +50,22 @@ export const register = async (data, token) => {
 };
 
 // Validar DNI del profesor
-export const verificarDNIServidor = async (dni) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/admin/teachers`);
-    const profesores = response.data;
-
-    if (!Array.isArray(profesores)) {
-      throw new Error("Se esperaba un array de profesores");
-    }
-    const dniExistente = profesores.some((profesor) => profesor.dni === dni);
-    return !dniExistente;
-  } catch (error) {
-    console.error("Error al verificar el DNI:", error);
-    throw error;
+export const verificarDNIServidor = async (dni,accessToken ) => {
+    try {
+       const response = await axios.get(`${BASE_URL}/admin/teachers`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+        const profesores = response.data
+        if (!Array.isArray(profesores)) {
+            throw new Error('Se esperaba un array de profesores')
+        }
+        const dniExistente = profesores.some(profesor => profesor.dni === dni)
+        return !dniExistente
+    } catch (error) {
+        console.error('Error al verificar el DNI:', error)
+        throw error;
   }
 };
 
@@ -283,24 +286,24 @@ export const registerChar = async (data, idtoken) => {
 };
 
 // Actualizar característica
-export const updateChar = async (data, idtoken) => {
-  try {
-    const response = await axios.put(
-      `${BASE_URL}/admin/characteristics/actualizar`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${idtoken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error updating characteristic:", error);
-    throw error;
-  }
-};
+export const updateChar = async (id, data, idtoken) => {
+    try {
+        const response = await axios.put(
+            `${BASE_URL}/admin/characteristics/update/${id}`,
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${idtoken}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+        return response.data
+    } catch (error) {
+        console.error('Error updating characteristic:', error)
+        throw error
+    }
+}
 
 // Eliminar característica
 export const deleteChar = async (id, idtoken) => {

@@ -206,7 +206,7 @@ const Search = ({ onSearchResults }) => {
                 onChange={handleCheckboxChange}
                 className="checkbox-date"
             >
-                Aún no decidido la fechas
+                Aún no decido la fechas
             </Checkbox>
             <Button
                 className="btn-submit"

@@ -39,47 +39,6 @@
   margin: 0 35px 0 0;
 }
 
-.container-image {
-  display: flex;
-  border-radius: 15px;
-}
-
-.cont-first-img {
-  flex: 0.6;
-  margin-right: 20px;
-  overflow: hidden;
-  border-radius:15px;
-}
-
-.cont-first-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.container-grid {
-  flex: 0.4;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  border-radius:15px;
-  overflow: hidden;
-}
-
-.cont-other-img {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.item-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
 .buttons-container {
   display: flex;
   flex-direction: column;
@@ -134,7 +93,9 @@
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
+.icon-characteristic{
+  width:30px;
+}
 .more:hover,
 .toggle-policies:hover,
 .share:hover {
@@ -241,4 +202,76 @@
 .close-button:hover {
   background-color: #005777;
   transform: translateY(-2px);
+}
+.btn-cancel{
+  font-family: 'Poppins';
+  background-color: #999998;
+  color: rgb(255, 255, 255);
+  font-size: small;
+  padding: 5px;
+  border-radius: 5px;
+  margin-left:10px;
+  border: none;
+}
+.btn-cancel:hover{
+  background-color: #205164;
+ border: none;
+
+}
+@media (max-width: 760px) {
+  .container-gallery{
+    margin-top: 90px;
+    margin-left: 30px;
+    width: 80%;
+  }
+  .container-characteristics-detail {
+    display: flex;
+    flex-direction: column;
+  width: 90%;}
+
+  .container-ratings{
+    margin:20px 10px
+  
+  }
+  .calendar-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+  }
+  .characteristics-wrapper {
+    margin: 20px;
+    width: 100%;
+   
+  }
+}
+@media (max-width: 480px) {
+
+
+.characteristics-list {
+  width: 100%;
+  margin:20px
+}
+.share-modal {
+   position: relative;
+   width: 90%;
+}
+.share-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.rating-list{
+  text-align: center;
+}
+.buttons-container{
+  display: flex;
+ align-items: center;
+}
+
+
 }

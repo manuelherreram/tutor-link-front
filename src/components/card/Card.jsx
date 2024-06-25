@@ -11,23 +11,24 @@ const Card = ({ name, category, image, description, id }) => {
   const { userId } = useAuth();
   const navigate = useNavigate();
   
-  useEffect(() => {
-    fetchFavorites(userId);
-  }, []);
+ //Manejo favoritos
+ useEffect(() => {
+  fetchFavorites(userId);
+}, []);
 
-  const handleToggleFavorite = async () => {
-    if (!userId) {
-      message.info('Debes iniciar sesión para marcar favoritos.');
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+const handleToggleFavorite = async () => {
+  if (!userId) {
+    message.info('Debes iniciar sesión para marcar favoritos.');
+    setTimeout(() => {
+      navigate('/login');
+    }, 2000);
 
-      return;
-    }
-    await toggleFavorite(userId, id);
-  };
+    return;
+  }
+  await toggleFavorite(userId, id);
+};
 
-  const isFavorite = favorites.map(({ id }) => id).includes(id);
+const isFavorite = favorites.map(({ id }) => id).includes(id);
 
   return (
     <div className="card">

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { getDataById } from '../../api/api';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFavorites } from '../../contexts/FavoriteContexts';
-import './Detail.css';
 import Modal from 'react-modal';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
@@ -16,39 +15,44 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
 import RatingList from '../../routes/ratings/RatingList';
-
+import ImageSection from '../../components/imageSection/ImageSection';
 import {
   WhatsappShare,
   FacebookShare,
   LinkedinShare,
   TwitterShare,
 } from 'react-share-kit';
-
 import ReservationForm from '../../components/ReservationForm';
-import AddRating from '../ratings/AddRating';
+import './Detail.css';
 
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toggleFavorite, favorites, fetchFavorites } = useFavorites();
-  const [teacherSelected, setTeacherSelected] = useState();
+  const { userId } = useAuth();
+  const [teacherSelected, setTeacherSelected] = useState(null);
   const [galleryImages, setGalleryImages] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [shareModalIsOpen, setShareModalIsOpen] = useState(false);
   const [showPolicies, setShowPolicies] = useState(false);
-  const { userId } = useAuth();
   const [selectedRange, setSelectedRange] = useState(null);
+  const [isFavorite,setIsFavorite]=useState()
 
-  //Manejo Imágenes
+  // Información tutor
   useEffect(() => {
-    const getById = async () => {
-      let res = await getDataById(id);
-      setTeacherSelected(res);
+    const fetchData = async () => {
+      try {
+        const res = await getDataById(id);
+        setTeacherSelected(res);
+      } catch (error) {
+        console.error('Error fetching teacher data:', error);
+      }
     };
 
-    getById();
+    fetchData();
   }, [id]);
 
+  //Manejo imágenes
   useEffect(() => {
     if (teacherSelected && teacherSelected.images) {
       const formattedImages = teacherSelected.images.map((image, index) => ({
@@ -59,7 +63,7 @@ const Detail = () => {
       setGalleryImages(formattedImages);
     }
   }, [teacherSelected]);
-  //Manejo Galería Imágenes
+
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -67,12 +71,21 @@ const Detail = () => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
-  //Manejo Favoritos
+
+  //Manejo favoritos
   useEffect(() => {
     fetchFavorites(userId);
   }, []);
+  useEffect(() => {
+    if (favorites.length > 0) {
+      const idTeacher = parseInt(id);
+      const isFavorited = favorites.map(favorite => favorite.id.toString()).includes(idTeacher.toString());
+      setIsFavorite(isFavorited);
+    }
+  }, [favorites, id]);
 
   const handleToggleFavorite = async () => {
+    const idTeacher= parseInt(id)
     if (!userId) {
       message.info('Debes iniciar sesión para marcar favoritos.');
       setTimeout(() => {
@@ -81,14 +94,10 @@ const Detail = () => {
 
       return;
     }
-    await toggleFavorite(userId, id);
+    await toggleFavorite(userId, idTeacher);
   };
-  useEffect(() => {
-    console.log('mis favoritos:', favorites);
-  }, [favorites]);
-  const isFavorite = favorites.map(({ id }) => id).includes(id);
-
-  //Manejo Compartir Redes
+  
+  //Manejo compartir redes
   const openShareModal = () => {
     setShareModalIsOpen(true);
   };
@@ -97,19 +106,13 @@ const Detail = () => {
     setShareModalIsOpen(false);
   };
 
-  //Manejo Policies
+  //Manejo políticas
   const togglePolicies = () => {
     setShowPolicies(!showPolicies);
   };
-
   //Redes
   const shareUrl = window.location.href;
   const shareTitle = teacherSelected ? teacherSelected.name : 'Check this out!';
-
-  //Manejo Disponibilidad
-  const handleSelectRange = (range) => {
-    setSelectedRange(range);
-  };
 
   return (
     <div className="container-detail">
@@ -143,87 +146,71 @@ const Detail = () => {
       ) : (
         <p>Cargando datos del tutor...</p>
       )}
-      {teacherSelected && teacherSelected.images && (
-        //imágenes
-        <div>
-          <section className="container-image">
-            <div className="cont-first-img">
-              <img
-                src={teacherSelected.images[0].url}
-                alt={`imagen1`}
-                className="first-image"
-              />
-            </div>
-            <div className="container-grid">
-              <div className="cont-other-img">
-                {teacherSelected.images.slice(1, 5).map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.url}
-                    alt={`imagen${index + 2}`}
-                    className="item-image"
-                  />
-                ))}
-              </div>
-              <div className="buttons-container">
-                <button className="more" onClick={openModal}>
-                  Ver más
-                </button>
-                <button className="toggle-policies" onClick={togglePolicies}>
-                  {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
-                </button>
-                <button className="share" onClick={openShareModal}>
-                  Compartir
-                </button>
-              </div>
-            </div>
-          </section>
-          <div className="container-characteristics-detail">
-            <div className="characteristics-wrapper">
-              <h3>Características:</h3>
-              <div className="characteristics-list">
-                {teacherSelected.characteristics.map((character) => (
-                  <div key={character.id} className="character-item">
-                    {character.name}
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Disponibilidad  */}
-            <div>
-              {teacherSelected && (
-                <TeacherAvailability
-                  teacherId={id}
-                  userId={userId}
-                  onSelectRange={setSelectedRange}
+
+      {/* Sección de imágenes */}
+      {teacherSelected && <ImageSection teacherSelected={teacherSelected} />}
+
+      {/* Botones de acción */}
+      <div className="buttons-container">
+        <button className="more" onClick={openModal}>
+          Ver más
+        </button>
+        <button className="toggle-policies" onClick={togglePolicies}>
+          {showPolicies ? 'Ocultar Políticas' : 'Ver Políticas'}
+        </button>
+        <button className="share" onClick={openShareModal}>
+          Compartir
+        </button>
+      </div>
+
+      {/* Detalles adicionales */}
+      <div className="container-characteristics-detail">
+        <div className="characteristics-wrapper">
+          <h3>Características:</h3>
+          <div className="characteristics-list">
+            {teacherSelected?.characteristics.map((character) => (
+              <div key={character.id} className="character-item">
+                <img
+                  className="icon-characteristic"
+                  src={character.url}
+                  alt="icono"
                 />
-              )}
-              {/* Reserva  */}
-              {selectedRange && (
-                <ReservationForm
-                  userId={userId}
-                  teacherId={parseInt(id)}
-                  selectedRange={selectedRange}
-                />
-              )}
-            </div>
+                {character.name}
+              </div>
+            ))}
           </div>
-          {/* Policies  */}
-          {showPolicies && (
-            <div className="policies-wrapper">
-              <Policies />
-            </div>
+        </div>
+
+        {/* Disponibilidad y reserva */}
+        <div>
+          {teacherSelected && (
+            <TeacherAvailability
+              teacherId={id}
+              teacherSelected={teacherSelected}
+              userId={userId}
+              onSelectRange={setSelectedRange}
+            />
           )}
         </div>
+      </div>
+
+      {/* Políticas */}
+      {showPolicies && (
+        <div className="policies-wrapper">
+          <Policies />
+        </div>
       )}
-      {/* Rating  */}
+
+      {/* Rating */}
       {teacherSelected && (
         <div className="container-ratings">
           <RatingList teacherId={id} />
         </div>
       )}
-      {/* Galería  */}
+
+      {/* Modal de Galería */}
       <Modal
+      className="container-gallery"
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Galería de Imágenes"
@@ -234,7 +221,8 @@ const Detail = () => {
           Cerrar
         </Button>
       </Modal>
-      {/* Compartir  */}
+
+      {/* Modal de Compartir */}
       <Modal
         className="share-modal"
         isOpen={shareModalIsOpen}
