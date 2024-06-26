@@ -1,9 +1,9 @@
-.container-reservations{
-    height: 100vh;
-    margin-top: 50px;
+.container-reservations {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
 }
-h3{
-    text-align: center;
- 
-   
+h3 {
+  text-align: center;
 }
