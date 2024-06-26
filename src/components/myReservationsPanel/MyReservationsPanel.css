@@ -1,5 +1,4 @@
 .panel-reservations {
-  height: 100vh;
   margin-top: 30px;
 }
 .panel-previus-reservations .ant-table {
@@ -24,4 +23,24 @@
 }
 .no-reservations {
   margin: 50px;
+}
+@media (max-width: 768px) {
+  .container-reservations {
+    margin: 10px; 
+  }
+  .panel-reservations,
+  .panel-previus-reservations {
+    margin-bottom: 10px; 
+}
+}
+
+@media (max-width: 480px) {
+  .container-reservations {
+    margin: 5px; 
+  }
+
+  .panel-reservations,
+  .panel-previus-reservations {
+    margin-bottom: 5px; 
+  }
 }

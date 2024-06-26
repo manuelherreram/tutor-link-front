@@ -158,7 +158,7 @@ const MyReservationsPanel = ({ userId }) => {
               className="panel-previus-reservations"
               dataSource={pastReservations}
               columns={pastColumns}
-              pagination={{ pageSize: 5 }}
+              pagination={{ pageSize: 3 }}
             />
           ) : (
             <h3 className="no-reservations">No tienes reservas anteriores</h3>
