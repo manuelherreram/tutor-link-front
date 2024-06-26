@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const ReservationForm = ({ userId, teacherId, selectedRange }) => {
+
   const { userLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,7 +37,11 @@ const ReservationForm = ({ userId, teacherId, selectedRange }) => {
 
     try {
       await addReservation(userId, teacherId, start, end);
-      message.success('Reserva realizada con éxito.');
+    setTimeout(()=>{
+      message.success('Reserva realizada con éxito.Te llegará un correo electrónico con la información de tu reserva');
+     
+    },4000)
+     
       navigate('/reservations');
     } catch (error) {
       message.error('Error al realizar la reserva.');

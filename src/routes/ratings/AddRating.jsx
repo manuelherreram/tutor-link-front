@@ -45,7 +45,7 @@ const AddRating = ({ teacherId, onRatingAdded }) => {
         value={comment}
         placeholder="Escribe tu comentario"
       />
-      <Button type="primary" onClick={handleSubmit}>
+      <Button className="button-send" type="primary" onClick={handleSubmit}>
         Enviar
       </Button>
     </div>
