@@ -79,6 +79,12 @@
     cursor: pointer;
 
 }
+.card-button:hover {
+    /* background-color: #f58220d0; */
+    color: #F58220;
+    border: 1px solid #F58220;
+    background-color: #ffffff;
+}
 .card-image {
     position: relative;
 }

@@ -24,7 +24,22 @@ const Home = () => {
   const teachersToDisplay =
     searchResults.length > 0 ? searchResults : randomTeachers;
 
-  const cardPerPage = 9;
+const [cardPerPage, setCardPerPage] = useState(9);
+
+useEffect(() => {
+  const handleResize = () => {
+    if (window.innerWidth <=1240) {
+      setCardPerPage(8);
+  } else {
+      setCardPerPage(9);
+  }
+  };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    }
+  }, [])
+
   const renderCards = teachersToDisplay.slice((page - 1) * cardPerPage, page * cardPerPage);  
 
   return (
@@ -51,7 +66,7 @@ const Home = () => {
       <div className="pagination">
                     <Pagination
                     defaultCurrent={1}
-                    defaultPageSize={cardPerPage}
+                    pageSize={cardPerPage}
                     total={teachersToDisplay.length}
                     showTotal={(total, range) => `${range[0]}-${range[1]} de ${total} items`}
                     onChange={(page) => {

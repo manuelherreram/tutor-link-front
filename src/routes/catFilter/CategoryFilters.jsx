@@ -67,7 +67,7 @@ useEffect(() => {
         console.log(data); 
     });
 
-}, [selectedCategories, selectedCharacteristics]);
+}, [ selectedCharacteristics]);
 
 console.log(products);
 
@@ -84,37 +84,25 @@ const clearFilters = () => {
 
     return (
         <div className='filters-result'>
-            <div className='category-filters'>
-            <ArrowLeftOutlined className="arrow-icon"
-                onClick={() => navigate('/')}
-            />
-                <div className='filters'>
-                
-                {categories.map((categories) => (                   
-                    <label className='filter-label' key={categories.id}>
-                        <input className='input-checkbox'
-                        type="checkbox"
-                        checked={selectedCategories.includes(categories.title)}
-                        disabled={category === categories.title}
-                        onChange={() => {
-                            const newSelectedCategories = selectedCategories.includes(categories.title)
-                            ? selectedCategories.filter((c) => c !== categories.title)
-                            : [...selectedCategories, categories.title];
-                            setSelectedCategories(newSelectedCategories);
-                        }}
-                        value={categories.title}
-                        />
-                        {categories.title}
-                        <Badge className='badge' count={counter[categories.title] || 0} style={{ backgroundColor: "#F58220" }}showZero/>
-                    </label>                   
-                ))}
-
-
-                <div className='filter-title-container'>
-                    <span className='filter-title'>Categorias</span> 
-                    <button className='clear-button' onClick={() => clearFilters()}>Limpiar</button>
+            <div className="title-filters-result">
+                <div>
+                    <h3>Resultados de la busqueda: <span>{category}</span><Badge className='badge' count={counter[products[0]?.subject?.title] || 0} style={{ backgroundColor: "#F58220" }}showZero/></h3>
                 </div>
-                {characteristics.map((characteristics) => (                   
+            </div>
+            <div className="filters-results-container">
+                <div className="filters-container">
+                    <div className="accesories-filter">
+                        <div>
+                            <ArrowLeftOutlined className="arrow-icon"
+                            onClick={() => navigate('/')}
+                            />
+                        </div>  
+                        <div>  
+                            <button className='clear-button' onClick={() => clearFilters()}>Limpiar</button>
+                        </div>
+                    </div>
+                    <div className="characteristics-filter">
+                    {characteristics.map((characteristics) => (                   
                     <label className='filter-label' key={characteristics.id}>
                         <input className='input-checkbox'
                         type="checkbox"
@@ -132,28 +120,31 @@ const clearFilters = () => {
                         <Badge className='badge' count={counter2[characteristics.name] || 0} style={{ backgroundColor: "#F58220" }}showZero/>
                     </label>                   
                 ))}
+                    </div>
                 </div>
-            </div>
-            <div className="card-result-container">
-                <div className='card-result'>
-                    
-                    {selectedCategories.length < 1 ? <span style={{color: "red", height: "100%"}}>No se han encontrado resultados</span> :
+                <div className="cards-result">
+                    <div className='cards-result-container'>
+                    {products.length < 1 ? <span style={{color: "red", height: "100%"}}>No se han encontrado resultados</span> :
                     renderCards.map((teacher) => (
                     <Card key = {teacher.id} name={teacher.name} category={teacher.subject.title} image={teacher.images[0].url} description={teacher.description} id={teacher.id}/>
                     ))}
-                </div>
-                <div className="pagination">
-                    <Pagination
-                    defaultCurrent={1}
-                    defaultPageSize={6}
-                    total={products.length}
-                    showTotal={(total, range) => `${range[0]}-${range[1]} de ${total} items`}
-                    onChange={(page) => {
-                        setPage(page);
-                    }}
-                    /> 
+                    </div>
+                    <div className="pagination">
+                        <Pagination
+                        defaultCurrent={1}
+                        defaultPageSize={6}
+                        total={products.length}
+                        showTotal={(total, range) => `${range[0]}-${range[1]} de ${total} items`}
+                        onChange={(page) => {
+                            setPage(page);
+                        }}
+                        /> 
+                    </div>
                 </div>
             </div>
+
+
+
         </div>
     )
 };
