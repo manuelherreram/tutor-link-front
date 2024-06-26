@@ -15,7 +15,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button, message } from 'antd';
 import TeacherAvailability from '../../components/teacherAvailability/TeacherAvailability';
 import RatingList from '../../routes/ratings/RatingList';
-import AddRating from '../../routes/ratings/AddRating';
 import ImageSection from '../../components/imageSection/ImageSection';
 import {
   WhatsappShare,
@@ -23,6 +22,7 @@ import {
   LinkedinShare,
   TwitterShare,
 } from 'react-share-kit';
+import ReservationForm from '../../components/ReservationForm';
 import './Detail.css';
 
 const Detail = () => {
@@ -205,7 +205,6 @@ const Detail = () => {
       {teacherSelected && (
         <div className="container-ratings">
           <RatingList teacherId={id} />
-          <AddRating teacherId={id} onRatingAdded={() => {}} />
         </div>
       )}
 
