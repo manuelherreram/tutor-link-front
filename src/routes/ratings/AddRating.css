@@ -15,19 +15,18 @@
 }
 
 .button-send {
-  width: 180px;
-  height: 50px;
+  width: 180px !important;
+  height: 50px !important;
   cursor: pointer;
+  font-size: large !important;
   background-color: #ffa500;
   color: rgb(255, 255, 255);
   border: none;
   border-radius: 5px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-top: 5px;
-  margin-bottom: 25px;
+  transition: background-color 0.3s ease, transform 0.3s ease !important;
 }
 
 .button-send:hover {
-  background-color: #005777;
-  transform: translateY(-2px);
+  background-color: #005777 !important;
+  transform: translateY(-2px) !important;
 }

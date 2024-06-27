@@ -1,12 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { getUserId } from '../../api/api';
+import  { useEffect, useState } from 'react';
 import { Rate } from 'antd';
 import './RatingItem.css';
-import {useAuth} from '../../contexts/AuthContext'
 
-const RatingItem = ({ rating, userId }) => {
+import { getUserById } from '../../api/api';
+
+const RatingItem = ({  rating, userId }) => {
   const [userName, setUserName] = useState('');
-  const {currentUser}=useAuth();
+  const [userLastName, setUserLastName]=useState('');
+
+ 
+
+  useEffect(()=>{
+    const getName= async()=>{
+      let res= await getUserById(rating.userId)
+     setUserName(res.firstName )
+     setUserLastName(res.lastName)
+    }
+getName()
+  },[])
 
   if (!rating.comment) {
     console.error('El objeto de calificación no tiene la estructura esperada:', rating);
@@ -15,9 +26,8 @@ const RatingItem = ({ rating, userId }) => {
 
   return (
     <div className="rating-item">
-      <p>{rating.userId === userId ? 'Tú' : currentUser.displayName}</p>
+      <p className='rating-item-name'>{rating.userId === userId ? 'Tú' : `${userName} ${userLastName}`}</p>
       <div className="rating-header">
-        <span>{userName}</span>
         <Rate disabled value={rating.rating} />
       </div>
       <p>{rating.comment}</p>
@@ -25,4 +35,4 @@ const RatingItem = ({ rating, userId }) => {
   );
 };
 
-export default RatingItem;
+export default RatingItem;

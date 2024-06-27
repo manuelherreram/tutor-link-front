@@ -79,12 +79,16 @@
     cursor: pointer;
 
 }
-.card-button:hover {
-    /* background-color: #f58220d0; */
+/* .card-button:hover {
     color: #F58220;
     border: 1px solid #F58220;
     background-color: #ffffff;
-}
+} */
+
+.card-button:hover {
+    background-color: #005777 !important;
+    transform: translateY(-2px) !important;
+  }
 .card-image {
     position: relative;
 }

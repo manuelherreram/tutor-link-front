@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { getRatingByTeacherId } from '../../api/api';
 import RatingItem from './RatingItem';
 import './RatingList.css';
@@ -55,4 +55,4 @@ const RatingList = ({ teacherId }) => {
   );
 };
 
-export default RatingList;
+export default RatingList;
