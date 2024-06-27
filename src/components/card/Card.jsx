@@ -44,7 +44,7 @@ const isFavorite = favorites.map(({ id }) => id).includes(id);
       </div>
       <div className="card-body">
         <div className="card-name">
-          <p>{name}</p>
+          <p>{name}</p>         
         </div>
         <div className="card-category">
           <p>{category}</p>
