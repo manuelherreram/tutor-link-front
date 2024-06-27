@@ -133,6 +133,22 @@ const MyReservationsPanel = ({ userId }) => {
     dayjs(reservation.fechaInicio, 'DD-MM-YYYY').isBefore(dayjs(), 'day')
   );
   const pastColumns = columns.filter((column) => column.key !== 'actions');
+  const collapseItems = [
+    {
+      key: '1',
+      label: 'Mis Reservas Anteriores',
+      children: pastReservations.length > 0 ? (
+        <Table
+          className="panel-previus-reservations"
+          dataSource={pastReservations}
+          columns={pastColumns}
+          pagination={{ pageSize: 2 }}
+        />
+      ) : (
+        <h3 className="no-reservations">No tienes reservas anteriores</h3>
+      ),
+    },
+  ];
   return (
     <div className="container-reservations">
       <h3 className="title-reservations">Mis Reservas Actuales</h3>
@@ -147,24 +163,9 @@ const MyReservationsPanel = ({ userId }) => {
         <h3 className="no-reservations">No tienes reservas actuales</h3>
       )}
 
-      <Collapse defaultActiveKey={['1']}>
-        <Panel
-          header="Mis Reservas Anteriores"
-          key="1"
-          className="title-reservations"
-        >
-          {pastReservations.length > 0 ? (
-            <Table
-              className="panel-previus-reservations"
-              dataSource={pastReservations}
-              columns={pastColumns}
-              pagination={{ pageSize: 3 }}
-            />
-          ) : (
-            <h3 className="no-reservations">No tienes reservas anteriores</h3>
-          )}
-        </Panel>
-      </Collapse>
+      <Collapse defaultActiveKey={['1']} items={collapseItems}/>
+        
+       
     </div>
   );
 };
