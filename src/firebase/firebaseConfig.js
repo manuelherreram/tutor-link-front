@@ -21,7 +21,7 @@ const firebaseConfig = {
 // console.log('Configuración de Firebase:', firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
-console.log('Aplicación Firebase inicializada:', app);
+
 // Initialize Firebase
 // Obtiene una referencia al almacenamiento de Firebase
 const storage = getStorage(app);

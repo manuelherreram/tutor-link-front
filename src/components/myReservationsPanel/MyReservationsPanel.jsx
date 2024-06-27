@@ -3,11 +3,13 @@ import {
   getUserReservations,
   deleteUserReservation,
 } from '../../api/apiReservations';
-import { Table, message, Button } from 'antd';
+import { Table, message, Button, Collapse } from 'antd';
 import dayjs from 'dayjs';
 import './MyReservationsPanel.css';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
+
+const { Panel } = Collapse;
 
 const MyReservationsPanel = ({ userId }) => {
   const [reservations, setReservations] = useState([]);
@@ -33,10 +35,9 @@ const MyReservationsPanel = ({ userId }) => {
           teacher: reservation.teacher.name,
           asignatura: reservation.teacher.subjectTitle,
           email: currentUser.email,
-          place, 
+          place,
           fechaInicio: startDate.format('DD-MM-YYYY'),
-          horarioInicio: startDate.format('HH:mm'),
-          horarioTermino: endDate.format('HH:mm'),
+          horario: startDate.format('HH:mm') + '-' + endDate.format('HH:mm'),
         };
       });
       setReservations(transformedData);
@@ -49,6 +50,7 @@ const MyReservationsPanel = ({ userId }) => {
       title: 'N° Reserva',
       dataIndex: 'key',
       key: 'key',
+      width: 50,
     },
     {
       title: 'Usuario',
@@ -59,11 +61,13 @@ const MyReservationsPanel = ({ userId }) => {
       title: 'Correo electrónico',
       dataIndex: 'email',
       key: 'email',
+      width: 50,
     },
     {
       title: 'Tutor',
       dataIndex: 'teacher',
       key: 'teacher',
+      width: 50,
     },
     {
       title: 'Asignatura',
@@ -74,22 +78,20 @@ const MyReservationsPanel = ({ userId }) => {
       title: 'Lugar',
       dataIndex: 'place',
       key: 'place',
+      width: 50,
     },
     {
-      title: 'Fecha ',
+      title: 'Fecha  ',
       dataIndex: 'fechaInicio',
       key: 'fechaInicio',
     },
     {
-      title: 'Horario Inicio',
-      dataIndex: 'horarioInicio',
-      key: 'horarioInicio',
+      title: 'Horario ',
+      dataIndex: 'horario',
+      key: 'horario',
+      width: 50,
     },
-    {
-      title: 'Horario Término',
-      dataIndex: 'horarioTermino',
-      key: 'horarioTermino',
-    },
+
     {
       title: 'Acciones',
       key: 'actions',
@@ -119,18 +121,52 @@ const MyReservationsPanel = ({ userId }) => {
     }
   };
 
-  return reservations.length > 0 ? (
-    <div>
-      <h3 className="title-reservations">Mis Reservas</h3>
-      <Table
-        className="panel-reservations"
-        dataSource={reservations}
-        columns={columns}
-        pagination={{ pageSize: 5 }}
-      />
+  const currentReservations = reservations.filter((reservation) => {
+    const fechaInicio = dayjs(reservation.fechaInicio, 'DD-MM-YYYY');
+
+    return (
+      fechaInicio.isAfter(dayjs(), 'day') || fechaInicio.isSame(dayjs(), 'day')
+    );
+  });
+
+  const pastReservations = reservations.filter((reservation) =>
+    dayjs(reservation.fechaInicio, 'DD-MM-YYYY').isBefore(dayjs(), 'day')
+  );
+  const pastColumns = columns.filter((column) => column.key !== 'actions');
+  const collapseItems = [
+    {
+      key: '1',
+      label: 'Mis Reservas Anteriores',
+      children: pastReservations.length > 0 ? (
+        <Table
+          className="panel-previus-reservations"
+          dataSource={pastReservations}
+          columns={pastColumns}
+          pagination={{ pageSize: 2 }}
+        />
+      ) : (
+        <h3 className="no-reservations">No tienes reservas anteriores</h3>
+      ),
+    },
+  ];
+  return (
+    <div className="container-reservations">
+      <h3 className="title-reservations">Mis Reservas Actuales</h3>
+      {currentReservations.length > 0 ? (
+        <Table
+          className="panel-reservations"
+          dataSource={currentReservations}
+          columns={columns}
+          pagination={{ pageSize: 5 }}
+        />
+      ) : (
+        <h3 className="no-reservations">No tienes reservas actuales</h3>
+      )}
+
+      <Collapse defaultActiveKey={['1']} items={collapseItems}/>
+        
+       
     </div>
-  ) : (
-    <h3 className="no-reservations">No has realizado reservas aún </h3>
   );
 };
 
