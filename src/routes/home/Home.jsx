@@ -13,7 +13,11 @@ const Home = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
+<<<<<<< HEAD
     fetch(`${BASE_URL}/public/index`)
+=======
+    fetch("http://localhost:8080/api/public/index")
+>>>>>>> bd3767c (backs to original apis)
       .then((res) => res.json())
       .then((data) => setRandomTeachers(data));
   }, []);
