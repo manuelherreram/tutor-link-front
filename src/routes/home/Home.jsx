@@ -12,7 +12,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/public/index")
+    fetch("https://tutor-link-back.onrender.com/api/public/index")
       .then((res) => res.json())
       .then((data) => setRandomTeachers(data));
   }, []);
