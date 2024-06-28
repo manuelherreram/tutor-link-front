@@ -4,6 +4,7 @@ import Card  from "../../components/card/Card";
 import "./CategoryFilter.css";
 import { Badge, Button, Pagination } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import { BASE_URL } from "../../api/api";
 
 
 const CategoryFilters = () => {
@@ -41,13 +42,13 @@ const counter = products.reduce((count, product) => {
   console.log(counter2);
 
 useEffect(() => {
-    const url = `http://localhost:8080/api/public/subjects/list`;
+    const url = `${BASE_URL}/public/subjects/list`;
     fetch(url)
     .then((response) => response.json())
     .then((data) => {
         setCategories(data);
     });
-    const url2 = `http://localhost:8080/api/public/characteristics/list`;
+    const url2 = `${BASE_URL}/public/characteristics/list`;
     fetch(url2)
     .then((response) => response.json())
     .then((data) => {
@@ -58,7 +59,7 @@ useEffect(() => {
 console.log(characteristics);
 useEffect(() => {
 
-    const url = selectedCategories.length > 0 && selectedCharacteristics.length > 0 ? `http://localhost:8080/api/teachers/search?subjects=${selectedCategories.join(',')}&characteristicIds=${selectedCharacteristics.join(',')}` : `http://localhost:8080/api/public/teachers/category?subjects=${selectedCategories.join(',')}`
+    const url = selectedCategories.length > 0 && selectedCharacteristics.length > 0 ? `${BASE_URL}/teachers/search?subjects=${selectedCategories.join(',')}&characteristicIds=${selectedCharacteristics.join(',')}` : `${BASE_URL}/public/teachers/category?subjects=${selectedCategories.join(',')}`
     fetch(url)
     .then((response) => response.json())
     .then((data) => {
@@ -80,6 +81,15 @@ const clearFilters = () => {
             setSelectedCharacteristics([]);
             setSelectedCategories([category]);
             setPage(1);       
+}
+
+const noResults = () => {
+    return (
+        <div className="no-results">
+            <h3>No se encontraron resultados</h3>
+            <p>Por favor intenta con otras busquedas</p>
+        </div>
+    )
 }
 
     return (
@@ -124,7 +134,7 @@ const clearFilters = () => {
                 </div>
                 <div className="cards-result">
                     <div className='cards-result-container'>
-                    {products.length < 1 ? <span style={{color: "red", height: "100%"}}>No se han encontrado resultados</span> :
+                    {products.length < 1 ? noResults() :
                     renderCards.map((teacher) => (
                     <Card key = {teacher.id} name={teacher.name} category={teacher.subject.title} image={teacher.images[0].url} description={teacher.description} id={teacher.id}/>
                     ))}

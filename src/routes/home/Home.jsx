@@ -5,6 +5,7 @@ import Card from "../../components/card/Card";
 import WhatsAppButton from "../../components/whatsappFloatingBtn/WhatsAppButton";
 import "./Home.css";
 import { Pagination } from "antd";
+import { BASE_URL } from "../../api/api";
 
 const Home = () => {
   const [randomTeachers, setRandomTeachers] = useState([]);
@@ -12,9 +13,10 @@ const Home = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/public/index")
+    fetch(`${BASE_URL}/public/index`)
       .then((res) => res.json())
       .then((data) => setRandomTeachers(data));
+
   }, []);
 
   const handleSearchResults = (results) => {
