@@ -14,10 +14,14 @@ const Home = () => {
 
   useEffect(() => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     fetch(`${BASE_URL}/public/index`)
 =======
     fetch("http://localhost:8080/api/public/index")
 >>>>>>> bd3767c (backs to original apis)
+=======
+    fetch("https://tutor-link-back.onrender.com/api/public/index")
+>>>>>>> 389e5be (adds render api)
       .then((res) => res.json())
       .then((data) => setRandomTeachers(data));
   }, []);

@@ -1,10 +1,14 @@
 import axios from "axios";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export const BASE_URL = "http://localhost:8080/api";
 // export const BASE_URL = "http://44.193.72.252:8080/api";
 =======
 const BASE_URL = "http://localhost:8080/api";
+=======
+const BASE_URL = "https://tutor-link-back.onrender.com/api";
+>>>>>>> 389e5be (adds render api)
 // const BASE_URL = "http://3.215.179.193:8080/api";
 >>>>>>> bd3767c (backs to original apis)
 
