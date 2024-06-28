@@ -16,7 +16,6 @@ const Home = () => {
     fetch(`${BASE_URL}/public/index`)
       .then((res) => res.json())
       .then((data) => setRandomTeachers(data));
-
   }, []);
 
   const handleSearchResults = (results) => {
@@ -26,23 +25,26 @@ const Home = () => {
   const teachersToDisplay =
     searchResults.length > 0 ? searchResults : randomTeachers;
 
-const [cardPerPage, setCardPerPage] = useState(9);
+  const [cardPerPage, setCardPerPage] = useState(9);
 
-useEffect(() => {
-  const handleResize = () => {
-    if (window.innerWidth <=1240) {
-      setCardPerPage(8);
-  } else {
-      setCardPerPage(9);
-  }
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1240) {
+        setCardPerPage(8);
+      } else {
+        setCardPerPage(9);
+      }
+    };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-    }
-  }, [])
+    };
+  }, []);
 
-  const renderCards = teachersToDisplay.slice((page - 1) * cardPerPage, page * cardPerPage);  
+  const renderCards = teachersToDisplay.slice(
+    (page - 1) * cardPerPage,
+    page * cardPerPage
+  );
 
   return (
     <div className="container-home">
@@ -66,16 +68,18 @@ useEffect(() => {
         ))}
       </div>
       <div className="pagination">
-                    <Pagination
-                    defaultCurrent={1}
-                    pageSize={cardPerPage}
-                    total={teachersToDisplay.length}
-                    showTotal={(total, range) => `${range[0]}-${range[1]} de ${total} items`}
-                    onChange={(page) => {
-                        setPage(page);
-                    }}
-                    /> 
-                </div>
+        <Pagination
+          defaultCurrent={1}
+          pageSize={cardPerPage}
+          total={teachersToDisplay.length}
+          showTotal={(total, range) =>
+            `${range[0]}-${range[1]} de ${total} items`
+          }
+          onChange={(page) => {
+            setPage(page);
+          }}
+        />
+      </div>
       <WhatsAppButton />
     </div>
   );
