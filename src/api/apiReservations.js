@@ -1,7 +1,7 @@
-import axios from 'axios';
-import dayjs from 'dayjs';
+import axios from "axios";
+import dayjs from "dayjs";
 
-const BASE_URL = 'http://localhost:8080/api';
+const BASE_URL = "http://http://3.215.179.193:8080/api:8080/api";
 // const BASE_URL = "http://44.193.72.252:8080/api";
 
 // Obtener disponibilidad de un profesor
@@ -12,7 +12,7 @@ export const getAvailabilitiesById = async (id) => {
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching availabilities:', error);
+    console.error("Error fetching availabilities:", error);
     throw error;
   }
 };
@@ -21,8 +21,8 @@ export const addReservation = async (userId, teacherId, start, end) => {
   let res = await axios.post(`${BASE_URL}/reservations/create`, {
     userId,
     teacherId,
-    startTime: start.format('YYYY-MM-DDTHH:mm:ss'),
-    endTime: end.format('YYYY-MM-DDTHH:mm:ss'),
+    startTime: start.format("YYYY-MM-DDTHH:mm:ss"),
+    endTime: end.format("YYYY-MM-DDTHH:mm:ss"),
   });
   return res.data;
 };
@@ -30,12 +30,10 @@ export const addReservation = async (userId, teacherId, start, end) => {
 //Listar las reservaciones del usuario
 export const getUserReservations = async (userId) => {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/reservations/user/${userId}`
-    );
+    const response = await axios.get(`${BASE_URL}/reservations/user/${userId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching reservations user:', error);
+    console.error("Error fetching reservations user:", error);
     throw error;
   }
 };
@@ -47,11 +45,7 @@ export const deleteUserReservation = async (id) => {
     );
     return response.data;
   } catch (error) {
-    console.error('Error deleting the reservation:', error);
+    console.error("Error deleting the reservation:", error);
     throw error;
   }
 };
-
-
-
-
