@@ -1,8 +1,8 @@
 import axios from "axios";
 import dayjs from "dayjs";
 
-// const BASE_URL = "https://tutor-link-back.onrender.com/api"; Render Plan B
-const BASE_URL = "http://3.231.155.26:8080/api";
+const BASE_URL = "https://tutor-link-back.onrender.com/api"; //Render Plan B
+//const BASE_URL = "http://3.231.155.26:8080/api";
 
 // Obtener disponibilidad de un profesor
 export const getAvailabilitiesById = async (id) => {

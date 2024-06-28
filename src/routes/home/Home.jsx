@@ -12,8 +12,8 @@ const Home = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch("http://3.231.155.26:8080/api/public/index")
-      //fetch("https://tutor-link-back.onrender.com/api/public/index") Render Plan B
+    //fetch("http://3.231.155.26:8080/api/public/index")
+    fetch("https://tutor-link-back.onrender.com/api/public/index") //Render Plan B
       .then((res) => res.json())
       .then((data) => setRandomTeachers(data));
   }, []);
