@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://tutor-link-back.onrender.com/api"; //Render Plan B
+const BASE_URL = "http://localhost:8080/api";
 // const BASE_URL = "http://3.215.179.193:8080/api";
 
 /*-----------Teachers---------------------------*/
